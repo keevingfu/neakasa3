@@ -162,6 +162,75 @@
             color: #00f2ea;
         }
         
+        /* Primary Menu Styles */
+        .primary-menu {
+            margin-bottom: 20px;
+        }
+        
+        .primary-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        
+        .primary-menu-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #00f2ea;
+            padding-left: 25px;
+        }
+        
+        .primary-menu-item.active {
+            background: rgba(0, 242, 234, 0.15);
+            color: #00f2ea;
+            border-left-color: #00f2ea;
+        }
+        
+        .menu-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .primary-menu-item.expanded .menu-arrow {
+            transform: rotate(90deg);
+        }
+        
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .submenu.expanded {
+            max-height: 1000px;
+        }
+        
+        .submenu .menu-category {
+            margin-bottom: 15px;
+            padding-left: 15px;
+        }
+        
+        .submenu .category-title {
+            font-size: 11px;
+            padding-left: 25px;
+        }
+        
+        .submenu .menu-item {
+            font-size: 13px;
+            padding: 10px 20px 10px 40px;
+        }
+        
         /* Content Area */
         .content-area {
             flex: 1;
@@ -267,12 +336,12 @@
         <div class="header-title">Data Analytics Center</div>
         <div class="header-stats">
             <div class="stat-item">
-                <div class="stat-value">11</div>
+                <div class="stat-value">12</div>
                 <div class="stat-label">Dashboards</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Product Lines</div>
+                <div class="stat-value">2</div>
+                <div class="stat-label">Main Sections</div>
             </div>
         </div>
     </header>
@@ -281,63 +350,143 @@
     <div class="main-container">
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
-            <!-- 综合分析 -->
-            <div class="menu-category">
-                <div class="category-title">
-                    <span class="category-icon">📊</span>
-                    Overview Analysis
+            <!-- Neakasa Ads Primary Menu -->
+            <div class="primary-menu">
+                <div class="primary-menu-item expanded" onclick="toggleSubmenu(this)">
+                    <span>📈 Neakasa Ads</span>
+                    <span class="menu-arrow">▶</span>
                 </div>
-                <a href="#" class="menu-item active" data-page="neakasa-tts.html">
-                    TikTok Shop Comparison
-                    <span class="menu-badge new">Featured</span>
-                </a>
+                
+                <div class="submenu expanded">
+                    <!-- Executive Summary -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">📊</span>
+                            Executive Summary
+                        </div>
+                        <a href="#" class="menu-item active" data-page="neakasa-ads.html">
+                            YoY/MoM Analysis
+                            <span class="menu-badge new">New</span>
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="biweekly">
+                            Weekly Performance
+                        </a>
+                    </div>
+
+                    <!-- Product Analytics -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">📦</span>
+                            Product Analytics
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="products">
+                            Product Comparison
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="steamer">
+                            Steamer Analysis
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="litterbox">
+                            Litter Box Report
+                        </a>
+                    </div>
+
+                    <!-- Channel Analytics -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">📱</span>
+                            Channel Analytics
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="channels">
+                            Channel Overview
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="campaign">
+                            Campaign ROI
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="social">
+                            Social Link Tracking
+                        </a>
+                    </div>
+
+                    <!-- Testing & Optimization -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">🧪</span>
+                            Testing & Optimization
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa-ads.html" data-section="content">
+                            Content Testing
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <!-- 挂烫机产品线 -->
-            <div class="menu-category">
-                <div class="category-title">
-                    <span class="category-icon">👔</span>
-                    Steamer Product Line
+            <!-- Product Dashboards Primary Menu -->
+            <div class="primary-menu">
+                <div class="primary-menu-item expanded" onclick="toggleSubmenu(this)">
+                    <span>📦 Product Dashboards</span>
+                    <span class="menu-arrow">▶</span>
                 </div>
-                <a href="#" class="menu-item" data-page="neakasa-steamer01.html">
-                    Social Media Marketing
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa-steamer02.html">
-                    Platform Performance
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa-steamer03.html">
-                    Multi-Channel Sales
-                </a>
-                <a href="#" class="menu-item" data-page="Neakasa-steamer04.html">
-                    MAGIC1 Sales Trends
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa-steamer05.html">
-                    Social Media Analytics
-                </a>
-            </div>
+                
+                <div class="submenu expanded">
+                    <!-- Overview Analysis -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">📊</span>
+                            Overview Analysis
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa-tts.html">
+                            TikTok Shop Comparison
+                            <span class="menu-badge">Featured</span>
+                        </a>
+                    </div>
 
-            <!-- 猫砂盆产品线 -->
-            <div class="menu-category">
-                <div class="category-title">
-                    <span class="category-icon">🐱</span>
-                    Cat Litter Box Product Line
+                    <!-- Steamer Product Line -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">👔</span>
+                            Steamer Product Line
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa-steamer01.html">
+                            Social Media Marketing
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-steamer02.html">
+                            Platform Performance
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-steamer03.html">
+                            Multi-Channel Sales
+                        </a>
+                        <a href="#" class="menu-item" data-page="Neakasa-steamer04.html">
+                            MAGIC1 Sales Trends
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa-steamer05.html">
+                            Social Media Analytics
+                        </a>
+                    </div>
+
+                    <!-- Cat Litter Box Product Line -->
+                    <div class="menu-category">
+                        <div class="category-title">
+                            <span class="category-icon">🐱</span>
+                            Cat Litter Box Product Line
+                        </div>
+                        <a href="#" class="menu-item" data-page="neakasa_catbox01.html">
+                            Marketing Overview
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa_catbox02.html">
+                            Social Media - Phase 3
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa_catbox03.html">
+                            Europe Market Analysis
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa_catbox04.html">
+                            Sales Dashboard
+                        </a>
+                        <a href="#" class="menu-item" data-page="neakasa_catbox05.html">
+                            Q2 Top Content Analysis
+                            <span class="menu-badge">2025</span>
+                        </a>
+                    </div>
                 </div>
-                <a href="#" class="menu-item" data-page="neakasa_catbox01.html">
-                    Marketing Overview
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa_catbox02.html">
-                    Social Media - Phase 3
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa_catbox03.html">
-                    Europe Market Analysis
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa_catbox04.html">
-                    Sales Dashboard
-                </a>
-                <a href="#" class="menu-item" data-page="neakasa_catbox05.html">
-                    Q2 Top Content Analysis
-                    <span class="menu-badge">2025</span>
-                </a>
             </div>
         </nav>
 
@@ -347,7 +496,7 @@
                 <div class="spinner"></div>
                 <p style="margin-top: 20px; color: #888;">Loading...</p>
             </div>
-            <iframe class="content-frame" id="contentFrame" src="neakasa-tts.html" onload="hideLoading()"></iframe>
+            <iframe class="content-frame" id="contentFrame" src="neakasa-ads.html" onload="hideLoading()"></iframe>
         </main>
     </div>
 
@@ -355,36 +504,71 @@
     <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">☰</button>
 
     <script>
-        // Get all menu items
-        const menuItems = document.querySelectorAll('.menu-item');
+        // Get all elements
         const contentFrame = document.getElementById('contentFrame');
         const loading = document.getElementById('loading');
         const sidebar = document.getElementById('sidebar');
 
-        // Add click event to menu items
-        menuItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Remove active class from all items
-                menuItems.forEach(menuItem => menuItem.classList.remove('active'));
-                
-                // Add active class to clicked item
-                this.classList.add('active');
-                
-                // Show loading
-                showLoading();
-                
-                // Load the page
-                const page = this.getAttribute('data-page');
-                contentFrame.src = page;
-                
-                // Close sidebar on mobile after selection
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('open');
-                }
+        // Function to toggle submenu
+        function toggleSubmenu(element) {
+            const submenu = element.nextElementSibling;
+            element.classList.toggle('expanded');
+            submenu.classList.toggle('expanded');
+        }
+
+        // Handle menu item clicks for all items (primary and sub items)
+        function setupMenuItems() {
+            const allMenuItems = document.querySelectorAll('.menu-item, .primary-menu-item[data-page]');
+            
+            allMenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    document.querySelectorAll('.menu-item, .primary-menu-item').forEach(menuItem => {
+                        menuItem.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show loading
+                    showLoading();
+                    
+                    // Load the page
+                    const page = this.getAttribute('data-page');
+                    const section = this.getAttribute('data-section');
+                    
+                    if (page) {
+                        contentFrame.src = page;
+                        
+                        // Handle navigation to specific sections
+                        if (section) {
+                            contentFrame.onload = function() {
+                                setTimeout(() => {
+                                    try {
+                                        // Call the render method on the dashboard app within the iframe
+                                        if (contentFrame.contentWindow && contentFrame.contentWindow.dashboardApp) {
+                                            contentFrame.contentWindow.dashboardApp.render(section);
+                                        }
+                                    } catch (e) {
+                                        console.log('Unable to navigate to section:', e);
+                                    }
+                                }, 100);
+                            };
+                        }
+                    }
+                    
+                    // Close sidebar on mobile after selection
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('open');
+                    }
+                });
             });
-        });
+        }
+
+        // Initialize menu items
+        setupMenuItems();
 
         // Show loading spinner
         function showLoading() {
