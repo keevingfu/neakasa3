@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Garment Steamer - Social Media Marketing Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .kpi-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .kpi-title {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .kpi-change {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .positive {
+            color: #4caf50;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+        
+        .insights-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .insight-card {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9ff;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .insight-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .insight-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        
+        .recommendation-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .roi-highlight {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .roi-highlight h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Neakasa Garment Steamer - Social Media Marketing Dashboard</h1>
+            <p>Campaign Period: June 30 - July 6, 2025 | Platforms: YouTube, Instagram, TikTok</p>
+        </div>
+        
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Active Accounts</div>
+                <div class="kpi-value">30</div>
+                <div class="kpi-change positive">100% Achievement</div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">Total Views</div>
+                <div class="kpi-value">28.76M</div>
+                <div class="kpi-change positive">+79.75% vs Target</div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">Total Engagement</div>
+                <div class="kpi-value">378.5K</div>
+                <div class="kpi-change positive">+2.63% vs Target</div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">Total Clicks</div>
+                <div class="kpi-value">49.1K</div>
+                <div class="kpi-change positive">+206.61% vs Target</div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-title">Revenue Generated</div>
+                <div class="kpi-value">$30,427</div>
+                <div class="kpi-change positive">Strong Performance</div>
+            </div>
+        </div>
+        
+        <div class="roi-highlight">
+            <h2>ROI: 4x</h2>
+            <p>Every $1 invested generated $4 in revenue</p>
+        </div>
+        
+        <div class="grid-2">
+            <div class="chart-container">
+                <h3 class="chart-title">Performance vs Target Achievement</h3>
+                <div id="performanceChart" class="chart"></div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="chart-title">Engagement Metrics Breakdown</h3>
+                <div id="engagementChart" class="chart"></div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3 class="chart-title">Conversion Funnel Analysis</h3>
+            <div id="funnelChart" class="chart"></div>
+        </div>
+        
+        <div class="insights-section">
+            <h2 class="chart-title">Key Insights & Recommendations</h2>
+            
+            <div class="insight-card">
+                <div class="insight-title">1. Exceptional View Performance</div>
+                <div class="insight-text">
+                    The campaign achieved 179.75% of the target views (28.76M vs 16M target), indicating highly engaging content that resonated with the audience. This suggests the content strategy and platform algorithm optimization were extremely effective.
+                </div>
+                <div class="recommendation">
+                    <div class="recommendation-title">Recommendation:</div>
+                    <p>Analyze top-performing content themes and formats. Scale successful content types while maintaining quality. Consider increasing content production budget given the strong view performance.</p>
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-title">2. Outstanding Click-Through Performance</div>
+                <div class="insight-text">
+                    Clicks exceeded target by 206.61% (49K vs 16K target), showing exceptional conversion from views to action. The click-through rate of 0.17% is strong for social media campaigns.
+                </div>
+                <div class="recommendation">
+                    <div class="recommendation-title">Recommendation:</div>
+                    <p>Optimize landing pages to match the high click volume. Implement A/B testing on call-to-action buttons and messaging. Consider increasing product inventory to meet potential demand surge.</p>
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-title">3. Strong ROI Performance</div>
+                <div class="insight-text">
+                    With an ROI of 4x, the campaign demonstrates excellent efficiency. The $30,427 in revenue from the campaign shows strong monetization of social media traffic.
+                </div>
+                <div class="recommendation">
+                    <div class="recommendation-title">Recommendation:</div>
+                    <p>Scale the campaign budget incrementally while monitoring ROI. Focus on high-converting content creators and platforms. Implement attribution tracking to identify best-performing channels.</p>
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-title">4. Engagement Rate Optimization Opportunity</div>
+                <div class="insight-text">
+                    While engagement targets were met (102.63%), the engagement rate (1.32%) could be improved relative to the exceptional view count. This suggests viewers are watching but not always interacting.
+                </div>
+                <div class="recommendation">
+                    <div class="recommendation-title">Recommendation:</div>
+                    <p>Implement interactive content strategies: polls, Q&As, challenges. Encourage user-generated content campaigns. Test different posting times to maximize engagement rates.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="insights-section">
+            <h2 class="chart-title">Strategic Next Steps</h2>
+            
+            <div class="insight-card">
+                <div class="insight-title">Short-term Actions (1-2 weeks)</div>
+                <div class="insight-text">
+                    • Identify and replicate top 20% performing content<br>
+                    • Increase budget allocation to high-performing creators<br>
+                    • Implement enhanced tracking for platform-specific performance<br>
+                    • Launch retargeting campaigns for the 49K clickers
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <div class="insight-title">Medium-term Strategy (1-3 months)</div>
+                <div class="insight-text">
+                    • Expand creator network by 50% focusing on micro-influencers<br>
+                    • Develop platform-specific content strategies<br>
+                    • Create seasonal campaigns for summer garment care<br>
+                    • Build email list from social traffic for long-term value
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Performance vs Target Chart
+        const performanceChart = echarts.init(document.getElementById('performanceChart'));
+        const performanceOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: ['Target', 'Actual', 'Achievement %']
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Accounts', 'Views', 'Engagement', 'Clicks']
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Count',
+                    position: 'left'
+                },
+                {
+                    type: 'value',
+                    name: 'Achievement %',
+                    position: 'right',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'Target',
+                    type: 'bar',
+                    data: [30, 16000000, 368800, 16000],
+                    itemStyle: {
+                        color: '#e0e0e0'
+                    }
+                },
+                {
+                    name: 'Actual',
+                    type: 'bar',
+                    data: [30, 28760095, 378507, 49058],
+                    itemStyle: {
+                        color: '#667eea'
+                    }
+                },
+                {
+                    name: 'Achievement %',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [100, 179.75, 102.63, 306.61],
+                    itemStyle: {
+                        color: '#4caf50'
+                    },
+                    lineStyle: {
+                        width: 3
+                    },
+                    symbol: 'circle',
+                    symbolSize: 8
+                }
+            ]
+        };
+        performanceChart.setOption(performanceOption);
+        
+        // Engagement Metrics Breakdown
+        const engagementChart = echarts.init(document.getElementById('engagementChart'));
+        const engagementOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: 'Engagement Metrics',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {value: 28760095, name: 'Views', itemStyle: {color: '#667eea'}},
+                        {value: 378507, name: 'Engagements', itemStyle: {color: '#764ba2'}},
+                        {value: 49058, name: 'Clicks', itemStyle: {color: '#f093fb'}},
+                        {value: 30427, name: 'Revenue ($)', itemStyle: {color: '#4caf50'}}
+                    ]
+                }
+            ]
+        };
+        engagementChart.setOption(engagementOption);
+        
+        // Conversion Funnel Chart
+        const funnelChart = echarts.init(document.getElementById('funnelChart'));
+        const funnelOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}'
+            },
+            toolbox: {
+                feature: {
+                    dataView: {readOnly: false},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            series: [
+                {
+                    name: 'Conversion Funnel',
+                    type: 'funnel',
+                    left: '10%',
+                    top: 60,
+                    bottom: 60,
+                    width: '80%',
+                    sort: 'descending',
+                    gap: 2,
+                    label: {
+                        show: true,
+                        position: 'inside',
+                        formatter: '{b}\n{c}'
+                    },
+                    labelLine: {
+                        length: 10,
+                        lineStyle: {
+                            width: 1,
+                            type: 'solid'
+                        }
+                    },
+                    itemStyle: {
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        label: {
+                            fontSize: 20
+                        }
+                    },
+                    data: [
+                        {value: 28760095, name: 'Total Views', itemStyle: {color: '#667eea'}},
+                        {value: 378507, name: 'Engagements', itemStyle: {color: '#764ba2'}},
+                        {value: 49058, name: 'Clicks to Site', itemStyle: {color: '#f093fb'}},
+                        {value: 30427/50, name: 'Estimated Conversions', itemStyle: {color: '#4caf50'}}
+                    ]
+                }
+            ]
+        };
+        funnelChart.setOption(funnelOption);
+        
+        // Make charts responsive
+        window.addEventListener('resize', function() {
+            performanceChart.resize();
+            engagementChart.resize();
+            funnelChart.resize();
+        });
+    </script>
+</body>
+</html>
