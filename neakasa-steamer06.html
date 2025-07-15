@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Marketing Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+        }
+        .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .tag:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+        .strategy-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .strategy-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Content Marketing Analytics Dashboard</h1>
+            <p class="text-gray-600">Strategic insights for vacuum steamer content optimization</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card">
+                <h3 class="text-lg font-semibold mb-2">Target Segments</h3>
+                <p class="text-3xl font-bold">7</p>
+                <p class="text-sm opacity-90">Distinct audience groups</p>
+            </div>
+            <div class="metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <h3 class="text-lg font-semibold mb-2">Total Search Volume</h3>
+                <p class="text-3xl font-bold">42.8K</p>
+                <p class="text-sm opacity-90">Monthly searches</p>
+            </div>
+            <div class="metric-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <h3 class="text-lg font-semibold mb-2">Content Coverage</h3>
+                <p class="text-3xl font-bold">100%</p>
+                <p class="text-sm opacity-90">Audience reach</p>
+            </div>
+            <div class="metric-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <h3 class="text-lg font-semibold mb-2">Key Scenarios</h3>
+                <p class="text-3xl font-bold">5</p>
+                <p class="text-sm opacity-90">Use cases covered</p>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Audience Distribution -->
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Target Audience Distribution</h2>
+                <div id="audienceChart" style="height: 400px;"></div>
+            </div>
+
+            <!-- Keyword Search Volume -->
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Keyword Search Volume Analysis</h2>
+                <div id="keywordChart" style="height: 400px;"></div>
+            </div>
+        </div>
+
+        <!-- Content Strategy Matrix -->
+        <div class="chart-container mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Content Strategy Effectiveness Matrix</h2>
+            <div id="strategyMatrix" style="height: 400px;"></div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Scenario Distribution -->
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Usage Scenario Distribution</h2>
+                <div id="scenarioChart" style="height: 350px;"></div>
+            </div>
+
+            <!-- Tag Cloud Analysis -->
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Hashtag Strategy Cloud</h2>
+                <div class="tag-cloud" id="tagCloud"></div>
+            </div>
+        </div>
+
+        <!-- Content Performance Prediction -->
+        <div class="chart-container mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Projected Content Performance by Segment</h2>
+            <div id="performanceChart" style="height: 400px;"></div>
+        </div>
+
+        <!-- Strategy Recommendations -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Key Strategic Insights</h2>
+                <div id="insights">
+                    <div class="strategy-card">
+                        <h3 class="font-semibold text-gray-800">Primary Focus Segments</h3>
+                        <p class="text-gray-600 mt-2">Business professionals and travelers represent 60% of content allocation, indicating high-value target segments with immediate purchase intent.</p>
+                    </div>
+                    <div class="strategy-card">
+                        <h3 class="font-semibold text-gray-800">SEO Optimization Priority</h3>
+                        <p class="text-gray-600 mt-2">"Clothes steamer" dominates with 22.2K monthly searches. Prioritize this keyword in all content while maintaining brand term "neakasamagic1".</p>
+                    </div>
+                    <div class="strategy-card">
+                        <h3 class="font-semibold text-gray-800">Content Hook Strategy</h3>
+                        <p class="text-gray-600 mt-2">Time-saving messaging resonates across all segments. Lead with "5 minutes", "3 minutes", or "60 seconds" in opening hooks.</p>
+                    </div>
+                    <div class="strategy-card">
+                        <h3 class="font-semibold text-gray-800">Cross-Segment Opportunities</h3>
+                        <p class="text-gray-600 mt-2">Portable and space-saving features appeal to 45% of audiences (travelers + small space residents + students).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Content Optimization Radar</h2>
+                <div id="radarChart" style="height: 350px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize all charts
+        const audienceChart = echarts.init(document.getElementById('audienceChart'));
+        const keywordChart = echarts.init(document.getElementById('keywordChart'));
+        const strategyMatrix = echarts.init(document.getElementById('strategyMatrix'));
+        const scenarioChart = echarts.init(document.getElementById('scenarioChart'));
+        const performanceChart = echarts.init(document.getElementById('performanceChart'));
+        const radarChart = echarts.init(document.getElementById('radarChart'));
+
+        // Audience Distribution Pie Chart
+        const audienceOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c}%'
+            },
+            legend: {
+                bottom: 0,
+                left: 'center'
+            },
+            series: [{
+                name: 'Content Allocation',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 20,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: 30, name: 'Busy Professionals', itemStyle: { color: '#5470c6' } },
+                    { value: 25, name: 'Homemakers', itemStyle: { color: '#91cc75' } },
+                    { value: 30, name: 'Frequent Travelers', itemStyle: { color: '#fac858' } },
+                    { value: 10, name: 'Beginners', itemStyle: { color: '#ee6666' } },
+                    { value: 10, name: 'Fashion Enthusiasts', itemStyle: { color: '#73c0de' } },
+                    { value: 5, name: 'Small Space Dwellers', itemStyle: { color: '#3ba272' } },
+                    { value: 5, name: 'Students', itemStyle: { color: '#fc8452' } }
+                ]
+            }]
+        };
+
+        // Keyword Search Volume Bar Chart
+        const keywordOption = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: function(value) {
+                        return value >= 1000 ? (value / 1000) + 'K' : value;
+                    }
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: ['vacuum steamer', 'hand held steamer', 'portable steamer', 'travel steamer', 'garment steamer', 'clothes steamer']
+            },
+            series: [{
+                name: 'Monthly Search Volume',
+                type: 'bar',
+                data: [
+                    { value: 1000, itemStyle: { color: '#fc8452' } },
+                    { value: 2400, itemStyle: { color: '#3ba272' } },
+                    { value: 3600, itemStyle: { color: '#73c0de' } },
+                    { value: 5400, itemStyle: { color: '#ee6666' } },
+                    { value: 5400, itemStyle: { color: '#fac858' } },
+                    { value: 22200, itemStyle: { color: '#5470c6' } }
+                ],
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function(params) {
+                        return params.value >= 1000 ? (params.value / 1000).toFixed(1) + 'K' : params.value;
+                    }
+                }
+            }]
+        };
+
+        // Content Strategy Matrix Heatmap
+        const audiences = ['Busy Professionals', 'Homemakers', 'Travelers', 'Beginners', 'Fashion Lovers', 'Small Spaces', 'Students'];
+        const strategies = ['Time-Saving', 'Ease of Use', 'Portability', 'Space-Saving', 'Professional Look'];
+        const matrixData = [
+            [0, 0, 5], [0, 1, 4], [0, 2, 5], [0, 3, 3], [0, 4, 5],
+            [1, 0, 4], [1, 1, 5], [1, 2, 3], [1, 3, 3], [1, 4, 3],
+            [2, 0, 5], [2, 1, 4], [2, 2, 5], [2, 3, 5], [2, 4, 4],
+            [3, 0, 3], [3, 1, 5], [3, 2, 3], [3, 3, 2], [3, 4, 2],
+            [4, 0, 4], [4, 1, 3], [4, 2, 4], [4, 3, 3], [4, 4, 5],
+            [5, 0, 4], [5, 1, 4], [5, 2, 4], [5, 3, 5], [5, 4, 3],
+            [6, 0, 5], [6, 1, 4], [6, 2, 5], [6, 3, 4], [6, 4, 3]
+        ];
+
+        const strategyMatrixOption = {
+            tooltip: {
+                position: 'top'
+            },
+            grid: {
+                height: '70%',
+                left: '15%',
+                top: '10%'
+            },
+            xAxis: {
+                type: 'category',
+                data: strategies,
+                splitArea: {
+                    show: true
+                },
+                axisLabel: {
+                    rotate: 30
+                }
+            },
+            yAxis: {
+                type: 'category',
+                data: audiences,
+                splitArea: {
+                    show: true
+                }
+            },
+            visualMap: {
+                min: 1,
+                max: 5,
+                calculable: true,
+                orient: 'horizontal',
+                left: 'center',
+                bottom: '5%',
+                inRange: {
+                    color: ['#e3f2fd', '#1976d2']
+                }
+            },
+            series: [{
+                name: 'Strategy Effectiveness',
+                type: 'heatmap',
+                data: matrixData,
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+
+        // Scenario Distribution Radar
+        const scenarioOption = {
+            tooltip: {},
+            radar: {
+                indicator: [
+                    { name: 'Morning Rush', max: 100 },
+                    { name: 'Home Care', max: 100 },
+                    { name: 'Travel', max: 100 },
+                    { name: 'Professional', max: 100 },
+                    { name: 'Quick Fix', max: 100 }
+                ],
+                shape: 'polygon'
+            },
+            series: [{
+                name: 'Usage Scenarios',
+                type: 'radar',
+                data: [{
+                    value: [85, 70, 90, 95, 80],
+                    name: 'Scenario Coverage',
+                    areaStyle: {
+                        color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+                            { color: '#5470c6', offset: 0 },
+                            { color: '#91cc75', offset: 1 }
+                        ])
+                    }
+                }]
+            }]
+        };
+
+        // Performance Projection Line Chart
+        const performanceOption = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Engagement Rate', 'Conversion Potential', 'Content Reach'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: audiences
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+            },
+            series: [
+                {
+                    name: 'Engagement Rate',
+                    type: 'line',
+                    smooth: true,
+                    data: [75, 65, 80, 55, 85, 60, 70],
+                    itemStyle: { color: '#5470c6' }
+                },
+                {
+                    name: 'Conversion Potential',
+                    type: 'line',
+                    smooth: true,
+                    data: [70, 60, 85, 45, 65, 50, 55],
+                    itemStyle: { color: '#91cc75' }
+                },
+                {
+                    name: 'Content Reach',
+                    type: 'line',
+                    smooth: true,
+                    data: [90, 75, 85, 60, 70, 55, 80],
+                    itemStyle: { color: '#fac858' }
+                }
+            ]
+        };
+
+        // Content Optimization Radar
+        const radarOption = {
+            tooltip: {},
+            radar: {
+                indicator: [
+                    { name: 'SEO Strength', max: 100 },
+                    { name: 'Audience Match', max: 100 },
+                    { name: 'Message Clarity', max: 100 },
+                    { name: 'Visual Appeal', max: 100 },
+                    { name: 'CTA Effectiveness', max: 100 },
+                    { name: 'Hashtag Strategy', max: 100 }
+                ]
+            },
+            series: [{
+                name: 'Content Optimization',
+                type: 'radar',
+                data: [{
+                    value: [85, 90, 88, 75, 82, 78],
+                    name: 'Current Performance',
+                    lineStyle: {
+                        color: '#5470c6',
+                        width: 2
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+                            { color: '#5470c6', offset: 0 },
+                            { color: 'rgba(84, 112, 198, 0.3)', offset: 1 }
+                        ])
+                    }
+                }]
+            }]
+        };
+
+        // Set all chart options
+        audienceChart.setOption(audienceOption);
+        keywordChart.setOption(keywordOption);
+        strategyMatrix.setOption(strategyMatrixOption);
+        scenarioChart.setOption(scenarioOption);
+        performanceChart.setOption(performanceOption);
+        radarChart.setOption(radarOption);
+
+        // Generate Tag Cloud
+        const tags = [
+            { name: '#neakasamagic1', frequency: 100, required: true },
+            { name: '#PortableSteamer', frequency: 100, required: true },
+            { name: '#vacuumsteamer', frequency: 100, required: true },
+            { name: '#clothessteamer', frequency: 100, required: true },
+            { name: '#BusyLife', frequency: 30 },
+            { name: '#MorningHacks', frequency: 30 },
+            { name: '#TravelEssentials', frequency: 30 },
+            { name: '#HomeHacks', frequency: 25 },
+            { name: '#EasyToUse', frequency: 10 },
+            { name: '#FashionEssentials', frequency: 10 },
+            { name: '#SmallSpaceLiving', frequency: 5 },
+            { name: '#QuickWrinkleFix', frequency: 35 },
+            { name: '#TimeSavingHacks', frequency: 40 },
+            { name: '#WrinkleFreeInMinutes', frequency: 45 }
+        ];
+
+        const tagCloud = document.getElementById('tagCloud');
+        tags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'tag';
+            tagElement.textContent = tag.name;
+            tagElement.style.fontSize = Math.max(12, Math.min(24, tag.frequency / 5)) + 'px';
+            if (tag.required) {
+                tagElement.style.background = '#1976d2';
+                tagElement.style.color = 'white';
+                tagElement.style.fontWeight = 'bold';
+            }
+            tagCloud.appendChild(tagElement);
+        });
+
+        // Responsive chart resize
+        window.addEventListener('resize', function() {
+            audienceChart.resize();
+            keywordChart.resize();
+            strategyMatrix.resize();
+            scenarioChart.resize();
+            performanceChart.resize();
+            radarChart.resize();
+        });
+    </script>
+</body>
+</html>

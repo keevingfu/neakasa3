@@ -4,129 +4,111 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**neakasa_h5** is a collection of standalone HTML dashboard files for Neakasa product marketing analytics. The project contains 11 self-contained HTML files with embedded CSS and JavaScript for data visualization and analysis.
+**neakasa_h5** is a collection of standalone HTML dashboard files for Neakasa product marketing analytics. The project contains 14 self-contained HTML files with embedded CSS and JavaScript for data visualization and analysis.
 
 ## Project Structure
 
-### Product Categories
+### Dashboard Categories
 
-1. **Steamer Dashboards** (5 files): 
+1. **Navigation Hub** (1 file):
+   - `index.html` - Central navigation dashboard with sidebar menu and overview stats
+
+2. **Comprehensive Analytics** (1 file):
+   - `neakasa-ads.html` - Executive-level analytics using Chart.js and Tailwind CSS
+
+3. **Steamer Product Dashboards** (6 files):
    - `neakasa-steamer01.html` - Social Media Marketing Dashboard
    - `neakasa-steamer02.html` - Platform Performance Dashboard
    - `neakasa-steamer03.html` - Multi-Channel Sales Dashboard
    - `Neakasa-steamer04.html` - MAGIC1挂烫机销售数据环比分析 (Chinese)
    - `neakasa-steamer05.html` - Social Media Analytics Dashboard
+   - `neakasa-steamer06.html` - Content Marketing Analytics (Tailwind CSS)
 
-2. **Cat Box Dashboards** (5 files):
+4. **Cat Litter Box Dashboards** (5 files):
    - `neakasa_catbox01.html` - Marketing Analytics Dashboard
    - `neakasa_catbox02.html` - Social Media Analytics Dashboard - Phase 3
    - `neakasa_catbox03.html` - Europe Social Media Analytics Dashboard
    - `neakasa_catbox04.html` - Cat Litter Box Sales Dashboard
    - `neakasa_catbox05.html` - Top Content Performance Dashboard - Q2 2025
 
-3. **TikTok Shop Analysis** (1 file):
-   - `neakasa-tts.html` - TikTok Shop (TTS) 产品对比分析
+5. **Product Comparison** (1 file):
+   - `neakasa-tts.html` - TikTok Shop (TTS) 产品对比分析 (Chinese)
 
-## Technical Stack
+## Commands
 
-- **Frontend**: Pure HTML5 with embedded CSS and JavaScript
-- **Data Visualization**: Apache ECharts v5.4.3 (CDN)
-- **Styling**: CSS3 with Grid/Flexbox layouts, dark theme with gradient accents
-- **JavaScript**: Vanilla JS (ES6+) with no framework dependencies
-- **Performance**: Intersection Observer API for lazy loading
+### Development
+```bash
+# No build process - serve HTML files directly
+python -m http.server 8000  # Python 3
+# or
+npx http-server             # Node.js
+# or
+open *.html                 # macOS - open in browser
+```
 
-## Key Features
+### Testing
+No automated tests - manually verify in browser:
+1. Check responsive behavior (mobile/tablet/desktop)
+2. Verify chart interactions (hover, click)
+3. Test chart resize on window resize
+4. Validate data calculations if modifying
 
-### Common Features Across All Dashboards
-- Responsive design with mobile support
-- Interactive charts with hover effects
-- Real-time chart resizing on window resize
-- Dark theme with gradient backgrounds
-- No external API calls (all data is embedded)
+## Architecture
 
-### Dashboard Types
-1. **Social Media Analytics** - Track engagement across TikTok, Instagram, YouTube
-2. **Sales Performance** - Monitor revenue and conversion metrics
-3. **Regional Analysis** - Europe-specific performance data
-4. **Content Performance** - Top posts and engagement analysis
-5. **Comparative Analysis** - Month-over-month performance tracking
+### Technical Stack
+- **Visualization Libraries**:
+  - Apache ECharts v5.4.3 (most dashboards)
+  - Chart.js v4.4.1 (neakasa-ads.html and newer files)
+- **Styling**:
+  - Custom CSS (older dashboards)
+  - Tailwind CSS via CDN (newer dashboards)
+- **JavaScript**: Vanilla ES6+ (no frameworks)
+- **Data**: Hardcoded in each file (no backend)
 
-## neakasa-tts.html - TikTok Shop Product Comparison Analysis
+### Design Patterns
+1. **Self-contained files**: Each HTML file includes all CSS, JS, and data
+2. **Dark theme**: Consistent use of #0f0f23 or #0f0f1e backgrounds
+3. **Gradient accents**: #00f2ea to #ff0050 gradients throughout
+4. **Responsive layout**: CSS Grid/Flexbox with mobile breakpoints
+5. **Lazy loading**: Intersection Observer API for performance
 
-### Overview
-This dashboard provides a comprehensive comparison between two Neakasa products (Steamer vs Cat Litter Box) sold on TikTok Shop from April to June 2024.
+### Data Structure Conventions
+```javascript
+// ECharts dashboards use option objects:
+const option = {
+    title: { text: 'Dashboard Title' },
+    series: [{ data: [...] }]
+};
 
-### Key Components
+// Chart.js dashboards use config objects:
+const config = {
+    type: 'line',
+    data: { datasets: [...] },
+    options: { responsive: true }
+};
+```
 
-1. **Product Comparison Cards**
-   - Visual KPI cards showing clicks, orders, and revenue
-   - Performance badges (高性能产品/需要优化)
-   - Growth indicators with percentage changes
+## Key Development Considerations
 
-2. **Data Insights**
-   - **Steamer (挂烫机)**: 
-     - 386K total clicks (679x growth)
-     - 3,554 orders (895% increase)
-     - ¥77,674 revenue (100% of total revenue)
-   - **Cat Litter Box (猫砂盆)**:
-     - 746 clicks (27% decrease)
-     - 14 orders (43% decrease)
-     - ¥0 revenue (data anomaly)
+1. **File Size**: Keep under 40KB for optimal loading
+2. **Chart Responsiveness**: Always include resize handlers
+3. **Data Consistency**: Maintain same data format across similar dashboards
+4. **Browser Compatibility**: Test in Chrome, Safari, Firefox
+5. **Mobile Support**: Ensure touch interactions work properly
 
-3. **Visualizations**
-   - Monthly trend comparison (logarithmic scale)
-   - Conversion rate radar chart
-   - Traffic distribution pie chart
-   - Revenue stacked bar chart
-   - Product performance radar chart
-   - Growth rate analysis
+## Important Project Context
 
-4. **Technical Features**
-   - Chinese language interface
-   - Dark theme with neon accents (#00f2ea, #ff0050)
-   - Responsive grid layout
-   - Warning box for data anomalies
-   - Animated loading states
+- **Purpose**: Marketing analytics and reporting dashboards
+- **Audience**: Internal Neakasa marketing team
+- **Data Source**: Static demonstration data (not live)
+- **Deployment**: Can be served from any static web server
+- **Version Control**: Project currently not in git (consider initializing)
+- **Test Directory**: Contains experimental TSX/React components (not production)
 
-### Data Anomalies Detected
-- April steamer orders (182) exceed clicks (178) - possible data collection issue
-- Cat litter box shows 14 orders but ¥0 revenue - requires investigation
+## Common Data Patterns
 
-### Business Insights
-- TikTok Shop traffic is 99.8% concentrated on steamers
-- Steamer conversion rates: 0.92-1.5% (excluding April anomaly)
-- Cat litter box needs urgent optimization (1.88% conversion, no revenue)
-- Significant growth opportunity identified for May-June period
-
-## File Characteristics
-
-- **Size Range**: 17KB - 39KB per file
-- **No Build Process**: Direct HTML files ready for deployment
-- **Static Data**: All dashboards use hardcoded data for demonstration
-- **Deployment Ready**: Can be served directly from any web server
-
-## Development Guidelines
-
-1. **Adding New Dashboards**:
-   - Follow existing naming convention: `neakasa_[product][number].html`
-   - Use ECharts for consistency
-   - Maintain dark theme styling
-   - Embed all data directly in the file
-
-2. **Modifying Existing Dashboards**:
-   - Test responsive behavior after changes
-   - Ensure chart resize handlers are maintained
-   - Keep data structures consistent
-
-3. **Performance Considerations**:
-   - Lazy load images and heavy content
-   - Minimize external dependencies
-   - Keep file sizes under 40KB when possible
-
-## Important Notes
-
-- All data appears to be for demonstration/reporting purposes
-- No backend integration or real-time data feeds
-- TikTok dominates traffic sources (90%+ in most dashboards)
-- Low engagement rates despite high view counts is a common pattern
-- The project is not currently version controlled (no .git directory)
+- **TikTok Dominance**: Most dashboards show 90%+ traffic from TikTok
+- **Low Engagement**: High view counts but low engagement rates (< 1%)
+- **Time Periods**: Most data covers Q1-Q2 2024 or 2025
+- **Languages**: English (default) and Chinese (specific dashboards)
+- **Currency**: Mixed USD ($) and CNY (¥) depending on region
