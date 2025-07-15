@@ -17,12 +17,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - `neakasa-ads.html` - Executive-level analytics using Chart.js and Tailwind CSS
 
 3. **Steamer Product Dashboards** (6 files):
-   - `neakasa-steamer01.html` - Social Media Marketing Dashboard
-   - `neakasa-steamer02.html` - Platform Performance Dashboard
-   - `neakasa-steamer03.html` - Multi-Channel Sales Dashboard
-   - `Neakasa-steamer04.html` - MAGIC1挂烫机销售数据环比分析 (Chinese)
-   - `neakasa-steamer05.html` - Social Media Analytics Dashboard
-   - `neakasa-steamer06.html` - Content Marketing Analytics (Tailwind CSS)
+   - `neakasa-steamer01.html` - Social Media Marketing Dashboard (ECharts)
+   - `neakasa-steamer02.html` - Platform Performance Dashboard (ECharts)
+   - `neakasa-steamer03.html` - Multi-Channel Sales Dashboard (ECharts)
+   - `Neakasa-steamer04.html` - MAGIC1挂烫机销售数据环比分析 (Chinese, ECharts)
+   - `neakasa-steamer05.html` - Social Media Analytics Dashboard (ECharts)
+   - `neakasa-steamer06.html` - Content Marketing Analytics (Tailwind CSS, ECharts)
 
 4. **Cat Litter Box Dashboards** (5 files):
    - `neakasa_catbox01.html` - Marketing Analytics Dashboard
@@ -44,6 +44,22 @@ python -m http.server 8000  # Python 3
 npx http-server             # Node.js
 # or
 open *.html                 # macOS - open in browser
+```
+
+### Git Workflow
+```bash
+# Clone repository
+git clone https://github.com/keevingfu/neakasa3.git
+
+# Check status
+git status
+
+# Stage and commit changes
+git add .
+git commit -m "Your commit message"
+
+# Push to GitHub
+git push origin main
 ```
 
 ### Testing
@@ -102,8 +118,8 @@ const config = {
 - **Audience**: Internal Neakasa marketing team
 - **Data Source**: Static demonstration data (not live)
 - **Deployment**: Can be served from any static web server
-- **Version Control**: Project currently not in git (consider initializing)
-- **Test Directory**: Contains experimental TSX/React components (not production)
+- **Version Control**: Git repository at https://github.com/keevingfu/neakasa3.git
+- **Test Directory**: Contains 15 experimental files (HTML prototypes and TSX React components)
 
 ## Common Data Patterns
 
@@ -112,3 +128,10 @@ const config = {
 - **Time Periods**: Most data covers Q1-Q2 2024 or 2025
 - **Languages**: English (default) and Chinese (specific dashboards)
 - **Currency**: Mixed USD ($) and CNY (¥) depending on region
+
+## Recent Updates
+
+- **2025-01-15**: Added neakasa-steamer06.html (Content Marketing Analytics)
+- **2025-01-15**: Updated navigation in index.html to include all 6 steamer dashboards
+- **2025-01-15**: Added .gitignore file for system files and future build artifacts
+- **2025-01-15**: Synced all files to GitHub repository
