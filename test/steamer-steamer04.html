@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAGIC1挂烫机销售数据环比分析</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+        
+        .card-title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-change {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .positive {
+            color: #10b981;
+        }
+        
+        .negative {
+            color: #ef4444;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 400px;
+        }
+        
+        .table-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: right;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+            position: sticky;
+            top: 0;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        
+        .period-column {
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .trend-cell {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.25rem;
+        }
+        
+        .trend-arrow {
+            font-size: 0.8rem;
+        }
+        
+        .insight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .insight-text {
+            color: #78350f;
+        }
+        
+        @media (max-width: 768px) {
+            .chart {
+                height: 300px;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MAGIC1 挂烫机销售数据分析</h1>
+        <p class="subtitle">2024年5月-7月 环比分析报告</p>
+    </div>
+
+    <div class="container">
+        <!-- 关键指标卡片 -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-title">总销售额</div>
+                <div class="card-value">¥42,711.78</div>
+                <div class="card-change positive">
+                    <span class="trend-arrow">↑</span>
+                    <span>覆盖9个销售周期</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">总订单数</div>
+                <div class="card-value">3,263</div>
+                <div class="card-change positive">
+                    <span class="trend-arrow">↑</span>
+                    <span>平均每周期362单</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">总点击量</div>
+                <div class="card-value">49,058</div>
+                <div class="card-change">
+                    <span>转化率: 6.65%</span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">平均客单价</div>
+                <div class="card-value">¥13.09</div>
+                <div class="card-change">
+                    <span>各渠道价格一致</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 销售趋势图 -->
+        <div class="chart-container">
+            <h2 class="chart-title">销售额趋势及环比变化</h2>
+            <div id="salesTrendChart" class="chart"></div>
+        </div>
+
+        <!-- 渠道对比图 -->
+        <div class="chart-container">
+            <h2 class="chart-title">各渠道销售占比分析</h2>
+            <div class="chart-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div id="channelPieChart" class="chart"></div>
+                <div id="channelTrendChart" class="chart"></div>
+            </div>
+        </div>
+
+        <!-- 转化率分析 -->
+        <div class="chart-container">
+            <h2 class="chart-title">各渠道转化率对比</h2>
+            <div id="conversionChart" class="chart"></div>
+        </div>
+
+        <!-- 关键洞察 -->
+        <div class="insight-box">
+            <div class="insight-title">📊 关键发现</div>
+            <div class="insight-text">
+                <ul>
+                    <li>TTS（TikTok Shop）渠道表现最佳，贡献了47.5%的销售额</li>
+                    <li>6月中旬后销售出现下滑趋势，最后一周环比下降54.5%</li>
+                    <li>DTC官网转化率最高（7.3%），但流量较少</li>
+                    <li>存在数据异常：5月19-25日期间"有一个新起来的挂车号掉车了"可能影响了该周期表现</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 详细数据表格 -->
+        <div class="table-container">
+            <h2 class="chart-title">详细环比分析数据</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="period-column">时间段</th>
+                        <th>总销售额</th>
+                        <th>环比</th>
+                        <th>总订单数</th>
+                        <th>环比</th>
+                        <th>总点击量</th>
+                        <th>环比</th>
+                        <th>转化率</th>
+                    </tr>
+                </thead>
+                <tbody id="analysisTable">
+                    <!-- 数据将通过JavaScript填充 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 原始数据
+        const rawData = [
+            { period: '5.7-5.11', dtc: { clicks: 175, orders: 46, revenue: 343.47 }, amz: { clicks: 178, orders: 9, revenue: 178.75 }, tts: { clicks: 145, orders: 72, revenue: 168.98 } },
+            { period: '5.12-5.18', dtc: { clicks: 101, orders: 94, revenue: 484.59 }, amz: { clicks: 275, orders: 8, revenue: 199.99 }, tts: { clicks: 277, orders: 72, revenue: 159.98 } },
+            { period: '5.19-5.25', dtc: { clicks: 404, orders: 85, revenue: 395.91 }, amz: { clicks: 167, orders: 22, revenue: 206.98 }, tts: { clicks: 192, orders: 42, revenue: 199.98 } },
+            { period: '5.26-6.1', dtc: { clicks: 266, orders: 36, revenue: 346.08 }, amz: { clicks: 168, orders: 7, revenue: 113.09 }, tts: { clicks: 195, orders: 0, revenue: 654.9 } },
+            { period: '6.2-6.8', dtc: { clicks: 108, orders: 38, revenue: 376.31 }, amz: { clicks: 196, orders: 8, revenue: 797.32 }, tts: { clicks: 244, orders: 0, revenue: 218.99 } },
+            { period: '6.9-6.15', dtc: { clicks: 370, orders: 43, revenue: 125.05 }, amz: { clicks: 127, orders: 6, revenue: 113.72 }, tts: { clicks: 159, orders: 73, revenue: 269.97 } },
+            { period: '6.16-6.22', dtc: { clicks: 311, orders: 23, revenue: 127.19 }, amz: { clicks: 93, orders: 5, revenue: 194.99 }, tts: { clicks: 107, orders: 75, revenue: 424.95 } },
+            { period: '6.23-6.29', dtc: { clicks: 325, orders: 93, revenue: 228.67 }, amz: { clicks: 68, orders: 11, revenue: 106.99 }, tts: { clicks: 107, orders: 82, revenue: 169.98 } },
+            { period: '6.30-7.6', dtc: { clicks: 582, orders: 119, revenue: 190.37 }, amz: { clicks: 79, orders: 4, revenue: 114.07 }, tts: { clicks: 130, orders: 11, revenue: 89.99 } }
+        ];
+
+        // 计算总计和环比
+        function calculateMetrics(data) {
+            const metrics = data.map((item, index) => {
+                const totalClicks = item.dtc.clicks + item.amz.clicks + item.tts.clicks;
+                const totalOrders = item.dtc.orders + item.amz.orders + item.tts.orders;
+                const totalRevenue = item.dtc.revenue + item.amz.revenue + item.tts.revenue;
+                const conversionRate = (totalOrders / totalClicks * 100).toFixed(2);
+                
+                let revenueChange = 0;
+                let ordersChange = 0;
+                let clicksChange = 0;
+                
+                if (index > 0) {
+                    const prevTotal = data[index - 1];
+                    const prevRevenue = prevTotal.dtc.revenue + prevTotal.amz.revenue + prevTotal.tts.revenue;
+                    const prevOrders = prevTotal.dtc.orders + prevTotal.amz.orders + prevTotal.tts.orders;
+                    const prevClicks = prevTotal.dtc.clicks + prevTotal.amz.clicks + prevTotal.tts.clicks;
+                    
+                    revenueChange = ((totalRevenue - prevRevenue) / prevRevenue * 100).toFixed(1);
+                    ordersChange = ((totalOrders - prevOrders) / prevOrders * 100).toFixed(1);
+                    clicksChange = ((totalClicks - prevClicks) / prevClicks * 100).toFixed(1);
+                }
+                
+                return {
+                    period: item.period,
+                    totalClicks,
+                    totalOrders,
+                    totalRevenue,
+                    conversionRate,
+                    revenueChange,
+                    ordersChange,
+                    clicksChange,
+                    ...item
+                };
+            });
+            
+            return metrics;
+        }
+
+        const metrics = calculateMetrics(rawData);
+
+        // 销售趋势图
+        function renderSalesTrendChart() {
+            const chart = echarts.init(document.getElementById('salesTrendChart'));
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                legend: {
+                    data: ['销售额', '环比增长率']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: metrics.map(m => m.period),
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '销售额 (¥)',
+                        position: 'left'
+                    },
+                    {
+                        type: 'value',
+                        name: '环比增长率 (%)',
+                        position: 'right',
+                        axisLabel: {
+                            formatter: '{value}%'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '销售额',
+                        type: 'bar',
+                        data: metrics.map(m => m.totalRevenue.toFixed(2)),
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#667eea' },
+                                { offset: 1, color: '#764ba2' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '环比增长率',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: metrics.map(m => m.revenueChange),
+                        itemStyle: {
+                            color: '#f59e0b'
+                        },
+                        lineStyle: {
+                            width: 3
+                        },
+                        symbol: 'circle',
+                        symbolSize: 8
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+
+        // 渠道占比饼图
+        function renderChannelPieChart() {
+            const chart = echarts.init(document.getElementById('channelPieChart'));
+            
+            // 计算各渠道总计
+            const dtcTotal = rawData.reduce((sum, item) => sum + item.dtc.revenue, 0);
+            const amzTotal = rawData.reduce((sum, item) => sum + item.amz.revenue, 0);
+            const ttsTotal = rawData.reduce((sum, item) => sum + item.tts.revenue, 0);
+            
+            const option = {
+                title: {
+                    text: '各渠道销售额占比',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: ¥{c} ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [
+                    {
+                        name: '销售渠道',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}\n{d}%'
+                        },
+                        data: [
+                            { value: dtcTotal.toFixed(2), name: 'DTC官网', itemStyle: { color: '#667eea' } },
+                            { value: amzTotal.toFixed(2), name: 'Amazon', itemStyle: { color: '#10b981' } },
+                            { value: ttsTotal.toFixed(2), name: 'TikTok Shop', itemStyle: { color: '#f59e0b' } }
+                        ]
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+
+        // 渠道趋势图
+        function renderChannelTrendChart() {
+            const chart = echarts.init(document.getElementById('channelTrendChart'));
+            
+            const option = {
+                title: {
+                    text: '各渠道销售趋势',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['DTC', 'Amazon', 'TikTok Shop'],
+                    bottom: 0
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: metrics.map(m => m.period),
+                    axisLabel: {
+                        rotate: 45,
+                        fontSize: 10
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '销售额 (¥)'
+                },
+                series: [
+                    {
+                        name: 'DTC',
+                        type: 'line',
+                        data: rawData.map(d => d.dtc.revenue),
+                        itemStyle: { color: '#667eea' }
+                    },
+                    {
+                        name: 'Amazon',
+                        type: 'line',
+                        data: rawData.map(d => d.amz.revenue),
+                        itemStyle: { color: '#10b981' }
+                    },
+                    {
+                        name: 'TikTok Shop',
+                        type: 'line',
+                        data: rawData.map(d => d.tts.revenue),
+                        itemStyle: { color: '#f59e0b' }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+
+        // 转化率对比图
+        function renderConversionChart() {
+            const chart = echarts.init(document.getElementById('conversionChart'));
+            
+            // 计算各渠道转化率
+            const conversionData = rawData.map(item => {
+                return {
+                    period: item.period,
+                    dtc: (item.dtc.orders / item.dtc.clicks * 100).toFixed(2),
+                    amz: (item.amz.orders / item.amz.clicks * 100).toFixed(2),
+                    tts: (item.tts.orders / item.tts.clicks * 100).toFixed(2)
+                };
+            });
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        let result = params[0].name + '<br/>';
+                        params.forEach(item => {
+                            result += item.marker + item.seriesName + ': ' + item.value + '%<br/>';
+                        });
+                        return result;
+                    }
+                },
+                legend: {
+                    data: ['DTC转化率', 'Amazon转化率', 'TikTok Shop转化率']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: conversionData.map(d => d.period),
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '转化率 (%)',
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                },
+                series: [
+                    {
+                        name: 'DTC转化率',
+                        type: 'line',
+                        data: conversionData.map(d => d.dtc),
+                        itemStyle: { color: '#667eea' },
+                        smooth: true
+                    },
+                    {
+                        name: 'Amazon转化率',
+                        type: 'line',
+                        data: conversionData.map(d => d.amz),
+                        itemStyle: { color: '#10b981' },
+                        smooth: true
+                    },
+                    {
+                        name: 'TikTok Shop转化率',
+                        type: 'line',
+                        data: conversionData.map(d => d.tts),
+                        itemStyle: { color: '#f59e0b' },
+                        smooth: true
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+
+        // 填充表格数据
+        function fillAnalysisTable() {
+            const tbody = document.getElementById('analysisTable');
+            let html = '';
+            
+            metrics.forEach((item, index) => {
+                const revenueClass = item.revenueChange > 0 ? 'positive' : 'negative';
+                const ordersClass = item.ordersChange > 0 ? 'positive' : 'negative';
+                const clicksClass = item.clicksChange > 0 ? 'positive' : 'negative';
+                
+                html += `
+                    <tr>
+                        <td class="period-column">${item.period}</td>
+                        <td>¥${item.totalRevenue.toFixed(2)}</td>
+                        <td class="trend-cell ${revenueClass}">
+                            ${index > 0 ? `<span class="trend-arrow">${item.revenueChange > 0 ? '↑' : '↓'}</span> ${Math.abs(item.revenueChange)}%` : '-'}
+                        </td>
+                        <td>${item.totalOrders}</td>
+                        <td class="trend-cell ${ordersClass}">
+                            ${index > 0 ? `<span class="trend-arrow">${item.ordersChange > 0 ? '↑' : '↓'}</span> ${Math.abs(item.ordersChange)}%` : '-'}
+                        </td>
+                        <td>${item.totalClicks}</td>
+                        <td class="trend-cell ${clicksClass}">
+                            ${index > 0 ? `<span class="trend-arrow">${item.clicksChange > 0 ? '↑' : '↓'}</span> ${Math.abs(item.clicksChange)}%` : '-'}
+                        </td>
+                        <td>${item.conversionRate}%</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        // 初始化所有图表
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSalesTrendChart();
+            renderChannelPieChart();
+            renderChannelTrendChart();
+            renderConversionChart();
+            fillAnalysisTable();
+        });
+
+        // 响应式调整
+        window.addEventListener('resize', () => {
+            echarts.getInstanceByDom(document.getElementById('salesTrendChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('channelPieChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('channelTrendChart'))?.resize();
+            echarts.getInstanceByDom(document.getElementById('conversionChart'))?.resize();
+        });
+    </script>
+</body>
+</html>
