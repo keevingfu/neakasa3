@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Garment Steamer Social Media Matrix Performance</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+        
+        /* KPI Overview */
+        .kpi-section {
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            margin: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .kpi-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .kpi-card:hover::before {
+            opacity: 1;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-target {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .kpi-completion {
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .completion-high {
+            color: #4ade80;
+        }
+        
+        .completion-medium {
+            color: #fbbf24;
+        }
+        
+        .completion-low {
+            color: #f87171;
+        }
+        
+        /* Chart Section */
+        .chart-section {
+            margin: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        /* Platform Cards */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .platform-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .platform-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .platform-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .youtube-icon {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+        }
+        
+        .instagram-icon {
+            background: linear-gradient(45deg, rgba(129, 52, 175, 0.2), rgba(221, 42, 123, 0.2));
+            color: #dd2a7b;
+        }
+        
+        .tiktok-icon {
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+        
+        .platform-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .platform-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .metric-box {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00f2ea;
+        }
+        
+        /* Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insight-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .insight-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #00f2ea;
+            font-weight: 700;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .kpi-value {
+                font-size: 24px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 242, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f2ea;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Neakasa Garment Steamer Social Media Matrix Performance</h1>
+        <p>Self-operated Social Media Content Marketing Analysis | July 17-22, 2025</p>
+    </header>
+
+    <!-- Primary KPIs Section -->
+    <div class="kpi-section">
+        <h2 class="kpi-title">
+            <span>🎯</span> Primary Performance Metrics
+        </h2>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Sales Revenue</div>
+                <div class="kpi-value">$131,468</div>
+                <div class="kpi-target">Period: July 17-22, 2025</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Return on Investment</div>
+                <div class="kpi-value">3.0x</div>
+                <div class="kpi-target">Target: 2.5x</div>
+                <div class="kpi-completion completion-high">+20% above target</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Views</div>
+                <div class="kpi-value">37M</div>
+                <div class="kpi-target">Target: 24M monthly</div>
+                <div class="kpi-completion completion-high">154.18% achieved</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Engagement</div>
+                <div class="kpi-value">455K</div>
+                <div class="kpi-target">Target: 553K monthly</div>
+                <div class="kpi-completion completion-medium">82.31% achieved</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Achievement Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">KPI Achievement Analysis</h2>
+        </div>
+        <div class="chart-container" id="kpiAchievementChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>📊</span> Achievement Insights
+            </h3>
+            <div class="insight-item">Views and clicks significantly exceed targets (154% and 233% respectively), indicating strong content discovery</div>
+            <div class="insight-item">Engagement rate at 82% suggests room for improvement in content quality and call-to-actions</div>
+            <div class="insight-item">Perfect execution on posting accounts (30/30) shows operational excellence</div>
+            <div class="insight-item">Focus on converting high view counts to engagement through interactive content formats</div>
+        </div>
+    </div>
+
+    <!-- Platform Performance Comparison -->
+    <div class="grid-container">
+        <!-- Platform Distribution -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Platform Performance Distribution</h2>
+            </div>
+            <div class="chart-container" id="platformDistributionChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>🌐</span> Platform Strategy
+                </h3>
+                <div class="insight-item">TikTok dominates with 91% of views but only 518 posts vs Instagram's 668</div>
+                <div class="insight-item">YouTube shows lowest volume but highest quality potential with longer content</div>
+                <div class="insight-item">Optimize posting frequency on TikTok to match its viral potential</div>
+            </div>
+        </div>
+
+        <!-- Engagement Rate Analysis -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Platform Engagement Rates</h2>
+            </div>
+            <div class="chart-container" id="engagementRateChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>💬</span> Engagement Optimization
+                </h3>
+                <div class="insight-item">TikTok engagement rate (1.33%) aligns with platform averages but can improve</div>
+                <div class="insight-item">Instagram's 0.21% engagement suggests content-audience mismatch</div>
+                <div class="insight-item">YouTube's minimal engagement indicates need for community building</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platform Details Cards -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Platform-Specific Performance</h2>
+        </div>
+        <div class="platform-grid">
+            <!-- YouTube Card -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon youtube-icon">YT</div>
+                    <div class="platform-name">YouTube</div>
+                </div>
+                <div class="platform-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">Total Posts</div>
+                        <div class="metric-value">260</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total Views</div>
+                        <div class="metric-value">288K</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Likes</div>
+                        <div class="metric-value">260</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Comments</div>
+                        <div class="metric-value">28</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 15%">
+                        <span class="progress-text">0.8% of views</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instagram Card -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon instagram-icon">IG</div>
+                    <div class="platform-name">Instagram</div>
+                </div>
+                <div class="platform-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">Total Posts</div>
+                        <div class="metric-value">668</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total Views</div>
+                        <div class="metric-value">2.9M</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Likes</div>
+                        <div class="metric-value">5.9K</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Comments</div>
+                        <div class="metric-value">153</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 25%">
+                        <span class="progress-text">7.9% of views</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TikTok Card -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon tiktok-icon">TT</div>
+                    <div class="platform-name">TikTok</div>
+                </div>
+                <div class="platform-metrics">
+                    <div class="metric-box">
+                        <div class="metric-label">Total Posts</div>
+                        <div class="metric-value">518</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Total Views</div>
+                        <div class="metric-value">33.8M</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Likes</div>
+                        <div class="metric-value">447K</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label">Comments</div>
+                        <div class="metric-value">2.1K</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 91%">
+                        <span class="progress-text">91.3% of views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Performance Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Content Efficiency Analysis</h2>
+        </div>
+        <div class="chart-container" id="contentEfficiencyChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>🚀</span> Content Optimization Strategy
+            </h3>
+            <div class="insight-item">TikTok shows highest efficiency with 65,251 views per post vs Instagram's 4,378</div>
+            <div class="insight-item">Consider reducing Instagram posting frequency and focusing on quality</div>
+            <div class="insight-item">YouTube's low metrics suggest need for SEO optimization and thumbnails</div>
+            <div class="insight-item">Implement A/B testing on TikTok's best performers across other platforms</div>
+        </div>
+    </div>
+
+    <!-- ROI Breakdown -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Estimated Platform ROI Contribution</h2>
+        </div>
+        <div class="chart-container" id="roiBreakdownChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>💰</span> Revenue Attribution Insights
+            </h3>
+            <div class="insight-item">Based on view distribution, TikTok likely drives 85%+ of the $131K revenue</div>
+            <div class="insight-item">Instagram's high post count but low engagement suggests resource reallocation opportunity</div>
+            <div class="insight-item">Consider platform-specific product links to track actual conversion paths</div>
+            <div class="insight-item">Implement UTM tracking for precise revenue attribution across platforms</div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const kpiData = {
+            posters: { target: 30, actual: 30, completion: 100 },
+            views: { target: 24000000, actual: 37003083, completion: 154.18 },
+            engagement: { target: 553200, actual: 455348, completion: 82.31 },
+            clicks: { target: 24000, actual: 55954, completion: 233.14 }
+        };
+
+        const platformData = {
+            youtube: { posts: 260, views: 287967, likes: 260, comments: 28 },
+            instagram: { posts: 668, views: 2924879, likes: 5851, comments: 153 },
+            tiktok: { posts: 518, views: 33790237, likes: 446996, comments: 2060 }
+        };
+
+        const totalViews = platformData.youtube.views + platformData.instagram.views + platformData.tiktok.views;
+        const totalEngagement = platformData.youtube.likes + platformData.youtube.comments + 
+                               platformData.instagram.likes + platformData.instagram.comments + 
+                               platformData.tiktok.likes + platformData.tiktok.comments;
+
+        // Initialize charts
+        let charts = {};
+
+        function initCharts() {
+            // KPI Achievement Chart
+            const kpiChart = echarts.init(document.getElementById('kpiAchievementChart'));
+            charts.kpi = kpiChart;
+            
+            // Platform Distribution Chart
+            const platformChart = echarts.init(document.getElementById('platformDistributionChart'));
+            charts.platform = platformChart;
+            
+            // Engagement Rate Chart
+            const engagementChart = echarts.init(document.getElementById('engagementRateChart'));
+            charts.engagement = engagementChart;
+            
+            // Content Efficiency Chart
+            const efficiencyChart = echarts.init(document.getElementById('contentEfficiencyChart'));
+            charts.efficiency = efficiencyChart;
+            
+            // ROI Breakdown Chart
+            const roiChart = echarts.init(document.getElementById('roiBreakdownChart'));
+            charts.roi = roiChart;
+            
+            // Window resize handler
+            window.addEventListener('resize', () => {
+                Object.values(charts).forEach(chart => chart.resize());
+            });
+        }
+
+        // Render KPI Achievement Chart
+        function renderKPIChart() {
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' },
+                    formatter: function(params) {
+                        const actual = params[0];
+                        const target = params[1];
+                        return `${actual.name}<br/>
+                                Actual: ${actual.value.toLocaleString()}<br/>
+                                Target: ${target.value.toLocaleString()}<br/>
+                                Completion: ${((actual.value / target.value) * 100).toFixed(1)}%`;
+                    }
+                },
+                legend: {
+                    data: ['Actual', 'Target'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Active Posters', 'Views (K)', 'Engagement (K)', 'Clicks (K)'],
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                series: [
+                    {
+                        name: 'Actual',
+                        type: 'bar',
+                        data: [
+                            kpiData.posters.actual,
+                            kpiData.views.actual / 1000,
+                            kpiData.engagement.actual / 1000,
+                            kpiData.clicks.actual / 1000
+                        ],
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00f2ea' },
+                                { offset: 1, color: '#0099cc' }
+                            ])
+                        }
+                    },
+                    {
+                        name: 'Target',
+                        type: 'bar',
+                        data: [
+                            kpiData.posters.target,
+                            kpiData.views.target / 1000,
+                            kpiData.engagement.target / 1000,
+                            kpiData.clicks.target / 1000
+                        ],
+                        itemStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                ]
+            };
+
+            charts.kpi.setOption(option);
+        }
+
+        // Render Platform Distribution Chart
+        function renderPlatformChart() {
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' },
+                    formatter: '{b}<br/>Views: {c} ({d}%)'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        center: ['50%', '50%'],
+                        data: [
+                            { 
+                                value: platformData.youtube.views, 
+                                name: 'YouTube',
+                                itemStyle: { color: '#ff0000' }
+                            },
+                            { 
+                                value: platformData.instagram.views, 
+                                name: 'Instagram',
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                                        { offset: 0, color: '#8134af' },
+                                        { offset: 1, color: '#dd2a7b' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: platformData.tiktok.views, 
+                                name: 'TikTok',
+                                itemStyle: { color: '#000000' }
+                            }
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}\n{d}%',
+                            fontSize: 14,
+                            fontWeight: 600
+                        }
+                    }
+                ]
+            };
+
+            charts.platform.setOption(option);
+        }
+
+        // Render Engagement Rate Chart
+        function renderEngagementChart() {
+            const engagementRates = {
+                youtube: ((platformData.youtube.likes + platformData.youtube.comments) / platformData.youtube.views * 100).toFixed(2),
+                instagram: ((platformData.instagram.likes + platformData.instagram.comments) / platformData.instagram.views * 100).toFixed(2),
+                tiktok: ((platformData.tiktok.likes + platformData.tiktok.comments) / platformData.tiktok.views * 100).toFixed(2)
+            };
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' },
+                    formatter: '{b}: {c}%'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['YouTube', 'Instagram', 'TikTok'],
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Engagement Rate (%)',
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', formatter: '{value}%' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                series: [{
+                    type: 'bar',
+                    data: [
+                        {
+                            value: engagementRates.youtube,
+                            itemStyle: { color: '#ff0000' }
+                        },
+                        {
+                            value: engagementRates.instagram,
+                            itemStyle: { 
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#8134af' },
+                                    { offset: 1, color: '#dd2a7b' }
+                                ])
+                            }
+                        },
+                        {
+                            value: engagementRates.tiktok,
+                            itemStyle: { color: '#000000' }
+                        }
+                    ],
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: '{c}%',
+                        color: '#fff'
+                    }
+                }]
+            };
+
+            charts.engagement.setOption(option);
+        }
+
+        // Render Content Efficiency Chart
+        function renderEfficiencyChart() {
+            const viewsPerPost = {
+                youtube: Math.round(platformData.youtube.views / platformData.youtube.posts),
+                instagram: Math.round(platformData.instagram.views / platformData.instagram.posts),
+                tiktok: Math.round(platformData.tiktok.views / platformData.tiktok.posts)
+            };
+
+            const engagementPerPost = {
+                youtube: Math.round((platformData.youtube.likes + platformData.youtube.comments) / platformData.youtube.posts),
+                instagram: Math.round((platformData.instagram.likes + platformData.instagram.comments) / platformData.instagram.posts),
+                tiktok: Math.round((platformData.tiktok.likes + platformData.tiktok.comments) / platformData.tiktok.posts)
+            };
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: ['Views per Post', 'Engagement per Post'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['YouTube', 'Instagram', 'TikTok'],
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Views per Post',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' },
+                        splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Engagement per Post',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Views per Post',
+                        type: 'bar',
+                        data: [viewsPerPost.youtube, viewsPerPost.instagram, viewsPerPost.tiktok],
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00f2ea' },
+                                { offset: 1, color: '#0099cc' }
+                            ])
+                        }
+                    },
+                    {
+                        name: 'Engagement per Post',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [engagementPerPost.youtube, engagementPerPost.instagram, engagementPerPost.tiktok],
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3,
+                            color: '#ff0050'
+                        },
+                        itemStyle: {
+                            color: '#ff0050'
+                        }
+                    }
+                ]
+            };
+
+            charts.efficiency.setOption(option);
+        }
+
+        // Render ROI Breakdown Chart
+        function renderROIChart() {
+            const estimatedRevenue = {
+                youtube: (platformData.youtube.views / totalViews * 131468.46).toFixed(2),
+                instagram: (platformData.instagram.views / totalViews * 131468.46).toFixed(2),
+                tiktok: (platformData.tiktok.views / totalViews * 131468.46).toFixed(2)
+            };
+
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' },
+                    formatter: function(params) {
+                        return `${params.name}<br/>
+                                Estimated Revenue: $${parseFloat(params.value).toLocaleString()}<br/>
+                                Share: ${params.percent}%`;
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['50%', '80%'],
+                        center: ['50%', '50%'],
+                        data: [
+                            { 
+                                value: estimatedRevenue.youtube, 
+                                name: 'YouTube',
+                                itemStyle: { color: '#ff0000' }
+                            },
+                            { 
+                                value: estimatedRevenue.instagram, 
+                                name: 'Instagram',
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                                        { offset: 0, color: '#8134af' },
+                                        { offset: 1, color: '#dd2a7b' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: estimatedRevenue.tiktok, 
+                                name: 'TikTok',
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                                        { offset: 0, color: '#00f2ea' },
+                                        { offset: 1, color: '#ff0050' }
+                                    ])
+                                }
+                            }
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        label: {
+                            show: true,
+                            formatter: function(params) {
+                                return `${params.name}\n$${(params.value / 1000).toFixed(1)}K`;
+                            },
+                            fontSize: 14,
+                            fontWeight: 600
+                        }
+                    }
+                ]
+            };
+
+            charts.roi.setOption(option);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderKPIChart();
+            renderPlatformChart();
+            renderEngagementChart();
+            renderEfficiencyChart();
+            renderROIChart();
+        });
+    </script>
+</body>
+</html>

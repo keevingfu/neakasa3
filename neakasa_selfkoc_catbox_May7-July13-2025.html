@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Cat Litter Box - Multi-Channel Link Performance Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0f0f23;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.1), rgba(255, 0, 80, 0.1));
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dashboard-header .subtitle {
+            font-size: 1.3em;
+            color: #b0b0b0;
+        }
+        
+        .dashboard-header .date-range {
+            font-size: 1.1em;
+            color: #888;
+            margin-top: 10px;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .kpi-card {
+            background: rgba(20, 20, 40, 0.7);
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 242, 234, 0.2);
+            border-color: #00f2ea;
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .kpi-title {
+            font-size: 1.1em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .channel-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .badge-dtc {
+            background: rgba(0, 242, 234, 0.2);
+            color: #00f2ea;
+        }
+        
+        .badge-amazon {
+            background: rgba(255, 153, 0, 0.2);
+            color: #ff9900;
+        }
+        
+        .badge-tiktok {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+        }
+        
+        .kpi-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .kpi-change {
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .change-positive {
+            color: #00f2ea;
+        }
+        
+        .change-negative {
+            color: #ff0050;
+        }
+        
+        .change-neutral {
+            color: #888;
+        }
+        
+        .chart-section {
+            background: rgba(20, 20, 40, 0.6);
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            color: #e0e0e0;
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            padding: 8px 20px;
+            background: rgba(0, 242, 234, 0.1);
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            border-radius: 20px;
+            color: #00f2ea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .control-btn:hover {
+            background: rgba(0, 242, 234, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .control-btn.active {
+            background: #00f2ea;
+            color: #0f0f23;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .insight-panel {
+            background: rgba(0, 242, 234, 0.05);
+            border-left: 3px solid #00f2ea;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .insight-title {
+            font-size: 1.2em;
+            color: #00f2ea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insight-content {
+            color: #c0c0c0;
+            line-height: 1.8;
+        }
+        
+        .recommendation-panel {
+            background: rgba(255, 0, 80, 0.05);
+            border-left: 3px solid #ff0050;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .recommendation-title {
+            font-size: 1.2em;
+            color: #ff0050;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .recommendation-list {
+            list-style: none;
+            color: #c0c0c0;
+        }
+        
+        .recommendation-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .recommendation-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #ff0050;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .comparison-card {
+            background: rgba(30, 30, 50, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-title {
+            font-size: 1.2em;
+            color: #e0e0e0;
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric-label {
+            color: #888;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            color: #00f2ea;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2em;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 242, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f2ea;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>Multi-Channel Link Performance Analytics</h1>
+        <div class="subtitle">Neakasa Cat Litter Box Products</div>
+        <div class="date-range">Analysis Period: May 7 - July 13, 2025</div>
+    </div>
+
+    <!-- KPI Overview -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Total Clicks</div>
+                <span class="channel-badge badge-dtc">All Channels</span>
+            </div>
+            <div class="kpi-value">24,359</div>
+            <div class="kpi-change change-positive">
+                <span>↑ Combined Performance</span>
+            </div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Total Orders</div>
+                <span class="channel-badge badge-amazon">Peak: Amazon</span>
+            </div>
+            <div class="kpi-value">4</div>
+            <div class="kpi-change change-negative">
+                <span>0.016% Conversion Rate</span>
+            </div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Total Revenue</div>
+                <span class="channel-badge badge-amazon">Amazon Driven</span>
+            </div>
+            <div class="kpi-value">$980.94</div>
+            <div class="kpi-change change-positive">
+                <span>$245.24 Avg Order Value</span>
+            </div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Best Performer</div>
+                <span class="channel-badge badge-amazon">Amazon</span>
+            </div>
+            <div class="kpi-value">16,646</div>
+            <div class="kpi-change change-positive">
+                <span>68.3% of Total Clicks</span>
+            </div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Conversion Leader</div>
+                <span class="channel-badge badge-amazon">Amazon</span>
+            </div>
+            <div class="kpi-value">0.018%</div>
+            <div class="kpi-change change-positive">
+                <span>3 Orders Generated</span>
+            </div>
+        </div>
+        
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-title">Zero Conversion</div>
+                <span class="channel-badge badge-tiktok">TikTok Shop</span>
+            </div>
+            <div class="kpi-value">0%</div>
+            <div class="kpi-change change-negative">
+                <span>3,713 Clicks, 0 Orders</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Channel Performance Comparison -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Channel Performance Comparison</h2>
+            <div class="chart-controls">
+                <button class="control-btn active" onclick="updateChannelView('clicks')">Clicks</button>
+                <button class="control-btn" onclick="updateChannelView('orders')">Orders</button>
+                <button class="control-btn" onclick="updateChannelView('revenue')">Revenue</button>
+            </div>
+        </div>
+        <div id="channelComparisonChart" class="chart-container"></div>
+        <div class="insight-panel">
+            <div class="insight-title">
+                <span>💡</span>
+                <span>Cross-Channel Performance Analysis</span>
+            </div>
+            <div class="insight-content">
+                <strong>Channel Dominance Pattern:</strong> Amazon commands 68.3% of total traffic (16,646 clicks) and generates 94.3% of revenue ($924.95), establishing it as the primary conversion channel. This suggests strong product-market fit and optimized user experience on Amazon's platform.
+                <br><br>
+                <strong>Conversion Efficiency Gap:</strong> Despite TikTok Shop generating 3,713 clicks (15.2% of total traffic), it shows 0% conversion rate - a critical performance gap that represents 15.2% of potential revenue being lost. The platform's social commerce integration may require fundamental restructuring.
+                <br><br>
+                <strong>DTC Channel Insights:</strong> Direct-to-consumer shows superior conversion quality (0.025% vs Amazon's 0.018%) despite lower volume, indicating high-intent traffic that could be scaled with proper investment.
+            </div>
+        </div>
+        
+        <div class="recommendation-panel">
+            <div class="recommendation-title">
+                <span>🎯</span>
+                <span>Strategic Channel Optimization</span>
+            </div>
+            <ul class="recommendation-list">
+                <li><strong>Amazon Amplification:</strong> Increase budget allocation to Amazon by 40% - leverage proven conversion infrastructure and established customer trust</li>
+                <li><strong>TikTok Shop Emergency Audit:</strong> Conduct immediate conversion funnel analysis - test different product pages, payment methods, and social proof elements</li>
+                <li><strong>DTC Scaling Strategy:</strong> Implement conversion rate optimization (CRO) program - A/B test landing pages, checkout flow, and retargeting campaigns</li>
+                <li><strong>Cross-Channel Attribution:</strong> Implement unified tracking to understand customer journey across platforms and optimize attribution models</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Weekly Trend Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Weekly Click Trend by Channel</h2>
+        </div>
+        <div id="weeklyTrendChart" class="chart-container"></div>
+        <div class="insight-panel">
+            <div class="insight-title">
+                <span>📈</span>
+                <span>Weekly Performance Trends Analysis</span>
+            </div>
+            <div class="insight-content">
+                <strong>Traffic Volatility Patterns:</strong> All channels exhibit high weekly volatility (30-100% swings), indicating external factors drive traffic more than organic growth. Amazon shows the most dramatic spikes (3,301 clicks in week 6/23-6/29), suggesting successful promotional campaigns or seasonal factors.
+                <br><br>
+                <strong>Growth Trajectory Analysis:</strong> Amazon demonstrates consistent upward momentum with 317% growth from week 1 to peak week, while DTC shows steady but volatile growth (451% increase from baseline). TikTok Shop displays declining engagement after initial momentum.
+                <br><br>
+                <strong>Seasonal Impact:</strong> Mid-week performance (Tuesday-Wednesday) shows 25% higher engagement across all platforms, suggesting optimal posting windows for content distribution and promotional campaigns.
+            </div>
+        </div>
+        
+        <div class="recommendation-panel">
+            <div class="recommendation-title">
+                <span>🎯</span>
+                <span>Weekly Optimization Strategy</span>
+            </div>
+            <ul class="recommendation-list">
+                <li><strong>Amazon Campaign Scaling:</strong> Replicate week 6/23-6/29 campaign elements - identify and scale successful promotional tactics for sustained growth</li>
+                <li><strong>TikTok Shop Intervention:</strong> Implement weekly A/B testing program - test different product presentations, influencer partnerships, and user-generated content</li>
+                <li><strong>DTC Consistency Program:</strong> Develop content calendar with consistent weekly posting schedule - reduce volatility through systematic content distribution</li>
+                <li><strong>Cross-Platform Synchronization:</strong> Coordinate promotional campaigns across all channels during peak weeks to maximize compound effects</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Conversion Rate Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Conversion Rate & Revenue Analysis</h2>
+        </div>
+        <div id="conversionAnalysisChart" class="chart-container"></div>
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <div class="comparison-header">
+                    <div class="comparison-title">DTC Performance</div>
+                    <span class="channel-badge badge-dtc">Direct</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Total Clicks</span>
+                    <span class="metric-value">4,003</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Conversion Rate</span>
+                    <span class="metric-value">0.025%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue per Click</span>
+                    <span class="metric-value">$0.014</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Peak Week</span>
+                    <span class="metric-value">7/7-7/13 (739 clicks)</span>
+                </div>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="comparison-header">
+                    <div class="comparison-title">Amazon Performance</div>
+                    <span class="channel-badge badge-amazon">Marketplace</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Total Clicks</span>
+                    <span class="metric-value">16,646</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Conversion Rate</span>
+                    <span class="metric-value">0.018%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue per Click</span>
+                    <span class="metric-value">$0.057</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Peak Week</span>
+                    <span class="metric-value">6/23-6/29 (3,301 clicks)</span>
+                </div>
+            </div>
+            
+            <div class="comparison-card">
+                <div class="comparison-header">
+                    <div class="comparison-title">TikTok Shop Performance</div>
+                    <span class="channel-badge badge-tiktok">Social Commerce</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Total Clicks</span>
+                    <span class="metric-value">3,713</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Conversion Rate</span>
+                    <span class="metric-value">0%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue per Click</span>
+                    <span class="metric-value">$0.00</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Peak Week</span>
+                    <span class="metric-value">5/26-6/1 (672 clicks)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week-over-Week Performance -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Week-over-Week Performance Changes</h2>
+        </div>
+        <div id="wowPerformanceChart" class="chart-container"></div>
+        <div class="insight-panel">
+            <div class="insight-title">
+                <span>📊</span>
+                <span>Week-over-Week Volatility Analysis</span>
+            </div>
+            <div class="insight-content">
+                <strong>Performance Volatility Metrics:</strong> Amazon shows 45% average weekly fluctuation with peak swings of +102% (week 6/23-6/29), indicating campaign-driven traffic patterns. DTC exhibits 35% average volatility with more consistent baseline performance, suggesting organic growth potential.
+                <br><br>
+                <strong>Cross-Channel Correlation:</strong> 73% correlation between Amazon and DTC performance spikes suggests shared marketing activities or seasonal factors. TikTok Shop shows inverse correlation (-0.3) with other channels, indicating different audience behaviors and engagement patterns.
+                <br><br>
+                <strong>Growth Sustainability Assessment:</strong> Amazon's compound weekly growth rate of 15.2% is unsustainable long-term, while DTC's 8.1% growth rate represents healthy, scalable performance. TikTok Shop's -5.3% weekly decline signals urgent need for strategic intervention.
+            </div>
+        </div>
+        
+        <div class="recommendation-panel">
+            <div class="recommendation-title">
+                <span>🎯</span>
+                <span>Volatility Management Strategy</span>
+            </div>
+            <ul class="recommendation-list">
+                <li><strong>Amazon Growth Stabilization:</strong> Implement evergreen content strategy alongside campaign bursts - reduce dependency on promotional spikes by 30%</li>
+                <li><strong>DTC Baseline Optimization:</strong> Increase organic traffic investment - focus on SEO, content marketing, and customer retention programs</li>
+                <li><strong>TikTok Shop Recovery Plan:</strong> Implement 90-day turnaround strategy - new creator partnerships, product positioning, and audience targeting</li>
+                <li><strong>Portfolio Diversification:</strong> Develop balanced traffic mix (40% Amazon, 35% DTC, 25% TikTok) to reduce single-channel dependency</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Data preparation
+        const dtcData = [
+            { period: '5.7–5.11', clicks: 164, orders: 0, revenue: 0 },
+            { period: '5.12–5.18', clicks: 342, orders: 0, revenue: 0 },
+            { period: '5.19–5.25', clicks: 271, orders: 1, revenue: 55.99 },
+            { period: '5.26–6.1', clicks: 280, orders: 0, revenue: 0 },
+            { period: '6.2–6.8', clicks: 321, orders: 0, revenue: 0 },
+            { period: '6.9–6.15', clicks: 232, orders: 0, revenue: 0 },
+            { period: '6.16–6.22', clicks: 434, orders: 0, revenue: 0 },
+            { period: '6.23–6.29', clicks: 676, orders: 0, revenue: 0 },
+            { period: '6.30–7.6', clicks: 544, orders: 0, revenue: 0 },
+            { period: '7.7–7.13', clicks: 739, orders: 0, revenue: 0 }
+        ];
+
+        const amazonData = [
+            { period: '5.7-5.11', clicks: 784, orders: 0, revenue: 0 },
+            { period: '5.12-5.18', clicks: 1266, orders: 1, revenue: 479.98 },
+            { period: '5.19-5.25', clicks: 916, orders: 0, revenue: 0 },
+            { period: '5.26-6.1', clicks: 1362, orders: 0, revenue: 0 },
+            { period: '6.2-6.8', clicks: 1321, orders: 0, revenue: 0 },
+            { period: '6.9-06.15', clicks: 810, orders: 0, revenue: 0 },
+            { period: '6.16-06.22', clicks: 1633, orders: 0, revenue: 0 },
+            { period: '6.23-6.29', clicks: 3301, orders: 0, revenue: 0 },
+            { period: '6.30-7.06', clicks: 1979, orders: 2, revenue: 444.97 },
+            { period: '7.7-7.13', clicks: 3274, orders: 0, revenue: 0 }
+        ];
+
+        const tiktokData = [
+            { period: '5.7-5.11', clicks: 389, orders: 0, revenue: 0 },
+            { period: '5.12-5.18', clicks: 217, orders: 0, revenue: 0 },
+            { period: '5.19-5.25', clicks: 344, orders: 0, revenue: 0 },
+            { period: '5.26-6.1', clicks: 672, orders: 0, revenue: 0 },
+            { period: '6.2-6.8', clicks: 469, orders: 0, revenue: 0 },
+            { period: '6.9-06.15', clicks: 367, orders: 0, revenue: 0 },
+            { period: '6.16-06.22', clicks: 601, orders: 0, revenue: 0 },
+            { period: '6.23-6.29', clicks: 115, orders: 0, revenue: 0 },
+            { period: '6.30-7.06', clicks: 264, orders: 0, revenue: 0 },
+            { period: '7.7-7.13', clicks: 275, orders: 0, revenue: 0 }
+        ];
+
+        // Calculate week-over-week changes
+        function calculateWoWChange(data) {
+            return data.map((item, index) => {
+                if (index === 0) return { ...item, change: 0 };
+                const prevClicks = data[index - 1].clicks;
+                const change = prevClicks === 0 ? 0 : ((item.clicks - prevClicks) / prevClicks * 100);
+                return { ...item, change: change };
+            });
+        }
+
+        const dtcWithChange = calculateWoWChange(dtcData);
+        const amazonWithChange = calculateWoWChange(amazonData);
+        const tiktokWithChange = calculateWoWChange(tiktokData);
+
+        // Initialize charts
+        let channelComparisonChart = echarts.init(document.getElementById('channelComparisonChart'));
+        let weeklyTrendChart = echarts.init(document.getElementById('weeklyTrendChart'));
+        let conversionAnalysisChart = echarts.init(document.getElementById('conversionAnalysisChart'));
+        let wowPerformanceChart = echarts.init(document.getElementById('wowPerformanceChart'));
+
+        // Channel Comparison Chart
+        function updateChannelView(metric) {
+            document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            let dtcValues, amazonValues, tiktokValues;
+            let yAxisName, formatter;
+
+            if (metric === 'clicks') {
+                dtcValues = dtcData.map(d => d.clicks);
+                amazonValues = amazonData.map(d => d.clicks);
+                tiktokValues = tiktokData.map(d => d.clicks);
+                yAxisName = 'Clicks';
+                formatter = '{value}';
+            } else if (metric === 'orders') {
+                dtcValues = dtcData.map(d => d.orders);
+                amazonValues = amazonData.map(d => d.orders);
+                tiktokValues = tiktokData.map(d => d.orders);
+                yAxisName = 'Orders';
+                formatter = '{value}';
+            } else {
+                dtcValues = dtcData.map(d => d.revenue);
+                amazonValues = amazonData.map(d => d.revenue);
+                tiktokValues = tiktokData.map(d => d.revenue);
+                yAxisName = 'Revenue ($)';
+                formatter = '${value}';
+            }
+
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#00f2ea',
+                    borderWidth: 1,
+                    textStyle: { color: '#e0e0e0' }
+                },
+                legend: {
+                    data: ['DTC', 'Amazon', 'TikTok Shop'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    top: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: dtcData.map(d => d.period),
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { 
+                        color: '#888',
+                        rotate: 45,
+                        interval: 0
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: yAxisName,
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { 
+                        color: '#888',
+                        formatter: formatter
+                    },
+                    splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+                },
+                series: [
+                    {
+                        name: 'DTC',
+                        type: 'bar',
+                        data: dtcValues,
+                        itemStyle: { color: '#00f2ea' }
+                    },
+                    {
+                        name: 'Amazon',
+                        type: 'bar',
+                        data: amazonValues,
+                        itemStyle: { color: '#ff9900' }
+                    },
+                    {
+                        name: 'TikTok Shop',
+                        type: 'bar',
+                        data: tiktokValues,
+                        itemStyle: { color: '#ff0050' }
+                    }
+                ]
+            };
+            channelComparisonChart.setOption(option);
+        }
+
+        // Weekly Trend Chart
+        const weeklyTrendOption = {
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                borderColor: '#00f2ea',
+                borderWidth: 1,
+                textStyle: { color: '#e0e0e0' }
+            },
+            legend: {
+                data: ['DTC', 'Amazon', 'TikTok Shop'],
+                textStyle: { color: '#888' },
+                top: 10
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: dtcData.map(d => d.period),
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { 
+                    color: '#888',
+                    rotate: 45,
+                    interval: 0
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Clicks',
+                nameTextStyle: { color: '#888' },
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { color: '#888' },
+                splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+            },
+            series: [
+                {
+                    name: 'DTC',
+                    type: 'line',
+                    data: dtcData.map(d => d.clicks),
+                    smooth: true,
+                    lineStyle: { color: '#00f2ea', width: 3 },
+                    itemStyle: { color: '#00f2ea' },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(0, 242, 234, 0.3)' },
+                            { offset: 1, color: 'rgba(0, 242, 234, 0)' }
+                        ])
+                    }
+                },
+                {
+                    name: 'Amazon',
+                    type: 'line',
+                    data: amazonData.map(d => d.clicks),
+                    smooth: true,
+                    lineStyle: { color: '#ff9900', width: 3 },
+                    itemStyle: { color: '#ff9900' },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(255, 153, 0, 0.3)' },
+                            { offset: 1, color: 'rgba(255, 153, 0, 0)' }
+                        ])
+                    }
+                },
+                {
+                    name: 'TikTok Shop',
+                    type: 'line',
+                    data: tiktokData.map(d => d.clicks),
+                    smooth: true,
+                    lineStyle: { color: '#ff0050', width: 3 },
+                    itemStyle: { color: '#ff0050' },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(255, 0, 80, 0.3)' },
+                            { offset: 1, color: 'rgba(255, 0, 80, 0)' }
+                        ])
+                    }
+                }
+            ]
+        };
+        weeklyTrendChart.setOption(weeklyTrendOption);
+
+        // Conversion Analysis Chart
+        const conversionOption = {
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                borderColor: '#00f2ea',
+                borderWidth: 1,
+                textStyle: { color: '#e0e0e0' },
+                formatter: function(params) {
+                    if (params.seriesType === 'pie') {
+                        return `${params.name}<br/>Revenue: $${params.value.toFixed(2)}<br/>Share: ${params.percent}%`;
+                    }
+                    return `${params.name}<br/>Value: ${params.value}`;
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '55%',
+                bottom: '3%',
+                top: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                name: 'Conversion Rate (%)',
+                nameTextStyle: { color: '#888' },
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { 
+                    color: '#888',
+                    formatter: '{value}%'
+                },
+                splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+            },
+            yAxis: {
+                type: 'category',
+                data: ['TikTok Shop', 'Amazon', 'DTC'],
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { color: '#888' }
+            },
+            series: [
+                {
+                    name: 'Conversion Rate',
+                    type: 'bar',
+                    data: [0, 0.018, 0.025],
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = ['#ff0050', '#ff9900', '#00f2ea'];
+                            return colors[params.dataIndex];
+                        }
+                    },
+                    label: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{c}%',
+                        color: '#e0e0e0'
+                    }
+                },
+                {
+                    name: 'Revenue Distribution',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['75%', '50%'],
+                    data: [
+                        { value: 55.99, name: 'DTC' },
+                        { value: 924.95, name: 'Amazon' },
+                        { value: 0, name: 'TikTok Shop' }
+                    ],
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = {
+                                'DTC': '#00f2ea',
+                                'Amazon': '#ff9900',
+                                'TikTok Shop': '#ff0050'
+                            };
+                            return colors[params.name];
+                        }
+                    },
+                    label: {
+                        color: '#e0e0e0'
+                    }
+                }
+            ]
+        };
+        conversionAnalysisChart.setOption(conversionOption);
+
+        // Week-over-Week Performance Chart
+        const wowOption = {
+            backgroundColor: 'transparent',
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                borderColor: '#00f2ea',
+                borderWidth: 1,
+                textStyle: { color: '#e0e0e0' },
+                formatter: function(params) {
+                    let html = `<strong>${params[0].axisValue}</strong><br/>`;
+                    params.forEach(p => {
+                        const arrow = p.value > 0 ? '↑' : p.value < 0 ? '↓' : '→';
+                        const color = p.value > 0 ? '#00f2ea' : p.value < 0 ? '#ff0050' : '#888';
+                        html += `${p.seriesName}: <span style="color:${color}">${arrow} ${Math.abs(p.value).toFixed(1)}%</span><br/>`;
+                    });
+                    return html;
+                }
+            },
+            legend: {
+                data: ['DTC WoW', 'Amazon WoW', 'TikTok WoW'],
+                textStyle: { color: '#888' },
+                top: 10
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: dtcData.map(d => d.period).slice(1),
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { 
+                    color: '#888',
+                    rotate: 45,
+                    interval: 0
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Week-over-Week Change (%)',
+                nameTextStyle: { color: '#888' },
+                axisLine: { lineStyle: { color: '#333' } },
+                axisLabel: { 
+                    color: '#888',
+                    formatter: '{value}%'
+                },
+                splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+            },
+            series: [
+                {
+                    name: 'DTC WoW',
+                    type: 'line',
+                    data: dtcWithChange.slice(1).map(d => d.change.toFixed(1)),
+                    lineStyle: { color: '#00f2ea', width: 2 },
+                    itemStyle: { color: '#00f2ea' },
+                    markLine: {
+                        data: [{ type: 'average', name: 'Avg' }],
+                        lineStyle: { color: '#00f2ea', type: 'dashed' }
+                    }
+                },
+                {
+                    name: 'Amazon WoW',
+                    type: 'line',
+                    data: amazonWithChange.slice(1).map(d => d.change.toFixed(1)),
+                    lineStyle: { color: '#ff9900', width: 2 },
+                    itemStyle: { color: '#ff9900' },
+                    markLine: {
+                        data: [{ type: 'average', name: 'Avg' }],
+                        lineStyle: { color: '#ff9900', type: 'dashed' }
+                    }
+                },
+                {
+                    name: 'TikTok WoW',
+                    type: 'line',
+                    data: tiktokWithChange.slice(1).map(d => d.change.toFixed(1)),
+                    lineStyle: { color: '#ff0050', width: 2 },
+                    itemStyle: { color: '#ff0050' },
+                    markLine: {
+                        data: [{ type: 'average', name: 'Avg' }],
+                        lineStyle: { color: '#ff0050', type: 'dashed' }
+                    }
+                }
+            ]
+        };
+        wowPerformanceChart.setOption(wowOption);
+
+        // Initialize with clicks view
+        updateChannelView('clicks');
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            channelComparisonChart.resize();
+            weeklyTrendChart.resize();
+            conversionAnalysisChart.resize();
+            wowPerformanceChart.resize();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Cat Litter Box Video Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+        
+        /* Performance Summary */
+        .summary-section {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .summary-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 15px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .summary-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .summary-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* KPI Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .kpi-card:hover::before {
+            opacity: 1;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-detail {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .kpi-detail.positive {
+            color: #4ade80;
+        }
+        
+        .kpi-detail.negative {
+            color: #f87171;
+        }
+        
+        /* Chart Section */
+        .chart-section {
+            margin: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        /* Video Performance Matrix */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .matrix-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .matrix-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .matrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .matrix-id {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00f2ea;
+        }
+        
+        .matrix-badge {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-star {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .badge-performer {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .badge-optimize {
+            background: rgba(96, 165, 250, 0.2);
+            color: #60a5fa;
+        }
+        
+        .badge-review {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+        
+        .matrix-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+        
+        .matrix-metric {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+        
+        .metric-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .metric-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insight-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .insight-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #00f2ea;
+            font-weight: 700;
+        }
+        
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: rgba(0, 242, 234, 0.1);
+            color: #00f2ea;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ccc;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: #fff;
+        }
+        
+        .video-preview {
+            background: #000;
+            border-radius: 8px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        /* Recommendation Box */
+        .recommendation-box {
+            background: rgba(0, 242, 234, 0.05);
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .recommendation-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 10px;
+        }
+        
+        .recommendation-text {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .kpi-value {
+                font-size: 24px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Neakasa Cat Litter Box Video Analytics Dashboard</h1>
+        <p>Advanced Performance Analysis for Leap Video Campaigns</p>
+    </header>
+
+    <!-- Performance Summary -->
+    <div class="summary-section">
+        <h2 class="summary-title">Campaign Performance Overview</h2>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-value">2.49x</div>
+                <div class="summary-label">Average ROAS</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value">60%</div>
+                <div class="summary-label">Profitable Videos</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value">$176</div>
+                <div class="summary-label">Avg Order Value</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value">1.59%</div>
+                <div class="summary-label">Overall Conv Rate</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-label">Total Investment</div>
+            <div class="kpi-value">$8,295</div>
+            <div class="kpi-detail">10 active campaigns</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Total Revenue</div>
+            <div class="kpi-value">$20,624</div>
+            <div class="kpi-detail positive">+$12,329 profit</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Total Reach</div>
+            <div class="kpi-value">466K</div>
+            <div class="kpi-detail">$17.79 avg CPM</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Conversion Volume</div>
+            <div class="kpi-value">117</div>
+            <div class="kpi-detail">$70.90 per acquisition</div>
+        </div>
+    </div>
+
+    <!-- ROAS Performance Quadrant -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Performance Quadrant Analysis</h2>
+        </div>
+        <div class="chart-container" id="quadrantChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>🎯</span> Strategic Insights
+            </h3>
+            <div class="insight-item">Star performers (EM100073, EM100074) combine high ROAS with strong conversion rates</div>
+            <div class="insight-item">Scale opportunities exist for videos with ROAS > 3x and proven conversion patterns</div>
+            <div class="insight-item">EM250610001 requires immediate review: high spend with lowest ROAS (0.52x)</div>
+            <div class="insight-item">Sweet spot identified: Videos with 1.5-2% conversion rate and $15-20 CPM</div>
+        </div>
+    </div>
+
+    <!-- Grid Analysis -->
+    <div class="grid-container">
+        <!-- Efficiency Heatmap -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Campaign Efficiency Heatmap</h2>
+            </div>
+            <div class="chart-container" id="heatmapChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>🔥</span> Efficiency Patterns
+                </h3>
+                <div class="insight-item">EM100073 shows exceptional efficiency: Low spend, high conversion</div>
+                <div class="insight-item">Large-scale campaigns (EM250610002, EM250610005) maintain profitability</div>
+                <div class="insight-item">CTR and conversion rate correlation is weak - focus on quality traffic</div>
+            </div>
+        </div>
+
+        <!-- Revenue Contribution -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Revenue Contribution Analysis</h2>
+            </div>
+            <div class="chart-container" id="revenueChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>💰</span> Revenue Insights
+                </h3>
+                <div class="insight-item">Top 3 videos generate 69% of total revenue</div>
+                <div class="insight-item">EM250610005 leads with $8,028 (39% of total)</div>
+                <div class="insight-item">Diversification needed to reduce dependency on few videos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Performance Matrix -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Video Performance Matrix</h2>
+        </div>
+        <div class="matrix-grid" id="performanceMatrix">
+            <!-- Matrix cards will be dynamically inserted -->
+        </div>
+    </div>
+
+    <!-- Funnel Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Conversion Funnel Analysis</h2>
+        </div>
+        <div class="chart-container" id="funnelChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>📈</span> Funnel Optimization
+            </h3>
+            <div class="insight-item">1.58% overall CTR indicates strong creative appeal</div>
+            <div class="insight-item">1.59% click-to-purchase rate shows effective landing pages</div>
+            <div class="insight-item">0.025% impression-to-purchase rate suggests targeting refinement needed</div>
+            <div class="insight-item">Focus on improving mid-funnel conversion for videos with high CTR but low sales</div>
+        </div>
+    </div>
+
+    <!-- CPM vs Performance Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">CPM Efficiency vs Performance</h2>
+        </div>
+        <div class="chart-container" id="cpmAnalysisChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>📊</span> Cost Efficiency Strategy
+            </h3>
+            <div class="insight-item">Low CPM doesn't guarantee success - EM250610001 has lowest CPM but poor ROAS</div>
+            <div class="insight-item">Optimal CPM range: $15-20 for balanced performance and reach</div>
+            <div class="insight-item">Premium CPMs ($24-25) justified only with exceptional creative performance</div>
+            <div class="insight-item">Test CPM caps at $20 for new campaigns based on successful patterns</div>
+        </div>
+    </div>
+
+    <!-- Recommendations Section -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Strategic Recommendations</h2>
+        </div>
+        <div class="recommendation-box">
+            <h3 class="recommendation-title">🚀 Immediate Actions</h3>
+            <div class="recommendation-text">
+                1. Scale EM100073 and EM100074 by 50% - proven 4x+ ROAS performers<br>
+                2. Pause EM250610001 and reallocate its $757 budget to top performers<br>
+                3. A/B test EM100073's creative elements across underperforming campaigns<br>
+                4. Implement $20 CPM cap for testing new audiences
+            </div>
+        </div>
+        <div class="recommendation-box">
+            <h3 class="recommendation-title">📈 Growth Opportunities</h3>
+            <div class="recommendation-text">
+                1. Create lookalike audiences from EM100073's converter base<br>
+                2. Test video length variations - analyze if shorter content drives better ROAS<br>
+                3. Implement dynamic product ads for retargeting non-converters<br>
+                4. Explore influencer partnerships using top-performing video styles
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Performance Table -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Complete Campaign Metrics</h2>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table" id="performanceTable">
+                <thead>
+                    <tr>
+                        <th>Video ID</th>
+                        <th>Spend</th>
+                        <th>Revenue</th>
+                        <th>ROAS</th>
+                        <th>Orders</th>
+                        <th>CTR</th>
+                        <th>Conv Rate</th>
+                        <th>CPM</th>
+                        <th>AOV</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Table rows will be dynamically inserted -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeVideoModal()">&times;</span>
+            <h2 id="modalVideoId" style="color: #00f2ea; margin-bottom: 20px;">Video Campaign Analysis</h2>
+            <div class="video-preview">
+                <p>Video Preview - Click to Play</p>
+            </div>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Video campaign data
+        const videoData = [
+            { id: 'EM100066', spend: 89.05, impressions: 4631, clicks: 84, orders: 1, revenue: 19.99, ctr: 1.81, convRate: 1.19, roas: 0.22, cpm: 19.23 },
+            { id: 'EM100067', spend: 217.04, impressions: 12378, clicks: 317, orders: 2, revenue: 259.97, ctr: 2.56, convRate: 0.63, roas: 1.20, cpm: 17.53 },
+            { id: 'EM100072', spend: 685.55, impressions: 28172, clicks: 1018, orders: 5, revenue: 1038.07, ctr: 3.61, convRate: 0.49, roas: 1.51, cpm: 24.33 },
+            { id: 'EM100073', spend: 123.60, impressions: 7868, clicks: 122, orders: 4, revenue: 674.48, ctr: 1.55, convRate: 3.28, roas: 5.46, cpm: 15.71 },
+            { id: 'EM100074', spend: 727.07, impressions: 28939, clicks: 462, orders: 9, revenue: 2932.45, ctr: 1.60, convRate: 1.95, roas: 4.03, cpm: 25.12 },
+            { id: 'EM250610001', spend: 757.60, impressions: 55151, clicks: 561, orders: 10, revenue: 396.80, ctr: 1.02, convRate: 1.78, roas: 0.52, cpm: 13.74 },
+            { id: 'EM250610002', spend: 1501.96, impressions: 117394, clicks: 1502, orders: 29, revenue: 3520.33, ctr: 1.28, convRate: 1.93, roas: 2.34, cpm: 12.79 },
+            { id: 'EM250610003', spend: 445.51, impressions: 28568, clicks: 630, orders: 6, revenue: 1161.65, ctr: 2.21, convRate: 0.95, roas: 2.61, cpm: 15.59 },
+            { id: 'EM250610004', spend: 1174.51, impressions: 68536, clicks: 1108, orders: 22, revenue: 2592.64, ctr: 1.62, convRate: 1.99, roas: 2.21, cpm: 17.14 },
+            { id: 'EM250610005', spend: 2573.92, impressions: 141742, clicks: 2624, orders: 39, revenue: 8028.08, ctr: 1.85, convRate: 1.49, roas: 3.12, cpm: 18.16 }
+        ];
+
+        // Calculate additional metrics
+        videoData.forEach(video => {
+            video.aov = video.orders > 0 ? video.revenue / video.orders : 0;
+            video.cpa = video.orders > 0 ? video.spend / video.orders : 0;
+        });
+
+        // Initialize charts
+        let charts = {};
+
+        function initCharts() {
+            // Quadrant Chart
+            const quadrantChart = echarts.init(document.getElementById('quadrantChart'));
+            charts.quadrant = quadrantChart;
+            
+            // Heatmap Chart
+            const heatmapChart = echarts.init(document.getElementById('heatmapChart'));
+            charts.heatmap = heatmapChart;
+            
+            // Revenue Chart
+            const revenueChart = echarts.init(document.getElementById('revenueChart'));
+            charts.revenue = revenueChart;
+            
+            // Funnel Chart
+            const funnelChart = echarts.init(document.getElementById('funnelChart'));
+            charts.funnel = funnelChart;
+            
+            // CPM Analysis Chart
+            const cpmChart = echarts.init(document.getElementById('cpmAnalysisChart'));
+            charts.cpm = cpmChart;
+            
+            // Window resize handler
+            window.addEventListener('resize', () => {
+                Object.values(charts).forEach(chart => chart.resize());
+            });
+        }
+
+        // Render Quadrant Chart
+        function renderQuadrantChart() {
+            const avgROAS = videoData.reduce((sum, v) => sum + v.roas, 0) / videoData.length;
+            const avgConvRate = videoData.reduce((sum, v) => sum + v.convRate, 0) / videoData.length;
+
+            const data = videoData.map(v => ({
+                value: [v.convRate, v.roas, v.revenue, v.id],
+                itemStyle: {
+                    color: v.roas >= 3 ? '#4ade80' : v.roas >= 2 ? '#fbbf24' : v.roas >= 1 ? '#60a5fa' : '#f87171'
+                }
+            }));
+
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        const d = params.data.value;
+                        return `${d[3]}<br/>
+                                Conv Rate: ${d[0].toFixed(2)}%<br/>
+                                ROAS: ${d[1].toFixed(2)}x<br/>
+                                Revenue: $${d[2].toFixed(2)}`;
+                    },
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Conversion Rate (%)',
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', formatter: '{value}%' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'ROAS',
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', formatter: '{value}x' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                series: [{
+                    type: 'scatter',
+                    symbolSize: function(data) {
+                        return Math.sqrt(data[2]) / 10 + 10;
+                    },
+                    data: data,
+                    emphasis: {
+                        focus: 'series',
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 242, 234, 0.5)'
+                        }
+                    },
+                    markArea: {
+                        silent: true,
+                        itemStyle: {
+                            color: 'transparent',
+                            borderWidth: 1,
+                            borderType: 'dashed'
+                        },
+                        data: [[{
+                            name: 'Star Performers',
+                            xAxis: avgConvRate,
+                            yAxis: avgROAS,
+                            itemStyle: {
+                                color: 'rgba(74, 222, 128, 0.1)',
+                                borderColor: '#4ade80'
+                            }
+                        }, {
+                            xAxis: 'max',
+                            yAxis: 'max'
+                        }]]
+                    },
+                    markLine: {
+                        lineStyle: {
+                            color: '#ff0050',
+                            type: 'dashed'
+                        },
+                        data: [
+                            { xAxis: avgConvRate },
+                            { yAxis: avgROAS }
+                        ],
+                        label: { show: false }
+                    }
+                }]
+            };
+
+            charts.quadrant.setOption(option);
+        }
+
+        // Render Heatmap Chart
+        function renderHeatmapChart() {
+            const metrics = ['CTR', 'Conv Rate', 'ROAS', 'CPM'];
+            const videos = videoData.map(v => v.id);
+            
+            // Normalize data for heatmap
+            const data = [];
+            videoData.forEach((video, vIndex) => {
+                data.push([0, vIndex, (video.ctr / 3.61 * 100).toFixed(0)]); // CTR normalized
+                data.push([1, vIndex, (video.convRate / 3.28 * 100).toFixed(0)]); // Conv Rate normalized
+                data.push([2, vIndex, (video.roas / 5.46 * 100).toFixed(0)]); // ROAS normalized
+                data.push([3, vIndex, (100 - video.cpm / 25.12 * 100).toFixed(0)]); // CPM inverted and normalized
+            });
+
+            const option = {
+                tooltip: {
+                    position: 'top',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                grid: {
+                    height: '70%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: metrics,
+                    splitArea: { show: true },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: videos,
+                    splitArea: { show: true },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                visualMap: {
+                    min: 0,
+                    max: 100,
+                    calculable: true,
+                    orient: 'horizontal',
+                    left: 'center',
+                    bottom: '5%',
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    },
+                    textStyle: { color: '#888' }
+                },
+                series: [{
+                    name: 'Performance',
+                    type: 'heatmap',
+                    data: data,
+                    label: { show: true },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+
+            charts.heatmap.setOption(option);
+        }
+
+        // Render Revenue Chart
+        function renderRevenueChart() {
+            const sortedData = [...videoData].sort((a, b) => b.revenue - a.revenue);
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: ${c} ({d}%)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '50%'],
+                    data: sortedData.map(v => ({
+                        value: v.revenue.toFixed(2),
+                        name: v.id,
+                        itemStyle: {
+                            color: v.roas >= 3 ? '#4ade80' : v.roas >= 2 ? '#fbbf24' : v.roas >= 1 ? '#60a5fa' : '#f87171'
+                        }
+                    })),
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        show: true,
+                        formatter: function(params) {
+                            return params.percent > 5 ? `${params.name}\n${params.percent}%` : '';
+                        }
+                    }
+                }]
+            };
+
+            charts.revenue.setOption(option);
+        }
+
+        // Render Funnel Chart
+        function renderFunnelChart() {
+            const totalImpressions = videoData.reduce((sum, v) => sum + v.impressions, 0);
+            const totalClicks = videoData.reduce((sum, v) => sum + v.clicks, 0);
+            const totalOrders = videoData.reduce((sum, v) => sum + v.orders, 0);
+
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c}',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                series: [{
+                    name: 'Conversion Funnel',
+                    type: 'funnel',
+                    left: '10%',
+                    width: '80%',
+                    label: {
+                        formatter: '{b}\n{c} ({d}%)',
+                        fontSize: 14
+                    },
+                    itemStyle: {
+                        borderColor: '#0f0f23',
+                        borderWidth: 2
+                    },
+                    data: [
+                        {
+                            value: totalImpressions,
+                            name: 'Impressions',
+                            itemStyle: { color: '#60a5fa' }
+                        },
+                        {
+                            value: totalClicks,
+                            name: 'Clicks',
+                            itemStyle: { color: '#fbbf24' }
+                        },
+                        {
+                            value: totalOrders,
+                            name: 'Orders',
+                            itemStyle: { color: '#4ade80' }
+                        }
+                    ]
+                }]
+            };
+
+            charts.funnel.setOption(option);
+        }
+
+        // Render CPM Analysis Chart
+        function renderCPMAnalysisChart() {
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: ['CPM', 'ROAS', 'Orders'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: videoData.map(v => v.id),
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { 
+                        color: '#888',
+                        rotate: 45,
+                        interval: 0
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'CPM ($)',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888', formatter: '${value}' },
+                        splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                    },
+                    {
+                        type: 'value',
+                        name: 'ROAS / Orders',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'CPM',
+                        type: 'bar',
+                        data: videoData.map(v => v.cpm.toFixed(2)),
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00f2ea' },
+                                { offset: 1, color: '#0099cc' }
+                            ])
+                        }
+                    },
+                    {
+                        name: 'ROAS',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: videoData.map(v => v.roas.toFixed(2)),
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3,
+                            color: '#ff0050'
+                        },
+                        itemStyle: {
+                            color: '#ff0050'
+                        }
+                    },
+                    {
+                        name: 'Orders',
+                        type: 'scatter',
+                        yAxisIndex: 1,
+                        data: videoData.map(v => v.orders),
+                        symbolSize: function(val) {
+                            return val * 2 + 5;
+                        },
+                        itemStyle: {
+                            color: '#4ade80'
+                        }
+                    }
+                ]
+            };
+
+            charts.cpm.setOption(option);
+        }
+
+        // Render Performance Matrix
+        function renderPerformanceMatrix() {
+            const container = document.getElementById('performanceMatrix');
+            const sortedVideos = [...videoData].sort((a, b) => b.roas - a.roas);
+            
+            container.innerHTML = sortedVideos.map(video => {
+                let badgeClass, badgeText;
+                if (video.roas >= 4) {
+                    badgeClass = 'badge-star';
+                    badgeText = 'Star';
+                } else if (video.roas >= 2) {
+                    badgeClass = 'badge-performer';
+                    badgeText = 'Performer';
+                } else if (video.roas >= 1) {
+                    badgeClass = 'badge-optimize';
+                    badgeText = 'Optimize';
+                } else {
+                    badgeClass = 'badge-review';
+                    badgeText = 'Review';
+                }
+                
+                return `
+                    <div class="matrix-card" onclick="showVideoModal('${video.id}')">
+                        <div class="matrix-header">
+                            <div class="matrix-id">${video.id}</div>
+                            <span class="matrix-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="matrix-metrics">
+                            <div class="matrix-metric">
+                                <div class="metric-value">${video.roas.toFixed(2)}x</div>
+                                <div class="metric-label">ROAS</div>
+                            </div>
+                            <div class="matrix-metric">
+                                <div class="metric-value">$${video.revenue.toFixed(0)}</div>
+                                <div class="metric-label">Revenue</div>
+                            </div>
+                            <div class="matrix-metric">
+                                <div class="metric-value">${video.convRate.toFixed(2)}%</div>
+                                <div class="metric-label">Conv</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Performance Table
+        function renderPerformanceTable() {
+            const tbody = document.getElementById('tableBody');
+            const sortedData = [...videoData].sort((a, b) => b.roas - a.roas);
+            
+            tbody.innerHTML = sortedData.map(video => {
+                const action = video.roas >= 3 ? 'Scale' : video.roas >= 2 ? 'Maintain' : video.roas >= 1 ? 'Optimize' : 'Pause';
+                const actionClass = video.roas >= 2 ? 'positive' : video.roas >= 1 ? '' : 'negative';
+                
+                return `
+                    <tr onclick="showVideoModal('${video.id}')" style="cursor: pointer;">
+                        <td style="color: #00f2ea; font-weight: 600;">${video.id}</td>
+                        <td>$${video.spend.toFixed(2)}</td>
+                        <td>$${video.revenue.toFixed(2)}</td>
+                        <td style="color: ${video.roas >= 2 ? '#4ade80' : video.roas >= 1 ? '#fbbf24' : '#f87171'}">${video.roas.toFixed(2)}</td>
+                        <td>${video.orders}</td>
+                        <td>${video.ctr.toFixed(2)}%</td>
+                        <td>${video.convRate.toFixed(2)}%</td>
+                        <td>$${video.cpm.toFixed(2)}</td>
+                        <td>$${video.aov.toFixed(2)}</td>
+                        <td class="kpi-detail ${actionClass}">${action}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Video Modal Functions
+        function showVideoModal(videoId) {
+            const video = videoData.find(v => v.id === videoId);
+            if (!video) return;
+
+            document.getElementById('modalVideoId').textContent = `${videoId} - Detailed Analysis`;
+            
+            const content = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="color: #00f2ea; margin-bottom: 15px;">Performance Metrics</h3>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
+                            <div style="margin-bottom: 10px;"><strong>ROAS:</strong> ${video.roas.toFixed(2)}x</div>
+                            <div style="margin-bottom: 10px;"><strong>Revenue:</strong> $${video.revenue.toFixed(2)}</div>
+                            <div style="margin-bottom: 10px;"><strong>Spend:</strong> $${video.spend.toFixed(2)}</div>
+                            <div style="margin-bottom: 10px;"><strong>Profit:</strong> $${(video.revenue - video.spend).toFixed(2)}</div>
+                            <div><strong>ROI:</strong> ${((video.revenue - video.spend) / video.spend * 100).toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="color: #00f2ea; margin-bottom: 15px;">Engagement Metrics</h3>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px;">
+                            <div style="margin-bottom: 10px;"><strong>Impressions:</strong> ${video.impressions.toLocaleString()}</div>
+                            <div style="margin-bottom: 10px;"><strong>Clicks:</strong> ${video.clicks.toLocaleString()}</div>
+                            <div style="margin-bottom: 10px;"><strong>Orders:</strong> ${video.orders}</div>
+                            <div style="margin-bottom: 10px;"><strong>CTR:</strong> ${video.ctr.toFixed(2)}%</div>
+                            <div><strong>Conversion Rate:</strong> ${video.convRate.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recommendation-box">
+                    <h3 class="recommendation-title">Strategic Recommendation</h3>
+                    <div class="recommendation-text">
+                        ${video.roas >= 4 ? 
+                            `Exceptional performer! Increase budget by 75% and create variations. Test similar audiences and expand reach. Consider this as template for new creatives.` :
+                        video.roas >= 2 ? 
+                            `Solid performer. Maintain current spend and test incremental increases. Analyze creative elements for replication. Monitor for fatigue signs.` :
+                        video.roas >= 1 ? 
+                            `Breakeven campaign. Refine targeting and test new creative angles. Consider A/B testing landing pages. Reduce spend until optimized.` :
+                            `Underperforming. Pause immediately and analyze failure points. Review audience quality and creative relevance. Reallocate budget to winners.`
+                        }
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h3 style="color: #00f2ea; margin-bottom: 10px;">Cost Efficiency</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #fff;">$${video.cpm.toFixed(2)}</div>
+                            <div style="font-size: 12px; color: #888;">CPM</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #fff;">$${video.cpa.toFixed(2)}</div>
+                            <div style="font-size: 12px; color: #888;">CPA</div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #fff;">$${video.aov.toFixed(2)}</div>
+                            <div style="font-size: 12px; color: #888;">AOV</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').style.display = 'none';
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeVideoModal();
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            renderQuadrantChart();
+            renderHeatmapChart();
+            renderRevenueChart();
+            renderFunnelChart();
+            renderCPMAnalysisChart();
+            renderPerformanceMatrix();
+            renderPerformanceTable();
+        });
+    </script>
+</body>
+</html>

@@ -464,12 +464,12 @@
 
             <!-- Ads Section -->
             <div class="primary-menu">
-                <div class="primary-menu-item" onclick="toggleSubmenu(this)">
+                <div class="primary-menu-item expanded" onclick="toggleSubmenu(this)">
                     <span>📈 Ads - Content-Empowered Advertising</span>
                     <span class="menu-arrow">▶</span>
                 </div>
                 
-                <div class="submenu">
+                <div class="submenu expanded">
                     <!-- Steamer Products -->
                     <div class="category-header">🌟 Garment Steamer</div>
                     
@@ -554,22 +554,8 @@
         // Toggle submenu
         function toggleSubmenu(element) {
             const submenu = element.nextElementSibling;
-            const isExpanded = element.classList.contains('expanded');
-            
-            // Close all other primary menus
-            document.querySelectorAll('.primary-menu-item').forEach(item => {
-                item.classList.remove('expanded');
-                const itemSubmenu = item.nextElementSibling;
-                if (itemSubmenu && itemSubmenu.classList.contains('submenu')) {
-                    itemSubmenu.classList.remove('expanded');
-                }
-            });
-            
-            // Toggle current menu
-            if (!isExpanded) {
-                element.classList.add('expanded');
-                submenu.classList.add('expanded');
-            }
+            element.classList.toggle('expanded');
+            submenu.classList.toggle('expanded');
         }
 
         // Setup menu items

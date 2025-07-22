@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Garment Steamer WoW Performance Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+        
+        /* Platform Selector */
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+        
+        .platform-btn {
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .platform-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+        
+        .platform-btn.active {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.2), rgba(255, 0, 80, 0.2));
+            border-color: #00f2ea;
+            color: #00f2ea;
+        }
+        
+        /* KPI Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .kpi-card:hover::before {
+            opacity: 1;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-change {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .kpi-change.positive {
+            color: #4ade80;
+        }
+        
+        .kpi-change.negative {
+            color: #f87171;
+        }
+        
+        .kpi-change.neutral {
+            color: #888;
+        }
+        
+        /* Chart Containers */
+        .chart-section {
+            margin: 30px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .chart-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        /* Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insight-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .insight-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #00f2ea;
+            font-weight: 700;
+        }
+        
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: rgba(0, 242, 234, 0.1);
+            color: #00f2ea;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ccc;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .table-change {
+            font-weight: 500;
+        }
+        
+        .table-change.positive {
+            color: #4ade80;
+        }
+        
+        .table-change.negative {
+            color: #f87171;
+        }
+        
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .platform-selector {
+                flex-wrap: wrap;
+            }
+            
+            .platform-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .kpi-value {
+                font-size: 24px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 12px;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 242, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f2ea;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Neakasa Garment Steamer WoW Performance Analysis</h1>
+        <p>Multi-Channel Week-over-Week Performance Tracking for Garment Steamer Products | May 7 - July 20, 2025</p>
+    </header>
+
+    <!-- Platform Selector -->
+    <div class="platform-selector">
+        <button class="platform-btn active" onclick="filterPlatform('all')">All Platforms</button>
+        <button class="platform-btn" onclick="filterPlatform('dtc')">DTC</button>
+        <button class="platform-btn" onclick="filterPlatform('amazon')">Amazon</button>
+        <button class="platform-btn" onclick="filterPlatform('tts')">TikTok Shop</button>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-container" id="kpiContainer">
+        <!-- KPI cards will be dynamically inserted here -->
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="grid-container">
+        <!-- Weekly Trend Analysis -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Weekly Performance Trends</h2>
+            </div>
+            <div class="chart-container" id="weeklyTrendChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>💡</span> Key Insights
+                </h3>
+                <div class="insight-item">Traffic patterns show significant volatility across all platforms, with TikTok Shop leading in volume</div>
+                <div class="insight-item">DTC channel shows best conversion stability despite lower traffic volumes</div>
+                <div class="insight-item">Week of June 2-8 marked peak performance for order volume across channels</div>
+                <div class="insight-item">July 14-20 shows concerning zero conversions on DTC and Amazon - investigate urgently</div>
+            </div>
+        </div>
+
+        <!-- Conversion Rate Analysis -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Conversion Rate Evolution</h2>
+            </div>
+            <div class="chart-container" id="conversionChart"></div>
+            <div class="insights-panel">
+                <h3 class="insights-title">
+                    <span>🎯</span> Optimization Opportunities
+                </h3>
+                <div class="insight-item">TikTok Shop maintains highest conversion rates (0.7-1.2%) despite traffic fluctuations</div>
+                <div class="insight-item">Amazon conversion rates declined from 0.3% to near zero - review listing quality and pricing</div>
+                <div class="insight-item">DTC shows sporadic high-conversion weeks - analyze successful campaign elements</div>
+                <div class="insight-item">Implement A/B testing on product pages to improve baseline conversion rates</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WoW Volatility Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Week-over-Week Volatility Analysis</h2>
+        </div>
+        <div class="chart-container" id="volatilityChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>📊</span> Volatility Insights
+            </h3>
+            <div class="insight-item">TikTok Shop shows highest revenue volatility (±188%) indicating dependency on viral content</div>
+            <div class="insight-item">Amazon demonstrates more stable traffic patterns but erratic conversion performance</div>
+            <div class="insight-item">DTC channel needs consistent marketing investment to reduce 100% order volatility</div>
+            <div class="insight-item">Consider diversifying traffic sources to reduce platform-specific risks</div>
+        </div>
+    </div>
+
+    <!-- Revenue Distribution -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Revenue Distribution & AOV Analysis</h2>
+        </div>
+        <div class="chart-container" id="revenueChart"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span>💰</span> Revenue Optimization
+            </h3>
+            <div class="insight-item">TikTok Shop dominates garment steamer revenue share (75%+) but shows declining AOV trend</div>
+            <div class="insight-item">DTC maintains highest garment steamer AOV (¥100-140) suggesting premium positioning works</div>
+            <div class="insight-item">Amazon garment steamer AOV stability around ¥85-95 indicates consistent product mix</div>
+            <div class="insight-item">Implement garment steamer bundle strategies on TikTok Shop to increase AOV from current ¥89</div>
+        </div>
+    </div>
+
+    <!-- Detailed Performance Table -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Detailed Performance Metrics</h2>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table" id="performanceTable">
+                <!-- Table will be dynamically populated -->
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data structure for all platforms
+        const platformData = {
+            dtc: {
+                weeks: ['5.7-5.11', '5.12-5.18', '5.19-5.25', '5.26-6.1', '6.2-6.8', '6.9-6.15', '6.16-6.22', '6.23-6.29', '6.30-7.6', '7.7-7.13', '7.14-7.20'],
+                clicks: [1789, 2758, 1672, 1687, 1968, 1276, 935, 681, 794, 865, 1312],
+                orders: [2, 1, 2, 1, 7, 1, 1, 1, 1, 2, 0],
+                revenue: [178.75, 99.99, 206.98, 130.09, 973.21, 137.23, 94.99, 106.99, 140.74, 248.06, 0],
+                aov: [89.38, 99.99, 103.49, 130.09, 139.03, 137.23, 94.99, 106.99, 140.74, 124.03, 0]
+            },
+            amazon: {
+                weeks: ['5.7-5.11', '5.12-5.18', '5.19-5.25', '5.26-6.1', '6.2-6.8', '6.9-6.15', '6.16-6.22', '6.23-6.29', '6.30-7.6', '7.7-7.13', '7.14-7.20'],
+                clicks: [1457, 2777, 1924, 1950, 2440, 1597, 1077, 1078, 1301, 1343, 1240],
+                orders: [2, 2, 2, 6, 2, 3, 5, 2, 1, 4, 0],
+                revenue: [168.98, 159.98, 199.98, 549.94, 189.98, 269.97, 424.95, 169.98, 89.99, 279.96, 0],
+                aov: [84.49, 79.99, 99.99, 91.66, 94.99, 89.99, 84.99, 84.99, 89.99, 69.99, 0]
+            },
+            tts: {
+                weeks: ['5.7-5.11', '5.12-5.18', '5.19-5.25', '5.26-6.1', '6.2-6.8', '6.9-6.15', '6.16-6.22', '6.23-6.29', '6.30-7.6', '7.7-7.13', '7.14-7.20'],
+                clicks: [4300, 4659, 452, 629, 2700, 831, 1100, 1500, 3726, 2136, 6732],
+                orders: [30, 45, 55, 29, 29, 27, 25, 27, 17, 26, 73],
+                revenue: [3100, 4100, 4984.5, 2788, 2600, 2097.85, 2200, 2591, 1673, 2255.63, 6507.42],
+                aov: [103.33, 91.11, 90.63, 96.14, 89.66, 77.70, 88.00, 95.96, 98.41, 86.75, 89.14]
+            }
+        };
+
+        let currentPlatform = 'all';
+        let charts = {};
+
+        // Initialize charts
+        function initCharts() {
+            // Weekly Trend Chart
+            const weeklyTrendChart = echarts.init(document.getElementById('weeklyTrendChart'));
+            charts.weeklyTrend = weeklyTrendChart;
+            
+            // Conversion Rate Chart
+            const conversionChart = echarts.init(document.getElementById('conversionChart'));
+            charts.conversion = conversionChart;
+            
+            // Volatility Chart
+            const volatilityChart = echarts.init(document.getElementById('volatilityChart'));
+            charts.volatility = volatilityChart;
+            
+            // Revenue Chart
+            const revenueChart = echarts.init(document.getElementById('revenueChart'));
+            charts.revenue = revenueChart;
+            
+            // Window resize handler
+            window.addEventListener('resize', () => {
+                Object.values(charts).forEach(chart => chart.resize());
+            });
+        }
+
+        // Calculate WoW changes
+        function calculateWoWChange(current, previous) {
+            if (!previous || previous === 0) return null;
+            return ((current - previous) / previous * 100).toFixed(1);
+        }
+
+        // Update KPI Cards
+        function updateKPICards(platform) {
+            const container = document.getElementById('kpiContainer');
+            let totalClicks = 0, totalOrders = 0, totalRevenue = 0;
+            
+            if (platform === 'all') {
+                Object.values(platformData).forEach(data => {
+                    totalClicks += data.clicks.reduce((a, b) => a + b, 0);
+                    totalOrders += data.orders.reduce((a, b) => a + b, 0);
+                    totalRevenue += data.revenue.reduce((a, b) => a + b, 0);
+                });
+            } else {
+                const data = platformData[platform];
+                totalClicks = data.clicks.reduce((a, b) => a + b, 0);
+                totalOrders = data.orders.reduce((a, b) => a + b, 0);
+                totalRevenue = data.revenue.reduce((a, b) => a + b, 0);
+            }
+            
+            const avgConversion = totalClicks > 0 ? (totalOrders / totalClicks * 100).toFixed(2) : 0;
+            const avgAOV = totalOrders > 0 ? (totalRevenue / totalOrders).toFixed(2) : 0;
+            
+            container.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Clicks</div>
+                    <div class="kpi-value">${totalClicks.toLocaleString()}</div>
+                    <div class="kpi-change neutral">11-week period</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Orders</div>
+                    <div class="kpi-value">${totalOrders.toLocaleString()}</div>
+                    <div class="kpi-change neutral">Conversion: ${avgConversion}%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Revenue</div>
+                    <div class="kpi-value">¥${totalRevenue.toLocaleString()}</div>
+                    <div class="kpi-change neutral">AOV: ¥${avgAOV}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Platform Focus</div>
+                    <div class="kpi-value">${platform === 'all' ? 'All' : platform.toUpperCase()}</div>
+                    <div class="kpi-change neutral">${platform === 'all' ? '3 channels' : 'Single channel'}</div>
+                </div>
+            `;
+        }
+
+        // Update Weekly Trend Chart
+        function updateWeeklyTrendChart(platform) {
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: platform === 'all' ? ['DTC Clicks', 'Amazon Clicks', 'TTS Clicks', 'DTC Orders', 'Amazon Orders', 'TTS Orders'] : ['Clicks', 'Orders'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: platformData.dtc.weeks,
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Clicks',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' },
+                        splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Orders',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' }
+                    }
+                ],
+                series: []
+            };
+
+            if (platform === 'all') {
+                option.series = [
+                    {
+                        name: 'DTC Clicks',
+                        type: 'line',
+                        data: platformData.dtc.clicks,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#00f2ea' },
+                        itemStyle: { color: '#00f2ea' }
+                    },
+                    {
+                        name: 'Amazon Clicks',
+                        type: 'line',
+                        data: platformData.amazon.clicks,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#ff9500' },
+                        itemStyle: { color: '#ff9500' }
+                    },
+                    {
+                        name: 'TTS Clicks',
+                        type: 'line',
+                        data: platformData.tts.clicks,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#ff0050' },
+                        itemStyle: { color: '#ff0050' }
+                    },
+                    {
+                        name: 'DTC Orders',
+                        type: 'bar',
+                        yAxisIndex: 1,
+                        data: platformData.dtc.orders,
+                        itemStyle: { color: 'rgba(0, 242, 234, 0.6)' }
+                    },
+                    {
+                        name: 'Amazon Orders',
+                        type: 'bar',
+                        yAxisIndex: 1,
+                        data: platformData.amazon.orders,
+                        itemStyle: { color: 'rgba(255, 149, 0, 0.6)' }
+                    },
+                    {
+                        name: 'TTS Orders',
+                        type: 'bar',
+                        yAxisIndex: 1,
+                        data: platformData.tts.orders,
+                        itemStyle: { color: 'rgba(255, 0, 80, 0.6)' }
+                    }
+                ];
+            } else {
+                const data = platformData[platform];
+                option.series = [
+                    {
+                        name: 'Clicks',
+                        type: 'line',
+                        data: data.clicks,
+                        smooth: true,
+                        lineStyle: { width: 3, color: '#00f2ea' },
+                        itemStyle: { color: '#00f2ea' },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(0, 242, 234, 0.3)' },
+                                { offset: 1, color: 'rgba(0, 242, 234, 0.05)' }
+                            ])
+                        }
+                    },
+                    {
+                        name: 'Orders',
+                        type: 'bar',
+                        yAxisIndex: 1,
+                        data: data.orders,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#ff0050' },
+                                { offset: 1, color: '#ff0080' }
+                            ])
+                        }
+                    }
+                ];
+            }
+
+            charts.weeklyTrend.setOption(option);
+        }
+
+        // Update Conversion Rate Chart
+        function updateConversionChart(platform) {
+            const series = [];
+            
+            if (platform === 'all') {
+                ['dtc', 'amazon', 'tts'].forEach((p, index) => {
+                    const data = platformData[p];
+                    const conversionRates = data.clicks.map((clicks, i) => 
+                        clicks > 0 ? (data.orders[i] / clicks * 100).toFixed(2) : 0
+                    );
+                    
+                    series.push({
+                        name: p.toUpperCase(),
+                        type: 'line',
+                        data: conversionRates,
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        lineStyle: {
+                            width: 3,
+                            color: ['#00f2ea', '#ff9500', '#ff0050'][index]
+                        },
+                        itemStyle: {
+                            color: ['#00f2ea', '#ff9500', '#ff0050'][index]
+                        }
+                    });
+                });
+            } else {
+                const data = platformData[platform];
+                const conversionRates = data.clicks.map((clicks, i) => 
+                    clicks > 0 ? (data.orders[i] / clicks * 100).toFixed(2) : 0
+                );
+                
+                series.push({
+                    name: 'Conversion Rate',
+                    type: 'line',
+                    data: conversionRates,
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    lineStyle: {
+                        width: 3,
+                        color: '#00f2ea'
+                    },
+                    itemStyle: {
+                        color: '#00f2ea'
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(0, 242, 234, 0.3)' },
+                            { offset: 1, color: 'rgba(0, 242, 234, 0.05)' }
+                        ])
+                    },
+                    markLine: {
+                        data: [{ type: 'average', name: 'Average' }],
+                        lineStyle: { color: '#ff0050', type: 'dashed' }
+                    }
+                });
+            }
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br/>{a}: {c}%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: series.map(s => s.name),
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: platformData.dtc.weeks,
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', rotate: 45 }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Conversion Rate (%)',
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', formatter: '{value}%' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                series: series
+            };
+
+            charts.conversion.setOption(option);
+        }
+
+        // Update Volatility Chart
+        function updateVolatilityChart(platform) {
+            const categories = ['Click WoW%', 'Order WoW%', 'Revenue WoW%'];
+            const series = [];
+
+            if (platform === 'all') {
+                ['dtc', 'amazon', 'tts'].forEach((p, index) => {
+                    const data = platformData[p];
+                    const volatility = [];
+                    
+                    // Calculate average WoW changes
+                    const clickChanges = [], orderChanges = [], revenueChanges = [];
+                    
+                    for (let i = 1; i < data.clicks.length; i++) {
+                        const clickChange = calculateWoWChange(data.clicks[i], data.clicks[i-1]);
+                        const orderChange = calculateWoWChange(data.orders[i], data.orders[i-1]);
+                        const revenueChange = calculateWoWChange(data.revenue[i], data.revenue[i-1]);
+                        
+                        if (clickChange !== null) clickChanges.push(Math.abs(parseFloat(clickChange)));
+                        if (orderChange !== null) orderChanges.push(Math.abs(parseFloat(orderChange)));
+                        if (revenueChange !== null) revenueChanges.push(Math.abs(parseFloat(revenueChange)));
+                    }
+                    
+                    volatility.push(
+                        clickChanges.length > 0 ? (clickChanges.reduce((a, b) => a + b, 0) / clickChanges.length).toFixed(1) : 0,
+                        orderChanges.length > 0 ? (orderChanges.reduce((a, b) => a + b, 0) / orderChanges.length).toFixed(1) : 0,
+                        revenueChanges.length > 0 ? (revenueChanges.reduce((a, b) => a + b, 0) / revenueChanges.length).toFixed(1) : 0
+                    );
+                    
+                    series.push({
+                        name: p.toUpperCase(),
+                        type: 'bar',
+                        data: volatility,
+                        itemStyle: {
+                            color: ['#00f2ea', '#ff9500', '#ff0050'][index]
+                        }
+                    });
+                });
+            } else {
+                const data = platformData[platform];
+                const volatility = [];
+                
+                // Calculate average WoW changes
+                const clickChanges = [], orderChanges = [], revenueChanges = [];
+                
+                for (let i = 1; i < data.clicks.length; i++) {
+                    const clickChange = calculateWoWChange(data.clicks[i], data.clicks[i-1]);
+                    const orderChange = calculateWoWChange(data.orders[i], data.orders[i-1]);
+                    const revenueChange = calculateWoWChange(data.revenue[i], data.revenue[i-1]);
+                    
+                    if (clickChange !== null) clickChanges.push(Math.abs(parseFloat(clickChange)));
+                    if (orderChange !== null) orderChanges.push(Math.abs(parseFloat(orderChange)));
+                    if (revenueChange !== null) revenueChanges.push(Math.abs(parseFloat(revenueChange)));
+                }
+                
+                volatility.push(
+                    clickChanges.length > 0 ? (clickChanges.reduce((a, b) => a + b, 0) / clickChanges.length).toFixed(1) : 0,
+                    orderChanges.length > 0 ? (orderChanges.reduce((a, b) => a + b, 0) / orderChanges.length).toFixed(1) : 0,
+                    revenueChanges.length > 0 ? (revenueChanges.reduce((a, b) => a + b, 0) / revenueChanges.length).toFixed(1) : 0
+                );
+                
+                series.push({
+                    name: 'Average Volatility',
+                    type: 'bar',
+                    data: volatility,
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#00f2ea' },
+                            { offset: 1, color: '#ff0050' }
+                        ])
+                    }
+                });
+            }
+
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{b}<br/>{a}: {c}%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: series.map(s => s.name),
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: categories,
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888' }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Average WoW Change (%)',
+                    nameTextStyle: { color: '#888' },
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', formatter: '{value}%' },
+                    splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                },
+                series: series
+            };
+
+            charts.volatility.setOption(option);
+        }
+
+        // Update Revenue Chart
+        function updateRevenueChart(platform) {
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    borderColor: '#333',
+                    textStyle: { color: '#fff' }
+                },
+                legend: {
+                    data: platform === 'all' ? ['DTC Revenue', 'Amazon Revenue', 'TTS Revenue', 'DTC AOV', 'Amazon AOV', 'TTS AOV'] : ['Revenue', 'AOV'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: platformData.dtc.weeks,
+                    axisLine: { lineStyle: { color: '#333' } },
+                    axisLabel: { color: '#888', rotate: 45 }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Revenue (¥)',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' },
+                        splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.05)' } }
+                    },
+                    {
+                        type: 'value',
+                        name: 'AOV (¥)',
+                        nameTextStyle: { color: '#888' },
+                        axisLine: { lineStyle: { color: '#333' } },
+                        axisLabel: { color: '#888' }
+                    }
+                ],
+                series: []
+            };
+
+            if (platform === 'all') {
+                option.series = [
+                    {
+                        name: 'DTC Revenue',
+                        type: 'bar',
+                        stack: 'revenue',
+                        data: platformData.dtc.revenue,
+                        itemStyle: { color: 'rgba(0, 242, 234, 0.8)' }
+                    },
+                    {
+                        name: 'Amazon Revenue',
+                        type: 'bar',
+                        stack: 'revenue',
+                        data: platformData.amazon.revenue,
+                        itemStyle: { color: 'rgba(255, 149, 0, 0.8)' }
+                    },
+                    {
+                        name: 'TTS Revenue',
+                        type: 'bar',
+                        stack: 'revenue',
+                        data: platformData.tts.revenue,
+                        itemStyle: { color: 'rgba(255, 0, 80, 0.8)' }
+                    },
+                    {
+                        name: 'DTC AOV',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: platformData.dtc.aov,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#00f2ea', type: 'dashed' },
+                        itemStyle: { color: '#00f2ea' }
+                    },
+                    {
+                        name: 'Amazon AOV',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: platformData.amazon.aov,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#ff9500', type: 'dashed' },
+                        itemStyle: { color: '#ff9500' }
+                    },
+                    {
+                        name: 'TTS AOV',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: platformData.tts.aov,
+                        smooth: true,
+                        lineStyle: { width: 2, color: '#ff0050', type: 'dashed' },
+                        itemStyle: { color: '#ff0050' }
+                    }
+                ];
+            } else {
+                const data = platformData[platform];
+                option.series = [
+                    {
+                        name: 'Revenue',
+                        type: 'bar',
+                        data: data.revenue,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00f2ea' },
+                                { offset: 1, color: '#0099cc' }
+                            ])
+                        }
+                    },
+                    {
+                        name: 'AOV',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: data.aov,
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3,
+                            color: '#ff0050'
+                        },
+                        itemStyle: {
+                            color: '#ff0050'
+                        }
+                    }
+                ];
+            }
+
+            charts.revenue.setOption(option);
+        }
+
+        // Update Performance Table
+        function updatePerformanceTable(platform) {
+            const table = document.getElementById('performanceTable');
+            let html = `
+                <thead>
+                    <tr>
+                        <th>Week</th>
+                        <th>Platform</th>
+                        <th>Clicks</th>
+                        <th>WoW%</th>
+                        <th>Orders</th>
+                        <th>WoW%</th>
+                        <th>Revenue (¥)</th>
+                        <th>WoW%</th>
+                        <th>AOV (¥)</th>
+                        <th>Conv Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            const platforms = platform === 'all' ? ['dtc', 'amazon', 'tts'] : [platform];
+            
+            // Collect all data with conversion rates
+            let allRows = [];
+            
+            platforms.forEach(p => {
+                const data = platformData[p];
+                data.weeks.forEach((week, i) => {
+                    const clickWoW = i > 0 ? calculateWoWChange(data.clicks[i], data.clicks[i-1]) : null;
+                    const orderWoW = i > 0 ? calculateWoWChange(data.orders[i], data.orders[i-1]) : null;
+                    const revenueWoW = i > 0 ? calculateWoWChange(data.revenue[i], data.revenue[i-1]) : null;
+                    const convRate = data.clicks[i] > 0 ? (data.orders[i] / data.clicks[i] * 100).toFixed(2) : 0;
+                    
+                    allRows.push({
+                        week: week,
+                        platform: p.toUpperCase(),
+                        clicks: data.clicks[i],
+                        clickWoW: clickWoW,
+                        orders: data.orders[i],
+                        orderWoW: orderWoW,
+                        revenue: data.revenue[i],
+                        revenueWoW: revenueWoW,
+                        aov: data.aov[i],
+                        convRate: parseFloat(convRate)
+                    });
+                });
+            });
+            
+            // Sort by week ascending
+            allRows.sort((a, b) => {
+                // Convert week format "5.7-5.11" to a sortable number
+                const aStart = parseFloat(a.week.split('-')[0]);
+                const bStart = parseFloat(b.week.split('-')[0]);
+                
+                if (aStart !== bStart) {
+                    return aStart - bStart;
+                }
+                
+                // If same week, sort by platform order (DTC, AMAZON, TTS)
+                const platformOrder = {'DTC': 0, 'AMAZON': 1, 'TTS': 2};
+                return platformOrder[a.platform] - platformOrder[b.platform];
+            });
+            
+            // Generate HTML for sorted rows
+            allRows.forEach(row => {
+                html += `
+                    <tr>
+                        <td>${row.week}</td>
+                        <td>${row.platform}</td>
+                        <td>${row.clicks.toLocaleString()}</td>
+                        <td class="table-change ${row.clickWoW > 0 ? 'positive' : row.clickWoW < 0 ? 'negative' : ''}">
+                            ${row.clickWoW !== null ? (row.clickWoW > 0 ? '+' : '') + row.clickWoW + '%' : '—'}
+                        </td>
+                        <td>${row.orders}</td>
+                        <td class="table-change ${row.orderWoW > 0 ? 'positive' : row.orderWoW < 0 ? 'negative' : ''}">
+                            ${row.orderWoW !== null ? (row.orderWoW > 0 ? '+' : '') + row.orderWoW + '%' : '—'}
+                        </td>
+                        <td>¥${row.revenue.toLocaleString()}</td>
+                        <td class="table-change ${row.revenueWoW > 0 ? 'positive' : row.revenueWoW < 0 ? 'negative' : ''}">
+                            ${row.revenueWoW !== null ? (row.revenueWoW > 0 ? '+' : '') + row.revenueWoW + '%' : '—'}
+                        </td>
+                        <td>¥${row.aov || '—'}</td>
+                        <td>${row.convRate.toFixed(2)}%</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody>';
+            table.innerHTML = html;
+        }
+
+        // Filter platform
+        function filterPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Update button states
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update all components
+            updateKPICards(platform);
+            updateWeeklyTrendChart(platform);
+            updateConversionChart(platform);
+            updateVolatilityChart(platform);
+            updateRevenueChart(platform);
+            updatePerformanceTable(platform);
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateKPICards('all');
+            updateWeeklyTrendChart('all');
+            updateConversionChart('all');
+            updateVolatilityChart('all');
+            updateRevenueChart('all');
+            updatePerformanceTable('all');
+        });
+    </script>
+</body>
+</html>
