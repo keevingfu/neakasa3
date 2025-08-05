@@ -385,7 +385,7 @@
         <div class="header-title">Analytics Center</div>
         <div class="header-stats">
             <div class="stat-item">
-                <div class="stat-value">21</div>
+                <div class="stat-value">28</div>
                 <div class="stat-label">Dashboards</div>
             </div>
             <div class="stat-item">
@@ -400,9 +400,39 @@
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
             
-            <!-- SelfKOC Section -->
+            <!-- Strategic Analysis Section -->
             <div class="primary-menu">
                 <div class="primary-menu-item expanded" onclick="toggleSubmenu(this)">
+                    <span>🎯 Strategic Analysis & Insights</span>
+                    <span class="menu-arrow">▶</span>
+                </div>
+                
+                <div class="submenu expanded">
+                    <a href="#" class="menu-item active" data-page="neakasa_selfkoc_matrix_test_July25-Aug3-2025.html">
+                        KOC Matrix Performance Test
+                        <span class="menu-badge new">Featured</span>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-page="neakasa_keyword_research_analysis_Aug2025.html">
+                        SEO Keyword Research Analysis
+                        <span class="menu-badge">SEO</span>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-page="neakasa_selfkoc_weekly_report_July21-28-2025.html">
+                        Weekly Performance Report
+                        <span class="menu-badge">Weekly</span>
+                    </a>
+                    
+                    <a href="#" class="menu-item" data-page="neakasa-selfkoc_steamer_strategic.html">
+                        Strategic Content Analytics
+                        <span class="menu-badge">Strategy</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- SelfKOC Section -->
+            <div class="primary-menu">
+                <div class="primary-menu-item" onclick="toggleSubmenu(this)">
                     <span>📊 SelfKOC - Matrix Content Testing</span>
                     <span class="menu-arrow">▶</span>
                 </div>
@@ -420,10 +450,6 @@
                         <span class="menu-badge multi">3 Periods</span>
                     </a>
                     
-                    <a href="#" class="menu-item" data-page="neakasa-selfkoc_steamer_strategic.html">
-                        Strategic Content Analytics
-                        <span class="menu-badge">Strategy</span>
-                    </a>
                     
                     <!-- Cat Litter Box Products -->
                     <div class="category-header">🐱 Cat Litter Box</div>
@@ -457,7 +483,7 @@
                     
                     <a href="#" class="menu-item" data-page="neakasa_selfkoc_catlink_linkperformance_May7-July13-2025.html">
                         Comprehensive Link Analysis
-                        <span class="menu-badge new">Advanced</span>
+                        <span class="menu-badge">Advanced</span>
                     </a>
                 </div>
             </div>
@@ -693,11 +719,17 @@
         window.addEventListener('DOMContentLoaded', function() {
             setupMenuItems();
             
-            // Load default page
-            const firstMenuItem = document.querySelector('.menu-item');
-            if (firstMenuItem) {
-                firstMenuItem.click();
-            }
+            // Load default page - KOC Matrix Test Results
+            const defaultPage = 'neakasa_selfkoc_matrix_test_July25-Aug3-2025.html';
+            loadPage(defaultPage);
+            
+            // Find and activate the corresponding menu item
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                if (item.getAttribute('data-page') === defaultPage) {
+                    item.classList.add('active');
+                }
+            });
             
             setTimeout(hideLoading, 500);
         });

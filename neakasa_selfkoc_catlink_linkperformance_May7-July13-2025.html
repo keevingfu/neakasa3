@@ -485,9 +485,9 @@
                 Cross-Channel Performance Comparison
             </h2>
             <div class="section-controls">
-                <button class="control-btn active" onclick="updatePerformanceView('clicks')">Clicks</button>
-                <button class="control-btn" onclick="updatePerformanceView('revenue')">Revenue</button>
-                <button class="control-btn" onclick="updatePerformanceView('conversion')">Conversion</button>
+                <button class="control-btn active" onclick="updatePerformanceView('clicks', this)">Clicks</button>
+                <button class="control-btn" onclick="updatePerformanceView('revenue', this)">Revenue</button>
+                <button class="control-btn" onclick="updatePerformanceView('conversion', this)">Conversion</button>
             </div>
         </div>
         <div id="performanceComparisonChart" class="chart-container"></div>
@@ -764,10 +764,21 @@
         let forecastChart = echarts.init(document.getElementById('forecastChart'));
 
         // Update performance comparison chart
-        function updatePerformanceView(metric) {
+        function updatePerformanceView(metric, buttonElement) {
             // Update button states
             document.querySelectorAll('.control-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            
+            // If buttonElement is provided, use it; otherwise find the button by metric
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            } else {
+                // Find the button that matches this metric
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    if (btn.textContent.toLowerCase() === metric) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
 
             let dtcValues, amazonValues, tiktokValues, yAxisName, formatter;
 

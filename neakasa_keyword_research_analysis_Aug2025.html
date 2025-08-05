@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Keyword Research Analysis - August 2025</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            background: rgba(0, 242, 234, 0.1);
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #00f2ea;
+            margin-top: 10px;
+        }
+        
+        /* KPI Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .kpi-card:hover::before {
+            opacity: 1;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-change {
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .kpi-change.positive {
+            color: #4ade80;
+        }
+        
+        .kpi-change.negative {
+            color: #f87171;
+        }
+        
+        /* Chart Sections */
+        .chart-section {
+            margin: 30px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .chart-subtitle {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        
+        .chart-container.small {
+            height: 300px;
+        }
+        
+        /* Insights Panel */
+        .insights-panel {
+            background: rgba(0, 242, 234, 0.05);
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .insights-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insights-content {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .insight-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .insight-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            border-radius: 4px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .insight-text {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .data-table th {
+            background: rgba(0, 242, 234, 0.1);
+            color: #00f2ea;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .data-table td:last-child {
+            text-align: right;
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-brand {
+            background: rgba(0, 242, 234, 0.2);
+            color: #00f2ea;
+        }
+        
+        .badge-comparison {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+        }
+        
+        .badge-review {
+            background: rgba(255, 206, 84, 0.2);
+            color: #ffce54;
+        }
+        
+        .badge-discount {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Neakasa Keyword Research Analysis</h1>
+        <p>Google Search Keyword Insights & Strategic Recommendations</p>
+        <span class="date-badge">August 2025 Data</span>
+    </div>
+    
+    <!-- KPI Cards -->
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-label">Top Keyword Volume</div>
+            <div class="kpi-value">5,400</div>
+            <div class="kpi-change positive">neakasa litter box</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Total Unique Keywords</div>
+            <div class="kpi-value">1,338</div>
+            <div class="kpi-change positive">+874 related terms</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Highest CPC</div>
+            <div class="kpi-value">$13.28</div>
+            <div class="kpi-change negative">neakasa vs meowant</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Brand Search Volume</div>
+            <div class="kpi-value">13,190</div>
+            <div class="kpi-change positive">Top 3 keywords combined</div>
+        </div>
+    </div>
+    
+    <!-- Top Keywords Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Top Search Keywords Performance</h2>
+            <p class="chart-subtitle">Search volume and keyword distribution analysis</p>
+        </div>
+        <div id="top-keywords-chart" class="chart-container"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span class="insight-icon">🔍</span>
+                Search Behavior Insights
+            </h3>
+            <div class="insights-content">
+                <div class="insight-item">
+                    <span class="insight-icon">1</span>
+                    <span class="insight-text">
+                        <strong>Brand Dominance:</strong> Top 3 keywords are brand-focused (neakasa, neakasa litter box, neakasa m1), accounting for 71% of top 10 search volume. This indicates strong brand awareness but also dependency on branded searches.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">2</span>
+                    <span class="insight-text">
+                        <strong>Purchase Intent Signals:</strong> Keywords containing "review", "vs", and "discount code" represent 31% of top searches, showing users are in active evaluation and purchase consideration phases.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">3</span>
+                    <span class="insight-text">
+                        <strong>Product-Specific Interest:</strong> M1 model generates 4,580 monthly searches (combined direct + review terms), suggesting this is the flagship product requiring focused content optimization.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid-2">
+        <!-- Keyword Type Distribution -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Keyword Type Coverage</h2>
+                <p class="chart-subtitle">Distribution of keyword modifiers</p>
+            </div>
+            <div id="keyword-type-chart" class="chart-container small"></div>
+        </div>
+        
+        <!-- CPC Analysis -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">CPC Competition Analysis</h2>
+                <p class="chart-subtitle">Cost-per-click by keyword category</p>
+            </div>
+            <div id="cpc-analysis-chart" class="chart-container small"></div>
+        </div>
+    </div>
+    
+    <!-- Search Intent Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Search Intent Mapping</h2>
+            <p class="chart-subtitle">User journey stages based on keyword patterns</p>
+        </div>
+        <div id="search-intent-chart" class="chart-container"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span class="insight-icon">🎯</span>
+                Intent-Based Strategy Recommendations
+            </h3>
+            <div class="insights-content">
+                <div class="insight-item">
+                    <span class="insight-icon">1</span>
+                    <span class="insight-text">
+                        <strong>Comparison Content Gap:</strong> High CPC on comparison keywords ($11.21 avg) indicates fierce competition. Create comprehensive comparison guides featuring side-by-side feature tables, video demonstrations, and user testimonials.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">2</span>
+                    <span class="insight-text">
+                        <strong>Discount Strategy:</strong> "Discount code" searches show 9% of top keyword volume. Implement always-on discount landing pages with email capture to convert high-intent traffic.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">3</span>
+                    <span class="insight-text">
+                        <strong>Question Content Optimization:</strong> Despite low volume (32 unique questions), these represent high-value long-tail opportunities. Create detailed FAQ sections and how-to videos addressing cleaning, setup, and troubleshooting.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Competitive Landscape -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Competitive Keyword Landscape</h2>
+            <p class="chart-subtitle">Brand comparison searches and CPC competition</p>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Keyword</th>
+                    <th>Type</th>
+                    <th>Search Volume</th>
+                    <th>CPC ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>neakasa vs meowant</td>
+                    <td><span class="badge badge-comparison">Comparison</span></td>
+                    <td>210</td>
+                    <td>$13.28</td>
+                </tr>
+                <tr>
+                    <td>popur vs neakasa</td>
+                    <td><span class="badge badge-comparison">Comparison</span></td>
+                    <td>170</td>
+                    <td>$11.25</td>
+                </tr>
+                <tr>
+                    <td>neakasa vs litter robot 4</td>
+                    <td><span class="badge badge-comparison">Comparison</span></td>
+                    <td>480</td>
+                    <td>$11.21</td>
+                </tr>
+                <tr>
+                    <td>neakasa litter box discount code</td>
+                    <td><span class="badge badge-discount">Discount</span></td>
+                    <td>480</td>
+                    <td>$9.22</td>
+                </tr>
+                <tr>
+                    <td>neakasa m1 reddit</td>
+                    <td><span class="badge badge-review">Review</span></td>
+                    <td>320</td>
+                    <td>$7.80</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Strategic Roadmap -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Keyword Strategy Roadmap</h2>
+            <p class="chart-subtitle">Prioritized action items for search optimization</p>
+        </div>
+        <div id="strategy-roadmap-chart" class="chart-container"></div>
+        <div class="insights-panel">
+            <h3 class="insights-title">
+                <span class="insight-icon">📊</span>
+                Implementation Priority Matrix
+            </h3>
+            <div class="insights-content">
+                <div class="insight-item">
+                    <span class="insight-icon">🚀</span>
+                    <span class="insight-text">
+                        <strong>Immediate Actions (Week 1-2):</strong> Optimize product pages for "neakasa litter box" and "neakasa m1" keywords. Create dedicated comparison landing pages for high-CPC competitor terms. Launch always-on discount code page.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">📈</span>
+                    <span class="insight-text">
+                        <strong>Short-term Goals (Month 1):</strong> Develop comprehensive review content hub with user-generated content. Build out M1-specific content including setup guides, maintenance tips, and troubleshooting videos.
+                    </span>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">🎯</span>
+                    <span class="insight-text">
+                        <strong>Long-term Strategy (Quarter):</strong> Expand into non-branded keywords through educational content. Target "automatic litter box" and category terms. Build authority through partnerships with pet influencers and veterinarians.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Data
+        const topKeywordsData = [
+            { keyword: 'neakasa litter box', volume: 5400, type: 'brand' },
+            { keyword: 'neakasa', volume: 3600, type: 'brand' },
+            { keyword: 'neakasa m1', volume: 3600, type: 'product' },
+            { keyword: 'neakasa litter box review', volume: 720, type: 'review' },
+            { keyword: 'neakasa litter box reviews', volume: 720, type: 'review' },
+            { keyword: 'neakasa vs litter robot', volume: 590, type: 'comparison' },
+            { keyword: 'neakasa m1 litter box', volume: 590, type: 'product' },
+            { keyword: 'neakasa litter box discount code', volume: 480, type: 'discount' },
+            { keyword: 'neakasa pet grooming kit', volume: 390, type: 'product' },
+            { keyword: 'neakasa m1 review', volume: 390, type: 'review' }
+        ];
+        
+        const keywordTypes = [
+            { type: 'Related', count: 874 },
+            { type: 'Alphabeticals', count: 325 },
+            { type: 'Prepositions', count: 50 },
+            { type: 'Numbers', count: 37 },
+            { type: 'Questions', count: 32 },
+            { type: 'Comparisons', count: 20 }
+        ];
+        
+        const cpcData = [
+            { keyword: 'vs meowant', cpc: 13.28, category: 'Comparison' },
+            { keyword: 'vs popur', cpc: 11.25, category: 'Comparison' },
+            { keyword: 'vs litter robot 4', cpc: 11.21, category: 'Comparison' },
+            { keyword: 'discount code', cpc: 9.22, category: 'Discount' },
+            { keyword: 'reddit review', cpc: 7.80, category: 'Review' },
+            { keyword: 'm1 price', cpc: 7.32, category: 'Price' },
+            { keyword: 'm2 model', cpc: 7.10, category: 'Product' },
+            { keyword: 'dimensions', cpc: 6.54, category: 'Specs' }
+        ];
+        
+        // Initialize Charts
+        function initCharts() {
+            // Top Keywords Chart
+            const topKeywordsChart = echarts.init(document.getElementById('top-keywords-chart'));
+            const topKeywordsOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: topKeywordsData.map(d => d.keyword),
+                    axisLabel: {
+                        color: '#888',
+                        rotate: 30,
+                        interval: 0
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                yAxis: {
+                    name: 'Monthly Search Volume',
+                    nameLocation: 'middle',
+                    nameGap: 50,
+                    type: 'value',
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                series: [{
+                    name: 'Search Volume',
+                    type: 'bar',
+                    data: topKeywordsData.map(d => ({
+                        value: d.volume,
+                        itemStyle: {
+                            color: d.type === 'brand' ? '#00f2ea' : 
+                                   d.type === 'comparison' ? '#ff0050' :
+                                   d.type === 'review' ? '#ffce54' :
+                                   d.type === 'discount' ? '#4ade80' : '#888'
+                        }
+                    })),
+                    barWidth: '60%'
+                }]
+            };
+            topKeywordsChart.setOption(topKeywordsOption);
+            
+            // Keyword Type Chart
+            const keywordTypeChart = echarts.init(document.getElementById('keyword-type-chart'));
+            const keywordTypeOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [{
+                    name: 'Keyword Types',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#0f0f23',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: true,
+                        formatter: '{b}: {c}'
+                    },
+                    data: keywordTypes.map(d => ({
+                        value: d.count,
+                        name: d.type,
+                        itemStyle: {
+                            color: d.type === 'Related' ? '#00f2ea' :
+                                   d.type === 'Alphabeticals' ? '#ff0050' :
+                                   d.type === 'Questions' ? '#4ade80' :
+                                   d.type === 'Comparisons' ? '#ffce54' : '#888'
+                        }
+                    }))
+                }]
+            };
+            keywordTypeChart.setOption(keywordTypeOption);
+            
+            // CPC Analysis Chart
+            const cpcChart = echarts.init(document.getElementById('cpc-analysis-chart'));
+            const cpcOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    formatter: function(params) {
+                        return params[0].name + '<br/>CPC: $' + params[0].value;
+                    }
+                },
+                grid: {
+                    left: '15%',
+                    right: '10%',
+                    bottom: '10%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'CPC ($)',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: cpcData.map(d => d.keyword),
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                series: [{
+                    name: 'CPC',
+                    type: 'bar',
+                    data: cpcData.map(d => ({
+                        value: d.cpc,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                { offset: 0, color: 'rgba(255, 0, 80, 0.8)' },
+                                { offset: 1, color: 'rgba(255, 0, 80, 0.3)' }
+                            ])
+                        }
+                    })),
+                    barWidth: '60%'
+                }]
+            };
+            cpcChart.setOption(cpcOption);
+            
+            // Search Intent Chart
+            const searchIntentChart = echarts.init(document.getElementById('search-intent-chart'));
+            const searchIntentOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        return `${params.data[3]}<br/>Volume: ${params.data[0]}<br/>Avg CPC: $${params.data[1]}<br/>Keywords: ${params.data[2]}`;
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '10%'
+                },
+                xAxis: {
+                    name: 'Search Volume',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    type: 'value',
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                yAxis: {
+                    name: 'Average CPC ($)',
+                    nameLocation: 'middle',
+                    nameGap: 40,
+                    type: 'value',
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                series: [{
+                    name: 'Search Intent',
+                    type: 'scatter',
+                    symbolSize: function(data) {
+                        return Math.sqrt(data[2]) * 10;
+                    },
+                    data: [
+                        [12600, 0.5, 320, 'Brand Awareness', { itemStyle: { color: '#00f2ea' } }],
+                        [1830, 2.8, 85, 'Research & Reviews', { itemStyle: { color: '#ffce54' } }],
+                        [1260, 11.2, 42, 'Comparison Shopping', { itemStyle: { color: '#ff0050' } }],
+                        [870, 8.7, 28, 'Purchase Intent', { itemStyle: { color: '#4ade80' } }],
+                        [320, 4.5, 32, 'Support & Questions', { itemStyle: { color: '#888' } }]
+                    ]
+                }]
+            };
+            searchIntentChart.setOption(searchIntentOption);
+            
+            // Strategy Roadmap Chart
+            const strategyChart = echarts.init(document.getElementById('strategy-roadmap-chart'));
+            const strategyOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['Impact', 'Effort'],
+                    textStyle: {
+                        color: '#888'
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '15%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Core SEO\nOptimization', 'Comparison\nContent', 'Discount\nStrategy', 'Review\nHub', 'FAQ\nContent', 'Video\nContent'],
+                    axisLabel: {
+                        color: '#888',
+                        interval: 0
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Score',
+                    nameLocation: 'middle',
+                    nameGap: 40,
+                    max: 10,
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#888'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Impact',
+                        type: 'bar',
+                        data: [9, 8, 7, 8, 5, 6],
+                        itemStyle: {
+                            color: '#00f2ea'
+                        }
+                    },
+                    {
+                        name: 'Effort',
+                        type: 'bar',
+                        data: [3, 6, 2, 5, 3, 7],
+                        itemStyle: {
+                            color: '#ff0050'
+                        }
+                    }
+                ]
+            };
+            strategyChart.setOption(strategyOption);
+            
+            // Resize on window resize
+            window.addEventListener('resize', () => {
+                topKeywordsChart.resize();
+                keywordTypeChart.resize();
+                cpcChart.resize();
+                searchIntentChart.resize();
+                strategyChart.resize();
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+        });
+    </script>
+</body>
+</html>

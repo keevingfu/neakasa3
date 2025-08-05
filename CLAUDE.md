@@ -4,16 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**neakasa_h5** is a comprehensive analytics dashboard platform for Neakasa product marketing. The project contains 24 self-contained HTML dashboards with embedded CSS and JavaScript for data visualization, performance tracking, and business intelligence across multiple product lines and marketing channels.
+**neakasa_h5** is a static analytics dashboard platform for Neakasa product marketing. The project consists of 25+ self-contained HTML dashboards with embedded CSS and JavaScript, providing data visualization and business intelligence for two main product lines (Garment Steamer and Cat Litter Box) across multiple marketing channels and platforms.
 
 ## Commands
 
 ### Development
 ```bash
-# Serve HTML files directly (no build process required)
-python -m http.server 8000  # Python 3
-npx http-server             # Node.js
-open *.html                 # macOS - open in browser
+# Serve HTML files locally (no build process required)
+python3 -m http.server 8000  # Python 3
+npx http-server -p 8000      # Node.js alternative
+
+# Open specific dashboards
+open index.html              # macOS - opens navigation hub
 ```
 
 ### Git Workflow
@@ -32,124 +34,130 @@ git push origin main
 ## Architecture
 
 ### Technical Stack
-- **Visualization Libraries**:
-  - Apache ECharts v5.4.3 (primary - used in most dashboards)
-  - Chart.js v4.4.1 (secondary - used in newer dashboards)
-- **Styling**:
-  - Custom CSS with consistent dark theme (#0f0f23 background)
-  - Tailwind CSS via CDN (selected dashboards)
-  - Gradient accents: #00f2ea to #ff0050
-- **JavaScript**: Vanilla ES6+ (no frameworks)
-- **Data**: Static datasets embedded in each file
+- **Visualization**: Apache ECharts 5.4.3 (primary), Chart.js 4.4.1 (newer dashboards)
+- **Styling**: Dark theme (#0f0f23), gradient accents (#00f2ea to #ff0050)
+- **JavaScript**: Vanilla ES6+, no build process required
+- **Data**: Static arrays embedded in each HTML file
 
-### Design Patterns
-1. **Self-contained files**: Each HTML file includes all CSS, JS, and data
-2. **Consistent dark theme**: #0f0f23 or #0f0f1e backgrounds throughout
-3. **Responsive layouts**: CSS Grid/Flexbox with mobile breakpoints
-4. **Interactive charts**: Hover tooltips, click interactions, zoom capabilities
-5. **Performance optimization**: Lazy loading with Intersection Observer API
+### High-Level Architecture
 
-### Dashboard Naming Convention
-- `neakasa-ads_*` - Advertising performance dashboards
-- `neakasa_selfkoc_*` - Self-operated KOC (Key Opinion Consumer) content
-- `neakasa_catbox_*` - Cat litter box product analytics
-- `neakasa_steamer_*` - Garment steamer product analytics
-- Date ranges in filenames use format: `May7-July20-2025`
+**Navigation Hub (index.html)**:
+- Accordion sidebar (auto-collapse behavior)
+- Dynamic iframe loading for dashboards
+- Category organization: SelfKOC (矩阵内容测试) and Ads (内容赋能广告)
 
-## Key Dashboard Files
+**Dashboard Pattern** - Each HTML file is self-contained with:
+- Embedded `<style>` and `<script>` tags
+- Static data arrays (no external APIs)
+- Platform filters (DTC, Amazon, TikTok Shop)
+- Responsive breakpoints (375px, 768px, 1024px, 1440px)
+- Business insights panels
 
-### Navigation & Overview
-- **index.html** - Central navigation hub with sidebar menu system
+### File Naming Convention
+- `neakasa_ads_*` - Advertising dashboards
+- `neakasa_selfkoc_*` - Self-operated KOC content
+- `neakasa_ecom_*` - E-commerce comparisons
+- Product suffixes: `_catbox_`, `_steamer_`
+- Date format: `May7-July20-2025`
 
-### Recent High-Impact Dashboards (Created January 2025)
-- **neakasa_catbox_multichannel.html** - Multi-channel performance (DTC/Amazon/TikTok)
-- **neakasa_weekly_videos.html** - Cross-platform video analytics
-- **neakasa_video_gallery.html** - Advanced video gallery with lazy loading
-- **neakasa_comprehensive_analysis.html** - Premium analytics with predictive modeling
-- **neakasa_platform_performance.html** - Platform comparison with ROI analysis
-- **neakasa_catbox_social_trends.html** - Social media content marketing trends
-- **neakasa_catbox_meta_ads.html** - Meta platform advertising performance
-- **neakasa_catbox_video_analytics.html** - Advanced video campaign analytics
-- **neakasa_steamer_wow.html** - Week-over-Week performance analysis
-- **neakasa_steamer_video_ads.html** - Video advertising campaign metrics
-- **neakasa_steamer_social_matrix.html** - Social media matrix performance
+## Common Patterns
 
-### Common Data Patterns
-- **Performance Metrics**: Clicks, impressions, orders, revenue, conversion rates
-- **Time Periods**: Weekly data with WoW (Week-over-Week) calculations
-- **Platforms**: DTC (Direct-to-Consumer), Amazon, TikTok Shop
-- **Video Platforms**: TikTok, Instagram, YouTube
-- **Currency**: Mixed USD ($) and EUR (€) depending on market
+### Data Metrics
+- Performance: Clicks, impressions, orders, revenue, CTR, CVR
+- Time periods: Weekly with WoW calculations
+- Platforms: DTC, Amazon, TikTok Shop, YouTube, Instagram
+- Currency: USD ($) and EUR (€)
 
 ## Development Guidelines
 
 ### Adding New Dashboards
-1. Use existing dashboard as template
-2. Maintain consistent dark theme and color scheme
-3. Include insights panel with actionable recommendations
-4. Implement responsive design (mobile/tablet/desktop)
-5. Add to index.html navigation menu
-6. Update dashboard count in header
+1. Copy existing dashboard as template
+2. Update data arrays and chart configurations
+3. Add to index.html navigation (update dashboard count)
+4. Test responsive breakpoints
 
 ### Chart Implementation
 ```javascript
-// Standard ECharts initialization pattern
+// ECharts pattern
 const chart = echarts.init(document.getElementById('chartId'));
-const option = {
-    tooltip: { trigger: 'axis' },
-    // ... configuration
-};
 chart.setOption(option);
+window.addEventListener('resize', () => chart.resize());
 
-// Window resize handler
-window.addEventListener('resize', () => {
-    chart.resize();
-});
+// Platform filtering
+function filterByPlatform(platform) {
+    const filteredData = data.filter(d => d.platform === platform || platform === 'all');
+    updateCharts(filteredData);
+}
 ```
 
-### Performance Optimization
-- Keep file size under 50KB when possible
-- Use lazy loading for heavy content
-- Implement skeleton screens for loading states
-- Optimize chart rendering with data sampling
+## Testing & Validation
 
-### Data Handling
-- Validate calculations for accuracy
-- Handle edge cases (division by zero, null values)
-- Format numbers consistently (toLocaleString(), toFixed())
-- Show meaningful zero states
+### Browser Testing
+- Chrome, Safari, Firefox, Edge
+- Mobile: 375px, Tablet: 768px, Desktop: 1024px+
 
-## Current Project State
+### Data Validation
+- Check calculations (especially division by zero)
+- Verify WoW percentages
+- Test platform filtering
+- Validate chart interactions
+
+## Key Implementation Details
+
+### Video Preview System
+The project includes standardized video preview implementations (`preview_ytb.html`, `prieview_tk.html`) supporting:
+- **YouTube**: Extract ID from URL, embed via iframe
+- **TikTok**: Direct embed URL format
+- **Instagram**: Post ID extraction for embed
+
+Embed patterns:
+```javascript
+// YouTube: https://www.youtube.com/embed/{videoId}
+// TikTok: https://www.tiktok.com/embed/v2/{videoId}
+// Instagram: https://www.instagram.com/p/{postId}/embed/
+```
+
+## Project State
 
 ### Repository
-- **GitHub**: https://github.com/keevingfu/neakasa3.git
-- **Total Dashboards**: 24 HTML files
-- **Latest Updates**: January 2025
-- **Primary Language**: English (with some Chinese in specific dashboards)
+- GitHub: https://github.com/keevingfu/neakasa3.git
+- 28 dashboards organized by strategic importance
+- No package.json or build process required
+- Static hosting ready
 
-### Key Features Implemented
-- ✅ Multi-channel analytics (DTC, Amazon, TikTok Shop)
-- ✅ Video performance tracking across platforms
-- ✅ Week-over-Week trend analysis
-- ✅ Conversion funnel visualization
-- ✅ Revenue attribution and ROI calculation
-- ✅ Predictive modeling and forecasting
-- ✅ Interactive filtering and drill-down
-- ✅ Mobile-responsive design
-- ✅ Business insights and recommendations
-- ✅ Lazy loading and performance optimization
+### Latest Updates (August 2025)
 
-### Dashboard Categories
-1. **Navigation Hub** - Central control panel
-2. **Product Analytics** - Steamer and cat litter box performance
-3. **Video Analytics** - Cross-platform video performance
-4. **Advertising Performance** - Campaign ROI and optimization
-5. **Social Media Analytics** - Content marketing effectiveness
-6. **Comprehensive Analysis** - Executive-level insights
+#### New Dashboards Added
+1. **neakasa_selfkoc_matrix_test_July25-Aug3-2025.html** - Comprehensive KOC matrix content marketing test analysis
+   - Now set as default landing page
+   - Features multi-tab navigation (Overview, Cat Litter Box, Garment Steamer, Strategy)
+   - Advanced visualizations: scatter plots, funnel charts, treemaps
+   - Automated campaign optimization recommendations
 
-## Testing Checklist
-1. **Responsive Design**: Test at 375px, 768px, 1024px, 1440px widths
-2. **Chart Interactions**: Verify tooltips, click events, zoom functionality
-3. **Data Accuracy**: Validate calculations and percentages
-4. **Performance**: Check load times and smooth animations
-5. **Cross-Browser**: Test on Chrome, Safari, Firefox, Edge
+2. **neakasa_keyword_research_analysis_Aug2025.html** - Google search keyword insights
+   - Top search keywords performance analysis
+   - CPC competition analysis
+   - Search intent mapping
+   - Strategic SEO roadmap
+
+3. **neakasa_selfkoc_weekly_report_July21-28-2025.html** - Weekly performance tracking
+
+#### Navigation Restructure
+- Added new primary section: "Strategic Analysis & Insights" (expanded by default)
+- Reorganized menu by analytical importance rather than just product type
+- Featured dashboards now prominently displayed at top
+- Improved user flow for accessing critical business insights
+
+#### Technical Improvements
+- Fixed chart layout issues in Performance Comparison, Funnel, and Classification visualizations
+- Implemented proper CSS grid layouts matching Creative Performance Matrix style
+- Enhanced chart types: grouped bar charts, actual funnel charts, bubble charts, treemaps
+- Improved responsive design and container space utilization
+
+### Claude Code Settings
+Local permissions configured in `.claude/settings.local.json` for:
+- File operations (ls, grep, python3)
+- Git commands (init, add, commit, push)
+- Dashboard preview (open *.html)
+- MCP server access
+

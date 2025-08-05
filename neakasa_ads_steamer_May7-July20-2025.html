@@ -1039,12 +1039,21 @@
             
             // Sort by week ascending
             allRows.sort((a, b) => {
-                // Convert week format "5.7-5.11" to a sortable number
-                const aStart = parseFloat(a.week.split('-')[0]);
-                const bStart = parseFloat(b.week.split('-')[0]);
+                // Convert week format "5.7-5.11" to a comparable value
+                // Parse month and day separately to handle proper ordering
+                const parseWeekStart = (week) => {
+                    const parts = week.split('-')[0].split('.');
+                    const month = parseInt(parts[0]);
+                    const day = parseInt(parts[1]);
+                    // Convert to a single sortable number: month * 100 + day
+                    return month * 100 + day;
+                };
                 
-                if (aStart !== bStart) {
-                    return aStart - bStart;
+                const aValue = parseWeekStart(a.week);
+                const bValue = parseWeekStart(b.week);
+                
+                if (aValue !== bValue) {
+                    return aValue - bValue;
                 }
                 
                 // If same week, sort by platform order (DTC, AMAZON, TTS)
