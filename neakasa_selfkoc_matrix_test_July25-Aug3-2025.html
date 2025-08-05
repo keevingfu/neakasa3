@@ -1080,7 +1080,7 @@
             };
             audienceRadar.setOption(radarOption);
             
-            // Creative Performance Comparison - Fixed Layout
+            // Creative Performance Comparison - Matching Creative Performance Matrix Layout
             const catPerformanceBar = echarts.init(document.getElementById('cat-performance-bar'));
             const catBarOption = {
                 tooltip: {
@@ -1101,15 +1101,13 @@
                     data: ['ROAS', 'Conv Rate', 'CTR'],
                     textStyle: {
                         color: '#888'
-                    },
-                    top: '3%'
+                    }
                 },
                 grid: {
                     left: '10%',
                     right: '10%',
                     bottom: '15%',
-                    top: '12%',
-                    containLabel: true
+                    top: '10%'
                 },
                 xAxis: {
                     type: 'category',
@@ -1220,7 +1218,7 @@
             };
             catPerformanceBar.setOption(catBarOption);
             
-            // Garment Steamer Performance Funnel - Fixed Layout
+            // Garment Steamer Performance Funnel - Matching Creative Performance Matrix Layout
             const steamerFunnel = echarts.init(document.getElementById('steamer-funnel'));
             const steamerOption = {
                 tooltip: {
@@ -1234,23 +1232,14 @@
                                 CPC: $${item.cpc}`;
                     }
                 },
-                grid: {
-                    left: '10%',
-                    right: '10%',
-                    bottom: '15%',
-                    top: '10%',
-                    containLabel: true
-                },
                 series: [
                     {
                         name: 'Conversion Funnel',
                         type: 'funnel',
-                        left: '5%',
-                        right: '5%',
-                        top: '5%',
-                        bottom: '5%',
-                        width: '90%',
-                        height: '90%',
+                        left: '10%',
+                        right: '10%',
+                        top: '10%',
+                        bottom: '15%',
                         min: 0,
                         max: 100,
                         minSize: '0%',
@@ -1310,7 +1299,7 @@
             };
             steamerFunnel.setOption(steamerOption);
             
-            // Cost Efficiency Analysis - Bubble Chart with ROAS visualization
+            // Cost Efficiency Analysis - Matching Creative Performance Matrix Layout
             const steamerCost = echarts.init(document.getElementById('steamer-cost'));
             const costOption = {
                 tooltip: {
@@ -1325,7 +1314,7 @@
                 },
                 grid: {
                     left: '10%',
-                    right: '15%',
+                    right: '10%',
                     bottom: '15%',
                     top: '10%'
                 },
@@ -1471,10 +1460,10 @@
                     {
                         name: 'Creative Classification',
                         type: 'treemap',
-                        top: '5%',
-                        left: '5%',
-                        right: '5%',
-                        bottom: '5%',
+                        top: '10%',
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%',
                         roam: false,
                         nodeClick: false,
                         breadcrumb: {
