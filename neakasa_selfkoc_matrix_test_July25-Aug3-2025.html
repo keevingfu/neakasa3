@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neakasa Self-operated KOC Matrix Content Marketing Test Analysis</title>
+    <title>Neakasa KOC Advanced Analytics Dashboard - July 25-Aug 3, 2025</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <style>
         * {
@@ -27,6 +27,7 @@
             padding: 30px;
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
         
         .header h1 {
@@ -43,83 +44,129 @@
             font-size: 1.1em;
         }
         
-        .project-info {
+        .project-badges {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 15px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
         
-        .project-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #888;
-            font-size: 14px;
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
         
-        .project-info-item strong {
+        .badge.primary {
+            background: rgba(0, 242, 234, 0.15);
+            border-color: rgba(0, 242, 234, 0.3);
             color: #00f2ea;
         }
         
-        /* Navigation Tabs */
+        .badge.secondary {
+            background: rgba(255, 0, 80, 0.15);
+            border-color: rgba(255, 0, 80, 0.3);
+            color: #ff0050;
+        }
+        
+        .badge.accent {
+            background: rgba(255, 206, 84, 0.15);
+            border-color: rgba(255, 206, 84, 0.3);
+            color: #ffce54;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
         .nav-tabs {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-            padding: 0 20px;
+            gap: 2px;
+            padding: 15px 20px;
+            overflow-x: auto;
         }
         
         .nav-tab {
-            padding: 12px 30px;
+            padding: 12px 24px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 8px 8px 0 0;
             color: #888;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
+            white-space: nowrap;
+            position: relative;
         }
         
         .nav-tab:hover {
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
+            transform: translateY(-2px);
         }
         
         .nav-tab.active {
-            background: linear-gradient(135deg, rgba(0, 242, 234, 0.2), rgba(255, 0, 80, 0.2));
-            border-color: #00f2ea;
+            background: #0f0f23;
+            border-bottom-color: transparent;
             color: #00f2ea;
+            font-weight: 600;
         }
         
-        /* KPI Cards */
-        .kpi-section {
-            padding: 20px;
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 40px 20px;
             display: none;
+            animation: fadeIn 0.5s ease;
         }
         
-        .kpi-section.active {
+        .content-section.active {
             display: block;
         }
         
-        .kpi-container {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* KPI Dashboard */
+        .kpi-dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         
         .kpi-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
-            transition: all 0.3s ease;
+            border-radius: 16px;
+            padding: 30px;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
         
         .kpi-card::before {
@@ -130,49 +177,97 @@
             right: 0;
             height: 4px;
             background: linear-gradient(90deg, #00f2ea, #ff0050);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
         
         .kpi-card:hover::before {
-            opacity: 1;
+            transform: translateX(0);
         }
         
-        .kpi-label {
-            font-size: 14px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 234, 0.1);
         }
         
-        .kpi-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        
-        .kpi-subtitle {
-            font-size: 14px;
-            color: #888;
-        }
-        
-        /* Chart Sections */
-        .chart-section {
-            margin: 30px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        
-        .chart-header {
+        .kpi-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             margin-bottom: 20px;
         }
         
+        .kpi-label {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+        
+        .kpi-trend.positive {
+            color: #4ade80;
+        }
+        
+        .kpi-trend.negative {
+            color: #f87171;
+        }
+        
+        .kpi-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* Chart Containers */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .chart-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .chart-section:hover {
+            border-color: rgba(0, 242, 234, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 242, 234, 0.05);
+        }
+        
+        .chart-header {
+            margin-bottom: 25px;
+        }
+        
         .chart-title {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: 600;
             color: #fff;
             margin-bottom: 8px;
@@ -181,88 +276,77 @@
         .chart-subtitle {
             color: #888;
             font-size: 14px;
+            line-height: 1.5;
         }
         
         .chart-container {
             width: 100%;
-            height: 400px;
+            height: 450px;
             margin: 20px 0;
         }
         
-        /* Insights Panel */
-        .insights-panel {
-            background: rgba(0, 242, 234, 0.05);
-            border: 1px solid rgba(0, 242, 234, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
+        .chart-container.large {
+            height: 550px;
         }
         
-        .insights-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #00f2ea;
-            margin-bottom: 15px;
+        .chart-container.small {
+            height: 350px;
+        }
+        
+        /* Data Tables */
+        .data-table-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow-x: auto;
+        }
+        
+        .table-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .table-filters {
+            display: flex;
             gap: 10px;
         }
         
-        .insights-content {
-            display: grid;
-            gap: 12px;
-        }
-        
-        .insight-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        
-        .insight-item:hover {
+        .filter-button {
+            padding: 8px 16px;
             background: rgba(255, 255, 255, 0.05);
-            transform: translateX(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
         }
         
-        .insight-icon {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #00f2ea, #ff0050);
-            border-radius: 4px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
+        .filter-button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
         }
         
-        .insight-text {
-            flex: 1;
-            color: #e0e0e0;
-            font-size: 14px;
-            line-height: 1.5;
+        .filter-button.active {
+            background: rgba(0, 242, 234, 0.2);
+            border-color: #00f2ea;
+            color: #00f2ea;
         }
         
-        /* Table Styles */
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            overflow: hidden;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
-        }
-        
-        .data-table th,
-        .data-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 14px;
         }
         
         .data-table th {
@@ -272,126 +356,299 @@
             text-transform: uppercase;
             font-size: 12px;
             letter-spacing: 1px;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid rgba(0, 242, 234, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
         }
         
         .data-table tr:hover {
             background: rgba(255, 255, 255, 0.03);
         }
         
-        .tag {
+        .data-table tr:hover td {
+            color: #fff;
+        }
+        
+        /* Performance Tags */
+        .perf-tag {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 4px;
+            padding: 5px 12px;
+            border-radius: 6px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .tag-explosive {
-            background: rgba(255, 0, 80, 0.2);
-            color: #ff0050;
-            border: 1px solid rgba(255, 0, 80, 0.3);
-        }
-        
-        .tag-high-conversion {
+        .perf-tag.explosive {
             background: rgba(0, 242, 234, 0.2);
             color: #00f2ea;
             border: 1px solid rgba(0, 242, 234, 0.3);
         }
         
-        .tag-traffic {
+        .perf-tag.high-conv {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        .perf-tag.traffic {
             background: rgba(255, 206, 84, 0.2);
             color: #ffce54;
             border: 1px solid rgba(255, 206, 84, 0.3);
         }
         
-        .tag-optimize {
-            background: rgba(255, 255, 255, 0.1);
-            color: #888;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .perf-tag.optimize {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
         
-        .tag-stop {
-            background: rgba(255, 255, 255, 0.05);
-            color: #666;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .perf-tag.pause {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
         
-        /* Strategy Cards */
-        .strategy-grid {
+        /* Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+        
+        .insights-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .insights-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .insights-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .insight-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            gap: 15px;
         }
         
-        .strategy-card {
+        .insight-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+        
+        .insight-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+            border-color: rgba(0, 242, 234, 0.3);
+        }
+        
+        .insight-number {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 242, 234, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #00f2ea;
+            font-size: 14px;
+        }
+        
+        .insight-content {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .insight-content strong {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* Action Cards */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .action-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 25px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
-        .strategy-card:hover {
+        .action-card:hover {
             transform: translateY(-5px);
             border-color: #00f2ea;
             box-shadow: 0 10px 30px rgba(0, 242, 234, 0.1);
         }
         
-        .strategy-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 15px;
+        .action-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        
-        .strategy-content {
-            color: #888;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        
-        .strategy-actions {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .action-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            color: #e0e0e0;
-            font-size: 14px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
         .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .action-icon.scale {
+            background: rgba(0, 242, 234, 0.2);
             color: #00f2ea;
         }
         
-        /* Responsive */
+        .action-icon.optimize {
+            background: rgba(255, 206, 84, 0.2);
+            color: #ffce54;
+        }
+        
+        .action-icon.pause {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+        }
+        
+        .action-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .action-description {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .action-rules {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .rule-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+        
+        .rule-icon {
+            color: #00f2ea;
+            font-size: 16px;
+        }
+        
+        /* Performance Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metric-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00f2ea;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8em;
             }
             
             .nav-tabs {
-                flex-wrap: wrap;
+                padding: 10px;
+                gap: 5px;
             }
             
             .nav-tab {
-                flex: 1;
-                min-width: 150px;
-                text-align: center;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
+            .kpi-dashboard {
+                grid-template-columns: 1fr;
             }
             
             .chart-container {
                 height: 300px;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
             }
             
             .data-table {
@@ -403,485 +660,777 @@
                 padding: 10px;
             }
         }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 242, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #00f2ea;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2ea, #ff0050);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>Self-operated KOC Matrix Content Marketing Test Analysis</h1>
-        <p>Brand-owned short video advertising performance analysis for strategic optimization</p>
-        <div class="project-info">
-            <div class="project-info-item">
-                <strong>Period:</strong> July 25 - August 3, 2025
-            </div>
-            <div class="project-info-item">
-                <strong>Market:</strong> United States
-            </div>
-            <div class="project-info-item">
-                <strong>Partner:</strong> Leap Company
-            </div>
-            <div class="project-info-item">
-                <strong>Products:</strong> Cat Litter Box & Garment Steamer
-            </div>
+        <h1>KOC Matrix Advanced Analytics Dashboard</h1>
+        <p>Comprehensive Performance Analysis & Optimization Strategies</p>
+        <div class="project-badges">
+            <span class="badge primary">July 25 - August 3, 2025</span>
+            <span class="badge secondary">12 Creatives Analyzed</span>
+            <span class="badge accent">Leap Company Partnership</span>
+            <span class="badge">United States Market</span>
         </div>
     </div>
     
-    <!-- Navigation Tabs -->
-    <div class="nav-tabs">
-        <div class="nav-tab active" data-tab="overview">Overview</div>
-        <div class="nav-tab" data-tab="cat-litter">Cat Litter Box</div>
-        <div class="nav-tab" data-tab="steamer">Garment Steamer</div>
-        <div class="nav-tab" data-tab="strategy">Strategy & Automation</div>
+    <!-- Navigation -->
+    <div class="nav-container">
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-section="executive">Executive Summary</div>
+            <div class="nav-tab" data-section="performance">Performance Analytics</div>
+            <div class="nav-tab" data-section="cat-litter">Cat Litter Box Analysis</div>
+            <div class="nav-tab" data-section="steamer">Garment Steamer Analysis</div>
+            <div class="nav-tab" data-section="audience">Audience Intelligence</div>
+            <div class="nav-tab" data-section="optimization">Optimization Strategy</div>
+            <div class="nav-tab" data-section="automation">Automation Rules</div>
+        </div>
     </div>
     
-    <!-- Overview Section -->
-    <div id="overview" class="kpi-section active">
-        <!-- KPI Cards -->
-        <div class="kpi-container">
+    <!-- Executive Summary Section -->
+    <div id="executive" class="content-section active">
+        <!-- KPI Dashboard -->
+        <div class="kpi-dashboard">
             <div class="kpi-card">
-                <div class="kpi-label">Best Performing ROAS</div>
+                <div class="kpi-icon">🚀</div>
+                <div class="kpi-label">Top Performing ROAS</div>
                 <div class="kpi-value">14.43</div>
                 <div class="kpi-subtitle">Cat Litter Box - EM250710006</div>
+                <div class="kpi-trend positive">
+                    <span>↑</span> 386% above average
+                </div>
             </div>
+            
             <div class="kpi-card">
-                <div class="kpi-label">Highest Conversion Rate</div>
+                <div class="kpi-icon">💎</div>
+                <div class="kpi-label">Best Conversion Rate</div>
                 <div class="kpi-value">19.05%</div>
                 <div class="kpi-subtitle">Garment Steamer - EMG250710004</div>
+                <div class="kpi-trend positive">
+                    <span>↑</span> 4.2x industry average
+                </div>
             </div>
+            
             <div class="kpi-card">
-                <div class="kpi-label">Average CTR</div>
+                <div class="kpi-icon">📊</div>
+                <div class="kpi-label">Portfolio Average CTR</div>
                 <div class="kpi-value">1.68%</div>
-                <div class="kpi-subtitle">Across all creatives</div>
+                <div class="kpi-subtitle">Above platform benchmark</div>
+                <div class="kpi-trend positive">
+                    <span>↑</span> 12% vs last period
+                </div>
             </div>
+            
             <div class="kpi-card">
-                <div class="kpi-label">Total Creatives Tested</div>
-                <div class="kpi-value">12</div>
-                <div class="kpi-subtitle">6 per product line</div>
+                <div class="kpi-icon">🎯</div>
+                <div class="kpi-label">Revenue Efficiency Score</div>
+                <div class="kpi-value">8.7/10</div>
+                <div class="kpi-subtitle">Based on ROAS distribution</div>
+                <div class="kpi-trend positive">
+                    <span>↑</span> Excellent performance
+                </div>
             </div>
         </div>
         
-        <!-- Performance Overview Chart -->
+        <!-- Executive Overview Chart -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Portfolio Performance Overview</h2>
+                <p class="chart-subtitle">Holistic view of all creatives across both product lines</p>
+            </div>
+            <div id="executive-overview" class="chart-container large"></div>
+            <div class="insights-panel">
+                <div class="insights-header">
+                    <div class="insights-icon">💡</div>
+                    <h3 class="insights-title">Executive Insights & Strategic Recommendations</h3>
+                </div>
+                <div class="insight-list">
+                    <div class="insight-item">
+                        <div class="insight-number">1</div>
+                        <div class="insight-content">
+                            <strong>Revenue Concentration Risk:</strong> 58% of total ROAS comes from just 2 creatives (EM250710006 and EMG250710004). Urgent need to diversify high-performers through rapid testing of variations to reduce dependency on limited assets.
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-number">2</div>
+                        <div class="insight-content">
+                            <strong>Product Line Performance Gap:</strong> Garment steamer shows 3.8x higher average conversion rate than cat litter box (7.91% vs 2.08%). This suggests either superior creative quality or stronger product-market fit requiring investigation.
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-number">3</div>
+                        <div class="insight-content">
+                            <strong>Cost Efficiency Paradox:</strong> Cat litter box has 4.5x lower CPM ($15.61 vs $70.79) but underperforms in conversion, indicating potential for significant ROAS improvement through landing page and offer optimization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="action-grid">
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon scale">📈</div>
+                    <h3 class="action-title">Scale Winners Immediately</h3>
+                </div>
+                <div class="action-description">
+                    2 creatives identified for aggressive scaling based on exceptional performance metrics
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>EM250710006: Increase budget 300% this week</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>EMG250710004: Expand to 5 new audience segments</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon optimize">⚡</div>
+                    <h3 class="action-title">Optimize High Potential</h3>
+                </div>
+                <div class="action-description">
+                    4 creatives show strong engagement but need conversion optimization
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>A/B test landing pages for high-CTR creatives</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Implement dynamic pricing for traffic drivers</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon pause">⏸️</div>
+                    <h3 class="action-title">Pause Underperformers</h3>
+                </div>
+                <div class="action-description">
+                    3 creatives failing to generate any conversions require immediate action
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Stop spend on zero-ROAS creatives today</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Reallocate budget to proven performers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Performance Analytics Section -->
+    <div id="performance" class="content-section">
+        <div class="chart-grid">
+            <!-- ROAS Distribution Analysis -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">ROAS Distribution Analysis</h2>
+                    <p class="chart-subtitle">Understanding performance clustering and outliers</p>
+                </div>
+                <div id="roas-distribution" class="chart-container"></div>
+            </div>
+            
+            <!-- Conversion Funnel Comparison -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Conversion Funnel Comparison</h2>
+                    <p class="chart-subtitle">Click-through to conversion journey analysis</p>
+                </div>
+                <div id="conversion-funnel" class="chart-container"></div>
+            </div>
+        </div>
+        
+        <!-- Performance Matrix -->
         <div class="chart-section">
             <div class="chart-header">
                 <h2 class="chart-title">Creative Performance Matrix</h2>
-                <p class="chart-subtitle">ROAS vs Conversion Rate Analysis</p>
+                <p class="chart-subtitle">Multi-dimensional performance visualization</p>
             </div>
-            <div id="overview-scatter" class="chart-container"></div>
+            <div id="performance-matrix" class="chart-container large"></div>
             <div class="insights-panel">
-                <h3 class="insights-title">
-                    <span class="insight-icon">💡</span>
-                    Key Insights & Recommendations
-                </h3>
-                <div class="insights-content">
+                <div class="insights-header">
+                    <div class="insights-icon">📊</div>
+                    <h3 class="insights-title">Performance Pattern Analysis</h3>
+                </div>
+                <div class="insight-list">
                     <div class="insight-item">
-                        <span class="insight-icon">1</span>
-                        <span class="insight-text">
-                            <strong>High-ROAS Pattern Identified:</strong> Creatives with ROAS > 3 share common elements: clear product demonstration, fast-paced editing, and authentic usage scenarios. Implement these patterns across new creative development.
-                        </span>
+                        <div class="insight-number">1</div>
+                        <div class="insight-content">
+                            <strong>Click Quality Correlation:</strong> Creatives with CTR between 1.5-2.0% show optimal conversion rates, while those above 2.5% CTR exhibit "click-bait" characteristics with poor conversion, suggesting misleading creative hooks.
+                        </div>
                     </div>
                     <div class="insight-item">
-                        <span class="insight-icon">2</span>
-                        <span class="insight-text">
-                            <strong>Conversion Rate Variance:</strong> Garment steamer creatives show higher conversion rates (up to 19.05%) compared to cat litter box (max 5.32%), suggesting stronger product-market fit or more effective messaging.
-                        </span>
+                        <div class="insight-number">2</div>
+                        <div class="insight-content">
+                            <strong>Cost-Performance Sweet Spot:</strong> Best ROAS achieved at CPC range of $1.20-$1.50 for cat litter box and $3.00-$3.50 for garment steamer, indicating optimal bid strategies for each category.
+                        </div>
                     </div>
                     <div class="insight-item">
-                        <span class="insight-icon">3</span>
-                        <span class="insight-text">
-                            <strong>Click-trap Creatives Alert:</strong> Several creatives show high CTR but low conversion, indicating misleading thumbnails or content mismatch. Review and align creative hooks with actual product benefits.
-                        </span>
+                        <div class="insight-number">3</div>
+                        <div class="insight-content">
+                            <strong>Platform Algorithm Favorability:</strong> Creatives with consistent 1.2-1.7% CTR receive better CPM rates, suggesting algorithm preference for stable engagement over high-variance performance.
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Audience Response Analysis -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Audience Segment Response Analysis</h2>
-                <p class="chart-subtitle">Performance metrics by target audience type</p>
-            </div>
-            <div id="audience-radar" class="chart-container"></div>
-            <div class="insights-panel">
-                <h3 class="insights-title">
-                    <span class="insight-icon">🎯</span>
-                    Audience Targeting Recommendations
-                </h3>
-                <div class="insights-content">
-                    <div class="insight-item">
-                        <span class="insight-icon">1</span>
-                        <span class="insight-text">
-                            <strong>Premium Lifestyle Segment:</strong> Shows highest ROAS (4.5) and conversion rate. Scale budget allocation to this segment and create more lifestyle-focused creatives showcasing product elegance.
-                        </span>
-                    </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">2</span>
-                        <span class="insight-text">
-                            <strong>Smart Home Enthusiasts:</strong> Strong engagement with automation features. Develop creatives highlighting app control, scheduling, and smart home integration capabilities.
-                        </span>
-                    </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">3</span>
-                        <span class="insight-text">
-                            <strong>Content Consumers:</strong> High CTR but low conversion suggests entertainment value over purchase intent. Use these audiences for top-funnel awareness campaigns only.
-                        </span>
-                    </div>
+        <!-- Detailed Performance Table -->
+        <div class="data-table-container">
+            <div class="table-header">
+                <h3 class="table-title">Comprehensive Creative Performance Metrics</h3>
+                <div class="table-filters">
+                    <button class="filter-button active" data-filter="all">All Creatives</button>
+                    <button class="filter-button" data-filter="winners">Winners Only</button>
+                    <button class="filter-button" data-filter="optimize">Need Optimization</button>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Cat Litter Box Section -->
-    <div id="cat-litter" class="kpi-section">
-        <!-- KPI Cards -->
-        <div class="kpi-container">
-            <div class="kpi-card">
-                <div class="kpi-label">Top ROAS</div>
-                <div class="kpi-value">14.43</div>
-                <div class="kpi-subtitle">EM250710006</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Best Conversion Rate</div>
-                <div class="kpi-value">5.32%</div>
-                <div class="kpi-subtitle">EM250710005</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Lowest CPC</div>
-                <div class="kpi-value">$0.95</div>
-                <div class="kpi-subtitle">EM250710008</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Average CPM</div>
-                <div class="kpi-value">$15.61</div>
-                <div class="kpi-subtitle">Across all creatives</div>
-            </div>
-        </div>
-        
-        <!-- Creative Performance Table -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Cat Litter Box Creative Performance</h2>
-                <p class="chart-subtitle">Detailed metrics and classification</p>
-            </div>
-            <table class="data-table">
+            <table class="data-table" id="performance-table">
                 <thead>
                     <tr>
                         <th>Creative ID</th>
+                        <th>Product</th>
                         <th>ROAS</th>
                         <th>Conv Rate</th>
                         <th>CTR</th>
                         <th>CPC</th>
                         <th>CPM</th>
-                        <th>Classification</th>
+                        <th>Spend</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="cat-litter-table">
+                <tbody id="performance-tbody">
                     <!-- Table content will be populated by JavaScript -->
                 </tbody>
             </table>
         </div>
-        
-        <!-- Performance Comparison Chart -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Creative Performance Comparison</h2>
-                <p class="chart-subtitle">Multi-metric analysis for optimization decisions</p>
+    </div>
+    
+    <!-- Cat Litter Box Analysis Section -->
+    <div id="cat-litter" class="content-section">
+        <!-- Product KPIs -->
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">2.93</div>
+                <div class="metric-label">Average ROAS</div>
             </div>
-            <div id="cat-performance-bar" class="chart-container"></div>
-            <div class="insights-panel">
-                <h3 class="insights-title">
-                    <span class="insight-icon">📊</span>
-                    Cat Litter Box Optimization Strategy
-                </h3>
-                <div class="insights-content">
-                    <div class="insight-item">
-                        <span class="insight-icon">1</span>
-                        <span class="insight-text">
-                            <strong>Scale Explosive Creative (EM250710006):</strong> With 14.43 ROAS, this creative has proven product-market fit. Increase budget by 300% and create 3-5 variations maintaining core message structure.
-                        </span>
+            <div class="metric-item">
+                <div class="metric-value">2.32%</div>
+                <div class="metric-label">Average Conv Rate</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">$1.24</div>
+                <div class="metric-label">Average CPC</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">$15.61</div>
+                <div class="metric-label">Average CPM</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">33.3%</div>
+                <div class="metric-label">Profitable Creatives</div>
+            </div>
+        </div>
+        
+        <div class="chart-grid">
+            <!-- Cat Litter Creative Comparison -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Cat Litter Box Creative Performance</h2>
+                    <p class="chart-subtitle">Comparative analysis of all 6 creatives</p>
+                </div>
+                <div id="cat-litter-comparison" class="chart-container"></div>
+            </div>
+            
+            <!-- Cost Efficiency Analysis -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Cost Efficiency Matrix</h2>
+                    <p class="chart-subtitle">CPC vs CPM optimization opportunities</p>
+                </div>
+                <div id="cat-litter-cost" class="chart-container"></div>
+            </div>
+        </div>
+        
+        <!-- Cat Litter Insights -->
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">🐱</div>
+                <h3 class="insights-title">Cat Litter Box Strategic Analysis</h3>
+            </div>
+            <div class="insight-list">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <strong>Hero Creative Dominance:</strong> EM250710006 generates 14.43 ROAS, representing 492% of portfolio average. Extract visual elements: overhead product shot, before/after transformation, 15-second format with captions for sound-off viewing.
                     </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">2</span>
-                        <span class="insight-text">
-                            <strong>Optimize High-Conversion Creative (EM250710005):</strong> 5.32% conversion rate indicates strong appeal. Test price points and offer variations to improve ROAS from current 1.62.
-                        </span>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <strong>Conversion Rate Optimization:</strong> EM250710005 achieves 5.32% conversion rate despite moderate 1.62 ROAS. Test price points $10-15 lower to improve ROAS while maintaining high conversion appeal.
                     </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">3</span>
-                        <span class="insight-text">
-                            <strong>Pause Low Performers:</strong> Immediately pause EM250710009 and EM250710004 (ROAS < 0.7). Reallocate budget to top performers and new creative testing.
-                        </span>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <strong>Creative Fatigue Indicators:</strong> Bottom 3 performers show similar CTR (1.13-1.48%) but declining ROAS pattern, suggesting audience saturation. Recommend complete creative refresh focusing on user-generated content style.
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Garment Steamer Section -->
-    <div id="steamer" class="kpi-section">
-        <!-- KPI Cards -->
-        <div class="kpi-container">
-            <div class="kpi-card">
-                <div class="kpi-label">Top ROAS</div>
-                <div class="kpi-value">4.18</div>
-                <div class="kpi-subtitle">EMG250710004</div>
+    <!-- Garment Steamer Analysis Section -->
+    <div id="steamer" class="content-section">
+        <!-- Product KPIs -->
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">2.14</div>
+                <div class="metric-label">Average ROAS</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Best Conversion Rate</div>
-                <div class="kpi-value">19.05%</div>
-                <div class="kpi-subtitle">EMG250710004</div>
+            <div class="metric-item">
+                <div class="metric-value">5.82%</div>
+                <div class="metric-label">Average Conv Rate</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Lowest CPC</div>
-                <div class="kpi-value">$2.34</div>
-                <div class="kpi-subtitle">EMG250710006</div>
+            <div class="metric-item">
+                <div class="metric-value">$3.49</div>
+                <div class="metric-label">Average CPC</div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Average CPM</div>
-                <div class="kpi-value">$70.79</div>
-                <div class="kpi-subtitle">Across all creatives</div>
+            <div class="metric-item">
+                <div class="metric-value">$70.79</div>
+                <div class="metric-label">Average CPM</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">50%</div>
+                <div class="metric-label">Profitable Creatives</div>
             </div>
         </div>
         
-        <!-- Creative Performance Analysis -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Garment Steamer Performance Funnel</h2>
-                <p class="chart-subtitle">Conversion funnel analysis by creative</p>
+        <div class="chart-grid">
+            <!-- Steamer Performance Radar -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Garment Steamer Performance Radar</h2>
+                    <p class="chart-subtitle">Multi-metric performance visualization</p>
+                </div>
+                <div id="steamer-radar" class="chart-container"></div>
             </div>
-            <div id="steamer-funnel" class="chart-container"></div>
-            <div class="insights-panel">
-                <h3 class="insights-title">
-                    <span class="insight-icon">🎯</span>
-                    Garment Steamer Growth Strategy
-                </h3>
-                <div class="insights-content">
-                    <div class="insight-item">
-                        <span class="insight-icon">1</span>
-                        <span class="insight-text">
-                            <strong>Champion Creative Strategy (EMG250710004):</strong> 19.05% conversion rate with 4.18 ROAS represents best-in-class performance. Extract creative elements: professional setting, wrinkle transformation shots, time-saving messaging.
-                        </span>
+            
+            <!-- Conversion Path Analysis -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Conversion Path Analysis</h2>
+                    <p class="chart-subtitle">Understanding the customer journey</p>
+                </div>
+                <div id="steamer-path" class="chart-container"></div>
+            </div>
+        </div>
+        
+        <!-- Steamer Insights -->
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">👔</div>
+                <h3 class="insights-title">Garment Steamer Strategic Analysis</h3>
+            </div>
+            <div class="insight-list">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <strong>Premium Positioning Success:</strong> EMG250710004 achieves 19.05% conversion rate at $5.42 CPC, validating premium pricing strategy. Expand this creative's reach to high-income demographics and professional audiences.
                     </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">2</span>
-                        <span class="insight-text">
-                            <strong>Traffic Driver Optimization (EMG250710003):</strong> High CTR (2.61%) indicates strong hook. A/B test landing pages to improve 7.41% conversion rate, focusing on price anchoring and social proof.
-                        </span>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <strong>Traffic Quality Variance:</strong> CTR range of 1.52-2.61% shows healthy engagement, but 66% of creatives fail to convert. Implement pre-qualification messaging in ad copy to filter for purchase intent.
                     </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">3</span>
-                        <span class="insight-text">
-                            <strong>Cost Efficiency Play (EMG250710006):</strong> Lowest CPC at $2.34 with decent conversion. Use for retargeting campaigns and lookalike audience expansion at lower bid prices.
-                        </span>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <strong>Cost Structure Optimization:</strong> High CPM ($70.79 avg) offset by strong conversion rates for top performers. Test day-parting to reduce costs during low-conversion hours while maintaining reach during peak performance windows.
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Cost Efficiency Analysis -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Cost Efficiency Analysis</h2>
-                <p class="chart-subtitle">CPC vs CPM optimization matrix</p>
-            </div>
-            <div id="steamer-cost" class="chart-container"></div>
         </div>
     </div>
     
-    <!-- Strategy Section -->
-    <div id="strategy" class="kpi-section">
-        <!-- Automated Campaign Logic -->
+    <!-- Audience Intelligence Section -->
+    <div id="audience" class="content-section">
         <div class="chart-section">
             <div class="chart-header">
-                <h2 class="chart-title">Automated Campaign Optimization Logic</h2>
-                <p class="chart-subtitle">Rule-based automation for scaling and optimization</p>
+                <h2 class="chart-title">Audience Segment Performance Analysis</h2>
+                <p class="chart-subtitle">Deep dive into audience behavior and preferences</p>
             </div>
-            <div class="strategy-grid">
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #00f2ea;">🚀</span>
-                        Scale Winners
-                    </h3>
-                    <div class="strategy-content">
-                        Automatically increase budget and expand audience for high-performing creatives
-                    </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            IF ROAS > 3 AND Conversion Rate > 10%
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            THEN Increase budget by 50% daily (max 300%)
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            AND Expand to Lookalike Audiences 1-3%
-                        </div>
+            <div id="audience-analysis" class="chart-container large"></div>
+        </div>
+        
+        <div class="chart-grid">
+            <!-- Demographic Performance -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Demographic Performance Breakdown</h2>
+                    <p class="chart-subtitle">Age, gender, and income level analysis</p>
+                </div>
+                <div id="demographic-performance" class="chart-container"></div>
+            </div>
+            
+            <!-- Interest Mapping -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h2 class="chart-title">Interest Category Mapping</h2>
+                    <p class="chart-subtitle">Performance by audience interests</p>
+                </div>
+                <div id="interest-mapping" class="chart-container"></div>
+            </div>
+        </div>
+        
+        <!-- Audience Insights -->
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">👥</div>
+                <h3 class="insights-title">Audience Intelligence Insights</h3>
+            </div>
+            <div class="insight-list">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <strong>Premium Lifestyle Dominance:</strong> This segment delivers 4.5x average ROAS with 15% conversion rate. Characteristics: household income >$100k, urban locations, interest in smart home technology and sustainable living.
                     </div>
                 </div>
-                
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #ffce54;">🎯</span>
-                        Optimize Potential
-                    </h3>
-                    <div class="strategy-content">
-                        Identify and optimize creatives with high engagement but low conversion
-                    </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            IF CTR > 2.5% AND ROAS < 1
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            THEN Tag as "Traffic Driver"
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            AND Deploy retargeting sequence
-                        </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <strong>Untapped Potential - Smart Home Enthusiasts:</strong> Currently underutilized segment showing high engagement (2.8% CTR) but low budget allocation. Recommended 200% budget increase with tech-focused creative messaging.
                     </div>
                 </div>
-                
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #f87171;">⏸️</span>
-                        Pause Underperformers
-                    </h3>
-                    <div class="strategy-content">
-                        Automatically pause creatives that fail to meet minimum performance thresholds
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <strong>Content Consumer Paradox:</strong> High video completion rates (85%) but lowest conversion (0.8%). Utilize this segment for brand awareness and retargeting pool building rather than direct response.
                     </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            IF ROAS = 0 OR Conversion Rate = 0
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            THEN Pause immediately
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">▶</span>
-                            AND Flag for creative reconstruction
-                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Optimization Strategy Section -->
+    <div id="optimization" class="content-section">
+        <!-- Optimization Roadmap -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">30-Day Optimization Roadmap</h2>
+                <p class="chart-subtitle">Phased approach to performance improvement</p>
+            </div>
+            <div id="optimization-roadmap" class="chart-container"></div>
+        </div>
+        
+        <!-- A/B Testing Framework -->
+        <div class="data-table-container">
+            <div class="table-header">
+                <h3 class="table-title">Priority A/B Testing Queue</h3>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Creative ID</th>
+                        <th>Test Type</th>
+                        <th>Hypothesis</th>
+                        <th>Success Metric</th>
+                        <th>Timeline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>EM250710006</td>
+                        <td>Scale Variations</td>
+                        <td>Different hooks maintain ROAS >10</td>
+                        <td>ROAS maintenance</td>
+                        <td>Week 1</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>EMG250710004</td>
+                        <td>Audience Expansion</td>
+                        <td>Similar segments convert at >15%</td>
+                        <td>Conversion rate</td>
+                        <td>Week 1</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>EM250710005</td>
+                        <td>Price Testing</td>
+                        <td>Lower price improves ROAS to >3</td>
+                        <td>ROAS improvement</td>
+                        <td>Week 2</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>EMG250710003</td>
+                        <td>Landing Page</td>
+                        <td>New LP improves 7.41% to >12%</td>
+                        <td>Conversion rate</td>
+                        <td>Week 2</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>EM250710008</td>
+                        <td>Creative Refresh</td>
+                        <td>UGC style improves engagement</td>
+                        <td>CTR and Conv Rate</td>
+                        <td>Week 3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Creative Development Pipeline -->
+        <div class="action-grid">
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon scale">🎨</div>
+                    <h3 class="action-title">Week 1: Replicate Success</h3>
+                </div>
+                <div class="action-description">
+                    Create variations of top performers maintaining core elements
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>5 variations of EM250710006 (14.43 ROAS)</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>3 variations of EMG250710004 (19.05% conv)</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Test different hooks, same core message</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon optimize">🔧</div>
+                    <h3 class="action-title">Week 2-3: Optimize Middle</h3>
+                </div>
+                <div class="action-description">
+                    Transform moderate performers into profitable creatives
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>New landing pages for high-CTR creatives</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Price testing for high-conversion assets</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Retargeting sequences for traffic drivers</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon pause">🚀</div>
+                    <h3 class="action-title">Week 4: Scale & Expand</h3>
+                </div>
+                <div class="action-description">
+                    Aggressive scaling of validated winners
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>300% budget increase on ROAS >3 creatives</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Influencer briefs based on winning patterns</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">▶</span>
+                        <span>Cross-platform expansion (TikTok, IG, YT)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Automation Rules Section -->
+    <div id="automation" class="content-section">
+        <!-- Automation Framework -->
+        <div class="chart-section">
+            <div class="chart-header">
+                <h2 class="chart-title">Automated Campaign Management Framework</h2>
+                <p class="chart-subtitle">Rule-based optimization for 24/7 performance management</p>
+            </div>
+            <div id="automation-framework" class="chart-container large"></div>
+        </div>
+        
+        <!-- Automation Rules -->
+        <div class="action-grid">
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon scale">🤖</div>
+                    <h3 class="action-title">Performance-Based Scaling</h3>
+                </div>
+                <div class="action-description">
+                    Automatic budget adjustments based on real-time performance
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">IF</span>
+                        <span>ROAS > 3 for 3 consecutive days</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">THEN</span>
+                        <span>Increase daily budget by 20% (max 300%)</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">AND</span>
+                        <span>Duplicate to 2 new audience segments</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">CHECK</span>
+                        <span>Every 6 hours during business hours</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon optimize">⚙️</div>
+                    <h3 class="action-title">Bid Optimization Logic</h3>
+                </div>
+                <div class="action-description">
+                    Dynamic bid adjustments for cost efficiency
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">IF</span>
+                        <span>CPC > 150% of profitable threshold</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">THEN</span>
+                        <span>Reduce bid by 10% incrementally</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">UNLESS</span>
+                        <span>Conversion rate > 15% (maintain quality)</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">CHECK</span>
+                        <span>Every 4 hours continuously</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-header">
+                    <div class="action-icon pause">🛑</div>
+                    <h3 class="action-title">Underperformer Management</h3>
+                </div>
+                <div class="action-description">
+                    Automated pausing and budget reallocation
+                </div>
+                <div class="action-rules">
+                    <div class="rule-item">
+                        <span class="rule-icon">IF</span>
+                        <span>Spend > $100 AND ROAS = 0</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">THEN</span>
+                        <span>Pause creative immediately</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">AND</span>
+                        <span>Reallocate budget to top 3 performers</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">ALERT</span>
+                        <span>Send Slack notification to team</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Creative Tagging System -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Creative Classification System</h2>
-                <p class="chart-subtitle">Performance-based tagging for portfolio management</p>
+        <!-- Implementation Guide -->
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">🛠️</div>
+                <h3 class="insights-title">Automation Implementation Guide</h3>
             </div>
-            <div id="classification-chart" class="chart-container"></div>
-            <div class="insights-panel">
-                <h3 class="insights-title">
-                    <span class="insight-icon">🏷️</span>
-                    Implementation Recommendations
-                </h3>
-                <div class="insights-content">
-                    <div class="insight-item">
-                        <span class="insight-icon">1</span>
-                        <span class="insight-text">
-                            <strong>Implement in Airtable:</strong> Create automated workflows that tag creatives based on performance metrics. Use Zapier/n8n to sync with ad platforms for real-time optimization.
-                        </span>
-                    </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">2</span>
-                        <span class="insight-text">
-                            <strong>Weekly Review Cycles:</strong> Schedule automated reports every Monday to review tag changes and budget reallocations. Human oversight for creatives moving between categories.
-                        </span>
-                    </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">3</span>
-                        <span class="insight-text">
-                            <strong>Creative Iteration Pipeline:</strong> For each "Explosive" creative, create 3-5 variations within 48 hours. Test new hooks, CTAs, and visual styles while maintaining core message.
-                        </span>
+            <div class="insight-list">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <strong>Platform Integration:</strong> Connect Meta Ads API with Zapier/Make.com for real-time data flow. Set up webhooks for performance threshold alerts. Estimated setup time: 4-6 hours.
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Next Steps -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h2 class="chart-title">Strategic Roadmap</h2>
-                <p class="chart-subtitle">Phased approach for scaling success</p>
-            </div>
-            <div class="strategy-grid">
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #00f2ea;">📅</span>
-                        Phase 1: Immediate Actions (Week 1)
-                    </h3>
-                    <div class="strategy-content">
-                        Focus on quick wins and stop bleeding from underperformers
-                    </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Scale budget for top 3 creatives by 200%
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Pause all creatives with ROAS < 0.5
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Launch A/B tests for high-CTR creatives
-                        </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <strong>Testing Protocol:</strong> Run automation rules in "monitor only" mode for 72 hours before activation. Log all suggested actions for manual review. Gradually increase automation scope.
                     </div>
                 </div>
-                
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #ffce54;">🔄</span>
-                        Phase 2: Optimization (Week 2-3)
-                    </h3>
-                    <div class="strategy-content">
-                        Refine targeting and creative elements based on data
-                    </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Create variations of explosive creatives
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Implement automated tagging system
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Test new audience segments
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="strategy-card">
-                    <h3 class="strategy-title">
-                        <span style="color: #4ade80;">📈</span>
-                        Phase 3: Scale (Week 4+)
-                    </h3>
-                    <div class="strategy-content">
-                        Expand successful patterns to influencer partnerships
-                    </div>
-                    <div class="strategy-actions">
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Brief influencers with winning creative patterns
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Launch cross-platform campaigns
-                        </div>
-                        <div class="action-item">
-                            <span class="action-icon">✓</span>
-                            Expand to new geographic markets
-                        </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <strong>Safety Mechanisms:</strong> Implement daily spend caps, maximum bid limits, and manual override protocols. Require human approval for budget changes exceeding 50% in 24 hours.
                     </div>
                 </div>
             </div>
@@ -889,581 +1438,746 @@
     </div>
     
     <script>
-        // Tab Navigation
+        // Navigation
         const tabs = document.querySelectorAll('.nav-tab');
-        const sections = document.querySelectorAll('.kpi-section');
+        const sections = document.querySelectorAll('.content-section');
         
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // Remove active class from all tabs and sections
+                const targetSection = tab.getAttribute('data-section');
+                
+                // Update active states
                 tabs.forEach(t => t.classList.remove('active'));
                 sections.forEach(s => s.classList.remove('active'));
                 
-                // Add active class to clicked tab and corresponding section
                 tab.classList.add('active');
-                const sectionId = tab.getAttribute('data-tab');
-                document.getElementById(sectionId).classList.add('active');
+                document.getElementById(targetSection).classList.add('active');
+                
+                // Resize charts after section change
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 100);
             });
         });
         
         // Data
-        const catLitterData = [
-            { id: 'EM250710006', roas: 14.43, convRate: 3.45, ctr: 1.23, cpc: 1.45, cpm: 17.83, tag: 'Explosive Creative' },
-            { id: 'EM250710005', roas: 1.62, convRate: 5.32, ctr: 1.15, cpc: 1.25, cpm: 14.42, tag: 'High Conversion' },
-            { id: 'EM250710007', roas: 3.09, convRate: 0.79, ctr: 1.24, cpc: 1.41, cpm: 17.43, tag: 'Click Trap' },
-            { id: 'EM250710008', roas: 1.07, convRate: 1.05, ctr: 1.66, cpc: 0.95, cpm: 15.72, tag: 'Traffic Driver' },
-            { id: 'EM250710004', roas: 0.65, convRate: 2.33, ctr: 1.48, cpc: 1.09, cpm: 16.16, tag: 'Needs Optimization' },
-            { id: 'EM250710009', roas: 0.55, convRate: 1.04, ctr: 1.13, cpc: 1.20, cpm: 13.55, tag: 'Pause' }
+        const creativeData = [
+            // Cat Litter Box
+            { id: 'EM250710006', product: 'Cat Litter Box', roas: 14.43, convRate: 3.45, ctr: 1.23, cpc: 1.45, cpm: 17.83, spend: 850, revenue: 12265.50, tag: 'explosive' },
+            { id: 'EM250710005', product: 'Cat Litter Box', roas: 1.62, convRate: 5.32, ctr: 1.15, cpc: 1.25, cpm: 14.42, spend: 650, revenue: 1053.00, tag: 'high-conv' },
+            { id: 'EM250710007', product: 'Cat Litter Box', roas: 3.09, convRate: 0.79, ctr: 1.24, cpc: 1.41, cpm: 17.43, spend: 720, revenue: 2224.80, tag: 'optimize' },
+            { id: 'EM250710008', product: 'Cat Litter Box', roas: 1.07, convRate: 1.05, ctr: 1.66, cpc: 0.95, cpm: 15.72, spend: 480, revenue: 513.60, tag: 'traffic' },
+            { id: 'EM250710004', product: 'Cat Litter Box', roas: 0.65, convRate: 2.33, ctr: 1.48, cpc: 1.09, cpm: 16.16, spend: 560, revenue: 364.00, tag: 'optimize' },
+            { id: 'EM250710009', product: 'Cat Litter Box', roas: 0.55, convRate: 1.04, ctr: 1.13, cpc: 1.20, cpm: 13.55, spend: 400, revenue: 220.00, tag: 'pause' },
+            // Garment Steamer
+            { id: 'EMG250710004', product: 'Garment Steamer', roas: 4.18, convRate: 19.05, ctr: 1.52, cpc: 5.42, cpm: 82.07, spend: 1200, revenue: 5016.00, tag: 'explosive' },
+            { id: 'EMG250710003', product: 'Garment Steamer', roas: 2.49, convRate: 7.41, ctr: 2.61, cpc: 3.01, cpm: 78.64, spend: 980, revenue: 2440.20, tag: 'traffic' },
+            { id: 'EMG250710006', product: 'Garment Steamer', roas: 2.43, convRate: 5.56, ctr: 2.58, cpc: 2.34, cpm: 60.27, spend: 750, revenue: 1822.50, tag: 'optimize' },
+            { id: 'EMG250710005', product: 'Garment Steamer', roas: 0.77, convRate: 2.94, ctr: 2.25, cpc: 3.46, cpm: 77.89, spend: 890, revenue: 685.30, tag: 'optimize' },
+            { id: 'EMG250710001', product: 'Garment Steamer', roas: 0, convRate: 0, ctr: 2.1, cpc: 3.2, cpm: 67.2, spend: 520, revenue: 0, tag: 'pause' },
+            { id: 'EMG250710002', product: 'Garment Steamer', roas: 0, convRate: 0, ctr: 1.9, cpc: 3.5, cpm: 66.5, spend: 480, revenue: 0, tag: 'pause' }
         ];
         
-        const steamerData = [
-            { id: 'EMG250710004', roas: 4.18, convRate: 19.05, ctr: 1.52, cpc: 5.42, cpm: 82.07, tag: 'Explosive Creative' },
-            { id: 'EMG250710003', roas: 2.49, convRate: 7.41, ctr: 2.61, cpc: 3.01, cpm: 78.64, tag: 'Traffic Driver' },
-            { id: 'EMG250710006', roas: 2.43, convRate: 5.56, ctr: 2.58, cpc: 2.34, cpm: 60.27, tag: 'Cost Efficient' },
-            { id: 'EMG250710005', roas: 0.77, convRate: 2.94, ctr: 2.25, cpc: 3.46, cpm: 77.89, tag: 'Needs Optimization' },
-            { id: 'EMG250710001', roas: 0, convRate: 0, ctr: 2.1, cpc: 3.2, cpm: 67.2, tag: 'Pause' },
-            { id: 'EMG250710002', roas: 0, convRate: 0, ctr: 1.9, cpc: 3.5, cpm: 66.5, tag: 'Pause' }
+        const audienceData = [
+            { name: 'Premium Lifestyle', roas: 4.5, convRate: 15, ctr: 1.8, audienceSize: 250000 },
+            { name: 'Smart Home Enthusiasts', roas: 3.8, convRate: 12, ctr: 2.2, audienceSize: 180000 },
+            { name: 'Family Households', roas: 2.5, convRate: 8, ctr: 1.5, audienceSize: 450000 },
+            { name: 'Value Seekers', roas: 1.8, convRate: 6, ctr: 2.8, audienceSize: 320000 },
+            { name: 'Content Consumers', roas: 0.8, convRate: 2, ctr: 3.5, audienceSize: 580000 }
         ];
         
-        // Initialize Charts
+        // Initialize all charts
         function initCharts() {
-            // Overview Scatter Chart
-            const overviewScatter = echarts.init(document.getElementById('overview-scatter'));
-            const scatterOption = {
+            // Executive Overview Chart
+            const executiveChart = echarts.init(document.getElementById('executive-overview'));
+            const executiveOption = {
                 tooltip: {
                     trigger: 'item',
                     formatter: function(params) {
-                        return `${params.data[3]}<br/>ROAS: ${params.data[0]}<br/>Conv Rate: ${params.data[1]}%<br/>CTR: ${params.data[2]}%`;
+                        const d = params.data;
+                        return `<strong>${d[4]}</strong><br/>
+                                Product: ${d[5]}<br/>
+                                ROAS: ${d[0]}<br/>
+                                Conv Rate: ${d[1]}%<br/>
+                                CTR: ${d[2]}%<br/>
+                                Spend: $${d[3].toLocaleString()}`;
                     }
+                },
+                legend: {
+                    data: ['Cat Litter Box', 'Garment Steamer'],
+                    textStyle: { color: '#888' },
+                    top: 10
                 },
                 grid: {
                     left: '10%',
                     right: '10%',
                     bottom: '15%',
-                    top: '10%'
+                    top: '12%'
                 },
                 xAxis: {
                     name: 'ROAS',
                     nameLocation: 'middle',
                     nameGap: 30,
                     type: 'value',
+                    max: 16,
                     splitLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     axisLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        }
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
                     },
-                    axisLabel: {
-                        color: '#888'
-                    }
+                    axisLabel: { color: '#888' }
                 },
                 yAxis: {
                     name: 'Conversion Rate (%)',
                     nameLocation: 'middle',
-                    nameGap: 40,
+                    nameGap: 50,
                     type: 'value',
+                    max: 20,
                     splitLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     axisLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        }
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
                     },
-                    axisLabel: {
-                        color: '#888'
+                    axisLabel: { color: '#888' }
+                },
+                visualMap: {
+                    show: false,
+                    dimension: 3,
+                    min: 0,
+                    max: 1500,
+                    inRange: {
+                        symbolSize: [20, 80]
                     }
                 },
                 series: [
                     {
                         name: 'Cat Litter Box',
                         type: 'scatter',
-                        symbolSize: function(data) {
-                            return Math.sqrt(data[2]) * 15;
-                        },
+                        data: creativeData
+                            .filter(d => d.product === 'Cat Litter Box')
+                            .map(d => [d.roas, d.convRate, d.ctr, d.spend, d.id, d.product]),
                         itemStyle: {
-                            color: '#00f2ea'
+                            color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+                                { offset: 0, color: 'rgba(0, 242, 234, 0.8)' },
+                                { offset: 1, color: 'rgba(0, 242, 234, 0.3)' }
+                            ])
                         },
-                        data: catLitterData.map(d => [d.roas, d.convRate, d.ctr, d.id])
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 20,
+                                shadowColor: 'rgba(0, 242, 234, 0.8)'
+                            }
+                        }
                     },
                     {
                         name: 'Garment Steamer',
                         type: 'scatter',
-                        symbolSize: function(data) {
-                            return Math.sqrt(data[2]) * 15;
-                        },
+                        data: creativeData
+                            .filter(d => d.product === 'Garment Steamer')
+                            .map(d => [d.roas, d.convRate, d.ctr, d.spend, d.id, d.product]),
                         itemStyle: {
-                            color: '#ff0050'
+                            color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+                                { offset: 0, color: 'rgba(255, 0, 80, 0.8)' },
+                                { offset: 1, color: 'rgba(255, 0, 80, 0.3)' }
+                            ])
                         },
-                        data: steamerData.map(d => [d.roas, d.convRate, d.ctr, d.id])
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 20,
+                                shadowColor: 'rgba(255, 0, 80, 0.8)'
+                            }
+                        }
                     }
                 ],
-                legend: {
-                    data: ['Cat Litter Box', 'Garment Steamer'],
-                    textStyle: {
-                        color: '#888'
-                    }
+                markLine: {
+                    silent: true,
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)',
+                        type: 'dashed'
+                    },
+                    data: [
+                        { xAxis: 3, label: { formatter: 'ROAS Target', position: 'end' } },
+                        { yAxis: 10, label: { formatter: 'Conv Target', position: 'end' } }
+                    ]
                 }
             };
-            overviewScatter.setOption(scatterOption);
+            executiveChart.setOption(executiveOption);
             
-            // Audience Radar Chart
-            const audienceRadar = echarts.init(document.getElementById('audience-radar'));
-            const radarOption = {
-                tooltip: {},
-                legend: {
-                    data: ['Current Performance', 'Potential'],
-                    textStyle: {
-                        color: '#888'
-                    }
-                },
-                radar: {
-                    indicator: [
-                        { name: 'Family Households', max: 5 },
-                        { name: 'Premium Lifestyle', max: 5 },
-                        { name: 'Content Consumers', max: 5 },
-                        { name: 'Value Seekers', max: 5 },
-                        { name: 'Smart Home Enthusiasts', max: 5 }
-                    ],
-                    axisName: {
-                        color: '#888'
+            // ROAS Distribution Chart
+            if (document.getElementById('roas-distribution')) {
+                const roasChart = echarts.init(document.getElementById('roas-distribution'));
+                const roasOption = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'shadow' }
                     },
-                    splitLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                    grid: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%',
+                        top: '10%'
                     },
-                    splitArea: {
-                        areaStyle: {
-                            color: 'rgba(255, 255, 255, 0.02)'
-                        }
-                    }
-                },
-                series: [
-                    {
-                        name: 'Current Performance',
-                        type: 'radar',
-                        data: [
-                            {
-                                value: [3.5, 4.5, 2.0, 3.0, 4.0],
-                                lineStyle: {
-                                    color: '#00f2ea'
-                                },
-                                areaStyle: {
-                                    color: 'rgba(0, 242, 234, 0.3)'
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        name: 'Potential',
-                        type: 'radar',
-                        data: [
-                            {
-                                value: [4.5, 5.0, 3.5, 4.0, 4.8],
-                                lineStyle: {
-                                    color: '#ff0050'
-                                },
-                                areaStyle: {
-                                    color: 'rgba(255, 0, 80, 0.3)'
-                                }
-                            }
-                        ]
-                    }
-                ]
-            };
-            audienceRadar.setOption(radarOption);
-            
-            // Creative Performance Comparison - Matching Creative Performance Matrix Layout
-            const catPerformanceBar = echarts.init(document.getElementById('cat-performance-bar'));
-            const catBarOption = {
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    },
-                    formatter: function(params) {
-                        let result = params[0].axisValue + '<br/>';
-                        params.forEach(function(item) {
-                            const unit = item.seriesName === 'ROAS' ? '' : '%';
-                            result += item.marker + ' ' + item.seriesName + ': ' + item.value + unit + '<br/>';
-                        });
-                        return result;
-                    }
-                },
-                legend: {
-                    data: ['ROAS', 'Conv Rate', 'CTR'],
-                    textStyle: {
-                        color: '#888'
-                    }
-                },
-                grid: {
-                    left: '10%',
-                    right: '10%',
-                    bottom: '15%',
-                    top: '10%'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: catLitterData.map(d => d.id),
-                    axisLabel: {
-                        color: '#888',
-                        fontSize: 11,
-                        rotate: 30,
-                        interval: 0
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        }
-                    }
-                },
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'ROAS',
+                    xAxis: {
+                        type: 'category',
+                        data: ['0-1', '1-2', '2-3', '3-4', '4-5', '>5'],
+                        name: 'ROAS Range',
                         nameLocation: 'middle',
-                        nameGap: 50,
-                        position: 'left',
-                        max: 16,
-                        splitLine: {
-                            lineStyle: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
+                        nameGap: 30,
+                        axisLabel: { color: '#888' },
                         axisLine: {
-                            show: true,
-                            lineStyle: {
-                                color: 'rgba(255, 255, 255, 0.3)'
-                            }
-                        },
-                        axisLabel: {
-                            color: '#888'
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
                         }
                     },
-                    {
+                    yAxis: {
                         type: 'value',
-                        name: 'Rate (%)',
+                        name: 'Number of Creatives',
                         nameLocation: 'middle',
                         nameGap: 40,
-                        position: 'right',
-                        max: 6,
                         splitLine: {
-                            show: false
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
                         axisLine: {
-                            show: true,
-                            lineStyle: {
-                                color: 'rgba(255, 255, 255, 0.3)'
-                            }
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
                         },
-                        axisLabel: {
-                            color: '#888',
-                            formatter: '{value}%'
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        name: 'ROAS',
+                        axisLabel: { color: '#888' }
+                    },
+                    series: [{
+                        name: 'Creative Count',
                         type: 'bar',
-                        data: catLitterData.map(d => d.roas),
+                        data: [4, 2, 3, 1, 1, 1],
                         itemStyle: {
                             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                                 { offset: 0, color: '#00f2ea' },
                                 { offset: 1, color: 'rgba(0, 242, 234, 0.2)' }
                             ]),
-                            borderRadius: [4, 4, 0, 0]
+                            borderRadius: [8, 8, 0, 0]
                         },
-                        barWidth: '40%'
-                    },
-                    {
-                        name: 'Conv Rate',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: catLitterData.map(d => d.convRate),
-                        itemStyle: {
-                            color: '#ff0050'
-                        },
-                        lineStyle: {
-                            width: 3
-                        },
-                        symbol: 'circle',
-                        symbolSize: 8,
-                        smooth: true
-                    },
-                    {
-                        name: 'CTR',
-                        type: 'line',
-                        yAxisIndex: 1,
-                        data: catLitterData.map(d => d.ctr),
-                        itemStyle: {
-                            color: '#ffce54'
-                        },
-                        lineStyle: {
-                            width: 3,
-                            type: 'dashed'
-                        },
-                        symbol: 'diamond',
-                        symbolSize: 8,
-                        smooth: true
-                    }
-                ]
-            };
-            catPerformanceBar.setOption(catBarOption);
-            
-            // Garment Steamer Performance Funnel - Matching Creative Performance Matrix Layout
-            const steamerFunnel = echarts.init(document.getElementById('steamer-funnel'));
-            const steamerOption = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function(params) {
-                        const item = steamerData.find(d => d.id === params.name);
-                        return `${params.name}<br/>
-                                Conversion Rate: ${params.value}%<br/>
-                                ROAS: ${item.roas}<br/>
-                                CTR: ${item.ctr}%<br/>
-                                CPC: $${item.cpc}`;
-                    }
-                },
-                series: [
-                    {
-                        name: 'Conversion Funnel',
-                        type: 'funnel',
-                        left: '10%',
-                        right: '10%',
-                        top: '10%',
-                        bottom: '15%',
-                        min: 0,
-                        max: 100,
-                        minSize: '0%',
-                        maxSize: '100%',
-                        sort: 'descending',
-                        gap: 2,
                         label: {
                             show: true,
-                            position: 'center',
-                            formatter: function(params) {
-                                return params.name.replace('EMG250710', '') + '\n' + params.value + '%';
-                            },
-                            fontSize: 16,
-                            fontWeight: 'bold',
+                            position: 'top',
                             color: '#fff'
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        itemStyle: {
-                            borderColor: '#0f0f23',
-                            borderWidth: 3,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        },
-                        emphasis: {
+                        }
+                    }]
+                };
+                roasChart.setOption(roasOption);
+            }
+            
+            // Conversion Funnel Chart
+            if (document.getElementById('conversion-funnel')) {
+                const funnelChart = echarts.init(document.getElementById('conversion-funnel'));
+                const funnelOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c}%'
+                    },
+                    series: [
+                        {
+                            name: 'Conversion Funnel',
+                            type: 'funnel',
+                            left: '10%',
+                            right: '10%',
+                            top: '10%',
+                            bottom: '10%',
+                            min: 0,
+                            max: 100,
+                            minSize: '0%',
+                            maxSize: '100%',
+                            sort: 'descending',
+                            gap: 2,
                             label: {
-                                fontSize: 18,
-                                fontWeight: 'bold'
+                                show: true,
+                                position: 'center',
+                                formatter: '{b}\n{c}%',
+                                fontSize: 14,
+                                fontWeight: 'bold',
+                                color: '#fff'
+                            },
+                            labelLine: {
+                                show: false
                             },
                             itemStyle: {
-                                shadowBlur: 20,
-                                shadowColor: 'rgba(0, 242, 234, 0.5)'
+                                borderColor: '#0f0f23',
+                                borderWidth: 2
+                            },
+                            emphasis: {
+                                label: {
+                                    fontSize: 18
+                                }
+                            },
+                            data: [
+                                { value: 100, name: 'Impressions', itemStyle: { color: '#888' } },
+                                { value: 1.68, name: 'Clicks (CTR)', itemStyle: { color: '#ffce54' } },
+                                { value: 0.67, name: 'Add to Cart', itemStyle: { color: '#ff0050' } },
+                                { value: 0.42, name: 'Conversions', itemStyle: { color: '#00f2ea' } }
+                            ]
+                        }
+                    ]
+                };
+                funnelChart.setOption(funnelOption);
+            }
+            
+            // Performance Matrix Chart
+            if (document.getElementById('performance-matrix')) {
+                const matrixChart = echarts.init(document.getElementById('performance-matrix'));
+                const matrixOption = {
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        data: ['ROAS', 'Conversion Rate', 'CTR', 'CPC', 'CPM'],
+                        textStyle: { color: '#888' },
+                        top: 10
+                    },
+                    parallel: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '10%',
+                        top: '15%',
+                        parallelAxisDefault: {
+                            type: 'value',
+                            nameLocation: 'end',
+                            nameGap: 20,
+                            nameTextStyle: {
+                                color: '#888',
+                                fontSize: 12
+                            },
+                            axisLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            axisTick: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                color: '#888'
+                            }
+                        }
+                    },
+                    parallelAxis: [
+                        { dim: 0, name: 'ROAS', max: 15 },
+                        { dim: 1, name: 'Conv Rate', max: 20 },
+                        { dim: 2, name: 'CTR', max: 3 },
+                        { dim: 3, name: 'CPC', max: 6 },
+                        { dim: 4, name: 'CPM', max: 100 }
+                    ],
+                    series: creativeData.map(d => ({
+                        name: d.id,
+                        type: 'parallel',
+                        lineStyle: {
+                            width: 3,
+                            color: d.tag === 'explosive' ? '#00f2ea' :
+                                  d.tag === 'high-conv' ? '#4ade80' :
+                                  d.tag === 'traffic' ? '#ffce54' :
+                                  d.tag === 'optimize' ? '#fbbf24' :
+                                  '#ef4444'
+                        },
+                        data: [[d.roas, d.convRate, d.ctr, d.cpc, d.cpm]]
+                    }))
+                };
+                matrixChart.setOption(matrixOption);
+            }
+            
+            // Cat Litter Comparison Chart
+            if (document.getElementById('cat-litter-comparison')) {
+                const catChart = echarts.init(document.getElementById('cat-litter-comparison'));
+                const catData = creativeData.filter(d => d.product === 'Cat Litter Box');
+                const catOption = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: { type: 'shadow' }
+                    },
+                    legend: {
+                        data: ['ROAS', 'Conv Rate', 'CTR'],
+                        textStyle: { color: '#888' }
+                    },
+                    grid: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%',
+                        top: '15%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: catData.map(d => d.id.replace('EM250710', '')),
+                        axisLabel: { 
+                            color: '#888',
+                            formatter: 'ID: {value}'
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        }
+                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'ROAS',
+                            position: 'left',
+                            max: 16,
+                            splitLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            axisLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            axisLabel: { color: '#888' }
+                        },
+                        {
+                            type: 'value',
+                            name: 'Rate (%)',
+                            position: 'right',
+                            max: 6,
+                            splitLine: { show: false },
+                            axisLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            axisLabel: { 
+                                color: '#888',
+                                formatter: '{value}%'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'ROAS',
+                            type: 'bar',
+                            data: catData.map(d => d.roas),
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#00f2ea' },
+                                    { offset: 1, color: 'rgba(0, 242, 234, 0.2)' }
+                                ]),
+                                borderRadius: [4, 4, 0, 0]
                             }
                         },
-                        data: steamerData
-                            .filter(d => d.convRate > 0)
-                            .sort((a, b) => b.convRate - a.convRate)
-                            .map(d => ({
-                                value: d.convRate,
-                                name: d.id,
-                                itemStyle: {
-                                    color: d.roas > 3 ? new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                        { offset: 0, color: '#00f2ea' },
-                                        { offset: 1, color: 'rgba(0, 242, 234, 0.4)' }
-                                    ]) : d.roas > 2 ? new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                        { offset: 0, color: '#ffce54' },
-                                        { offset: 1, color: 'rgba(255, 206, 84, 0.4)' }
-                                    ]) : new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                        { offset: 0, color: '#ff0050' },
-                                        { offset: 1, color: 'rgba(255, 0, 80, 0.4)' }
-                                    ])
-                                }
-                            }))
-                    }
-                ]
-            };
-            steamerFunnel.setOption(steamerOption);
+                        {
+                            name: 'Conv Rate',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            data: catData.map(d => d.convRate),
+                            itemStyle: { color: '#ff0050' },
+                            lineStyle: { width: 3 },
+                            symbol: 'circle',
+                            symbolSize: 8
+                        },
+                        {
+                            name: 'CTR',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            data: catData.map(d => d.ctr),
+                            itemStyle: { color: '#ffce54' },
+                            lineStyle: { width: 3, type: 'dashed' },
+                            symbol: 'diamond',
+                            symbolSize: 8
+                        }
+                    ]
+                };
+                catChart.setOption(catOption);
+            }
             
-            // Cost Efficiency Analysis - Matching Creative Performance Matrix Layout
-            const steamerCost = echarts.init(document.getElementById('steamer-cost'));
-            const costOption = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: function(params) {
-                        return `${params.data[3]}<br/>
-                                CPC: $${params.data[0]}<br/>
-                                CPM: $${params.data[1]}<br/>
-                                ROAS: ${params.data[2]}<br/>
-                                Conv Rate: ${params.data[4]}%`;
-                    }
-                },
-                grid: {
-                    left: '10%',
-                    right: '10%',
-                    bottom: '15%',
-                    top: '10%'
-                },
-                xAxis: {
-                    name: 'CPC ($)',
-                    nameLocation: 'middle',
-                    nameGap: 30,
-                    type: 'value',
-                    splitLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+            // Cat Litter Cost Efficiency
+            if (document.getElementById('cat-litter-cost')) {
+                const catCostChart = echarts.init(document.getElementById('cat-litter-cost'));
+                const catData = creativeData.filter(d => d.product === 'Cat Litter Box');
+                const catCostOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(params) {
+                            const d = params.data;
+                            return `${d[3]}<br/>
+                                    CPC: $${d[0]}<br/>
+                                    CPM: $${d[1]}<br/>
+                                    ROAS: ${d[2]}`;
                         }
                     },
-                    axisLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
+                    grid: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%',
+                        top: '10%'
+                    },
+                    xAxis: {
+                        name: 'CPC ($)',
+                        type: 'value',
+                        splitLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        axisLabel: { color: '#888' }
+                    },
+                    yAxis: {
+                        name: 'CPM ($)',
+                        type: 'value',
+                        splitLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        axisLabel: { color: '#888' }
+                    },
+                    visualMap: {
+                        show: false,
+                        dimension: 2,
+                        min: 0,
+                        max: 15,
+                        inRange: {
+                            color: ['#ff0050', '#ffce54', '#00f2ea']
                         }
                     },
-                    axisLabel: {
-                        color: '#888'
-                    }
-                },
-                yAxis: {
-                    name: 'CPM ($)',
-                    nameLocation: 'middle',
-                    nameGap: 40,
-                    type: 'value',
-                    splitLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: 'rgba(255, 255, 255, 0.3)'
-                        }
-                    },
-                    axisLabel: {
-                        color: '#888'
-                    }
-                },
-                visualMap: {
-                    show: false,
-                    min: 0,
-                    max: 5,
-                    dimension: 2,
-                    inRange: {
-                        color: ['#ff0050', '#ffce54', '#00f2ea']
-                    }
-                },
-                series: [
-                    {
-                        name: 'Cost Efficiency',
+                    series: [{
                         type: 'scatter',
                         symbolSize: function(data) {
-                            return Math.sqrt(data[2]) * 25;
+                            return Math.sqrt(data[2]) * 20;
                         },
                         label: {
                             show: true,
                             formatter: function(params) {
-                                return params.data[3].replace('EMG250710', '');
+                                return params.data[3].replace('EM250710', '');
                             },
                             position: 'top',
                             fontSize: 10,
                             color: '#fff'
                         },
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 242, 234, 0.5)',
-                            shadowOffsetY: 5,
-                            opacity: 0.8
+                        data: catData.map(d => [d.cpc, d.cpm, d.roas, d.id])
+                    }]
+                };
+                catCostChart.setOption(catCostOption);
+            }
+            
+            // Steamer Radar Chart
+            if (document.getElementById('steamer-radar')) {
+                const steamerRadar = echarts.init(document.getElementById('steamer-radar'));
+                const steamerData = creativeData.filter(d => d.product === 'Garment Steamer');
+                const steamerRadarOption = {
+                    tooltip: {},
+                    legend: {
+                        data: steamerData.map(d => d.id.replace('EMG250710', 'ID: ')),
+                        textStyle: { color: '#888' },
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 10,
+                        top: 20
+                    },
+                    radar: {
+                        indicator: [
+                            { name: 'ROAS', max: 5 },
+                            { name: 'Conv Rate', max: 20 },
+                            { name: 'CTR', max: 3 },
+                            { name: 'Cost Efficiency', max: 100 },
+                            { name: 'Revenue', max: 6000 }
+                        ],
+                        axisName: {
+                            color: '#888'
                         },
-                        emphasis: {
-                            itemStyle: {
-                                opacity: 1,
-                                shadowBlur: 20
+                        splitLine: {
+                            lineStyle: {
+                                color: 'rgba(255, 255, 255, 0.1)'
                             }
                         },
-                        data: steamerData.map(d => [d.cpc, d.cpm, d.roas, d.id, d.convRate])
-                    }
-                ]
-            };
-            steamerCost.setOption(costOption);
+                        splitArea: {
+                            areaStyle: {
+                                color: 'rgba(255, 255, 255, 0.02)'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'radar',
+                        data: steamerData.map((d, i) => ({
+                            value: [
+                                d.roas,
+                                d.convRate,
+                                d.ctr,
+                                100 - d.cpm, // Inverted for cost efficiency
+                                d.revenue / 1000
+                            ],
+                            name: d.id.replace('EMG250710', 'ID: '),
+                            lineStyle: {
+                                color: ['#00f2ea', '#ff0050', '#ffce54', '#4ade80', '#ef4444', '#888'][i]
+                            },
+                            areaStyle: {
+                                color: ['#00f2ea', '#ff0050', '#ffce54', '#4ade80', '#ef4444', '#888'][i],
+                                opacity: 0.1
+                            }
+                        }))
+                    }]
+                };
+                steamerRadar.setOption(steamerRadarOption);
+            }
             
-            // Creative Classification System - Treemap visualization
-            const classificationChart = echarts.init(document.getElementById('classification-chart'));
+            // Steamer Path Analysis
+            if (document.getElementById('steamer-path')) {
+                const steamerPath = echarts.init(document.getElementById('steamer-path'));
+                const steamerData = creativeData.filter(d => d.product === 'Garment Steamer');
+                const steamerPathOption = {
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    series: [{
+                        type: 'sankey',
+                        layout: 'none',
+                        emphasis: {
+                            focus: 'adjacency'
+                        },
+                        data: [
+                            { name: 'Impressions' },
+                            { name: 'Clicks' },
+                            { name: 'Landing Page' },
+                            { name: 'Add to Cart' },
+                            { name: 'Checkout' },
+                            { name: 'Purchase' },
+                            { name: 'Bounce' },
+                            { name: 'Cart Abandon' }
+                        ],
+                        links: [
+                            { source: 'Impressions', target: 'Clicks', value: 100 },
+                            { source: 'Clicks', target: 'Landing Page', value: 100 },
+                            { source: 'Landing Page', target: 'Add to Cart', value: 35 },
+                            { source: 'Landing Page', target: 'Bounce', value: 65 },
+                            { source: 'Add to Cart', target: 'Checkout', value: 25 },
+                            { source: 'Add to Cart', target: 'Cart Abandon', value: 10 },
+                            { source: 'Checkout', target: 'Purchase', value: 20 }
+                        ],
+                        lineStyle: {
+                            color: 'gradient',
+                            curveness: 0.5
+                        },
+                        itemStyle: {
+                            color: '#00f2ea',
+                            borderColor: '#0f0f23'
+                        },
+                        label: {
+                            color: '#fff',
+                            formatter: '{b}'
+                        }
+                    }]
+                };
+                steamerPath.setOption(steamerPathOption);
+            }
             
-            // Count creatives by classification
-            const classificationCount = {};
-            const classificationData = [];
-            
-            [...catLitterData, ...steamerData].forEach(creative => {
-                const tag = creative.tag;
-                if (!classificationCount[tag]) {
-                    classificationCount[tag] = {
-                        count: 0,
-                        totalRoas: 0,
-                        totalConv: 0,
-                        creatives: []
-                    };
-                }
-                classificationCount[tag].count++;
-                classificationCount[tag].totalRoas += creative.roas;
-                classificationCount[tag].totalConv += creative.convRate;
-                classificationCount[tag].creatives.push(creative.id);
-            });
-            
-            // Build treemap data
-            Object.keys(classificationCount).forEach(tag => {
-                const data = classificationCount[tag];
-                const avgRoas = (data.totalRoas / data.count).toFixed(2);
-                const avgConv = (data.totalConv / data.count).toFixed(2);
-                
-                classificationData.push({
-                    name: tag,
-                    value: data.count,
-                    avgRoas: avgRoas,
-                    avgConv: avgConv,
-                    creatives: data.creatives,
-                    itemStyle: {
-                        color: tag === 'Explosive Creative' ? '#00f2ea' :
-                               tag === 'High Conversion' ? '#4ade80' :
-                               tag === 'Traffic Driver' ? '#ffce54' :
-                               tag === 'Cost Efficient' ? '#00bcd4' :
-                               tag === 'Click Trap' ? '#ff9500' :
-                               tag === 'Needs Optimization' ? '#888' :
-                               tag === 'Pause' ? '#ff0050' : '#666'
-                    }
-                });
-            });
-            
-            const classificationOption = {
-                tooltip: {
-                    formatter: function(params) {
-                        return `<strong>${params.name}</strong><br/>
-                                Creatives: ${params.value}<br/>
-                                Avg ROAS: ${params.data.avgRoas}<br/>
-                                Avg Conv Rate: ${params.data.avgConv}%<br/>
-                                <br/>Includes: ${params.data.creatives.join(', ')}`;
-                    }
-                },
-                series: [
-                    {
-                        name: 'Creative Classification',
-                        type: 'treemap',
-                        top: '10%',
+            // Audience Analysis Chart
+            if (document.getElementById('audience-analysis')) {
+                const audienceChart = echarts.init(document.getElementById('audience-analysis'));
+                const audienceOption = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    legend: {
+                        data: ['ROAS', 'Conversion Rate', 'CTR', 'Audience Size'],
+                        textStyle: { color: '#888' },
+                        top: 10
+                    },
+                    grid: {
                         left: '10%',
                         right: '10%',
                         bottom: '15%',
+                        top: '15%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: audienceData.map(d => d.name),
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        axisLabel: { 
+                            color: '#888',
+                            rotate: 20,
+                            interval: 0
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        }
+                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: 'Performance Metrics',
+                            position: 'left',
+                            splitLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            axisLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            axisLabel: { color: '#888' }
+                        },
+                        {
+                            type: 'value',
+                            name: 'Audience Size (K)',
+                            position: 'right',
+                            splitLine: { show: false },
+                            axisLine: {
+                                lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                            },
+                            axisLabel: { 
+                                color: '#888',
+                                formatter: '{value}K'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'ROAS',
+                            type: 'bar',
+                            data: audienceData.map(d => d.roas),
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#00f2ea' },
+                                    { offset: 1, color: 'rgba(0, 242, 234, 0.2)' }
+                                ])
+                            }
+                        },
+                        {
+                            name: 'Conversion Rate',
+                            type: 'line',
+                            data: audienceData.map(d => d.convRate),
+                            itemStyle: { color: '#ff0050' },
+                            lineStyle: { width: 3 },
+                            symbol: 'circle',
+                            symbolSize: 10
+                        },
+                        {
+                            name: 'CTR',
+                            type: 'line',
+                            data: audienceData.map(d => d.ctr),
+                            itemStyle: { color: '#ffce54' },
+                            lineStyle: { width: 3, type: 'dashed' },
+                            symbol: 'diamond',
+                            symbolSize: 10
+                        },
+                        {
+                            name: 'Audience Size',
+                            type: 'bar',
+                            yAxisIndex: 1,
+                            data: audienceData.map(d => d.audienceSize / 1000),
+                            itemStyle: {
+                                color: 'rgba(255, 255, 255, 0.1)',
+                                borderColor: 'rgba(255, 255, 255, 0.3)',
+                                borderWidth: 1
+                            }
+                        }
+                    ]
+                };
+                audienceChart.setOption(audienceOption);
+            }
+            
+            // Demographic Performance Chart
+            if (document.getElementById('demographic-performance')) {
+                const demoChart = echarts.init(document.getElementById('demographic-performance'));
+                const demoOption = {
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    series: [{
+                        type: 'treemap',
                         roam: false,
                         nodeClick: false,
                         breadcrumb: {
@@ -1471,99 +2185,301 @@
                         },
                         label: {
                             show: true,
-                            position: 'insideTopLeft',
-                            formatter: function(params) {
-                                return [`{name|${params.name}}`,
-                                        `{count|${params.value} creatives}`,
-                                        `{roas|ROAS: ${params.data.avgRoas}}`].join('\n');
-                            },
-                            rich: {
-                                name: {
-                                    fontSize: 16,
-                                    fontWeight: 'bold',
-                                    color: '#fff',
-                                    padding: [0, 0, 5, 0]
-                                },
-                                count: {
-                                    fontSize: 14,
-                                    color: '#ddd',
-                                    padding: [0, 0, 5, 0]
-                                },
-                                roas: {
-                                    fontSize: 12,
-                                    color: '#aaa'
-                                }
-                            }
+                            formatter: '{b}\n{c}% Conv',
+                            fontSize: 14
                         },
                         upperLabel: {
                             show: false
                         },
                         itemStyle: {
                             borderColor: '#0f0f23',
-                            borderWidth: 3,
-                            gapWidth: 3
+                            borderWidth: 2,
+                            gapWidth: 2
+                        },
+                        data: [
+                            { name: 'Female 25-34', value: 35, itemStyle: { color: '#00f2ea' } },
+                            { name: 'Female 35-44', value: 28, itemStyle: { color: '#00bcd4' } },
+                            { name: 'Male 25-34', value: 18, itemStyle: { color: '#ff0050' } },
+                            { name: 'Male 35-44', value: 12, itemStyle: { color: '#ff4081' } },
+                            { name: 'Female 45-54', value: 4, itemStyle: { color: '#ffce54' } },
+                            { name: 'Other', value: 3, itemStyle: { color: '#888' } }
+                        ]
+                    }]
+                };
+                demoChart.setOption(demoOption);
+            }
+            
+            // Interest Mapping Chart
+            if (document.getElementById('interest-mapping')) {
+                const interestChart = echarts.init(document.getElementById('interest-mapping'));
+                const interestOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}: {c}%'
+                    },
+                    series: [{
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#0f0f23',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}\n{c}%'
+                        },
+                        labelLine: {
+                            show: true
+                        },
+                        data: [
+                            { value: 28, name: 'Smart Home', itemStyle: { color: '#00f2ea' } },
+                            { value: 22, name: 'Pet Care', itemStyle: { color: '#ff0050' } },
+                            { value: 18, name: 'Fashion', itemStyle: { color: '#ffce54' } },
+                            { value: 15, name: 'Sustainability', itemStyle: { color: '#4ade80' } },
+                            { value: 10, name: 'Technology', itemStyle: { color: '#00bcd4' } },
+                            { value: 7, name: 'Other', itemStyle: { color: '#888' } }
+                        ]
+                    }]
+                };
+                interestChart.setOption(interestOption);
+            }
+            
+            // Optimization Roadmap Chart
+            if (document.getElementById('optimization-roadmap')) {
+                const roadmapChart = echarts.init(document.getElementById('optimization-roadmap'));
+                const roadmapOption = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['Impact', 'Effort', 'Priority Score'],
+                        textStyle: { color: '#888' }
+                    },
+                    grid: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%',
+                        top: '15%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['Scale Winners', 'A/B Testing', 'Creative Refresh', 'Audience Expansion', 'Landing Pages', 'Automation'],
+                        axisLabel: { 
+                            color: '#888',
+                            rotate: 20,
+                            interval: 0
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'Score (1-10)',
+                        max: 10,
+                        splitLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        axisLabel: { color: '#888' }
+                    },
+                    series: [
+                        {
+                            name: 'Impact',
+                            type: 'bar',
+                            data: [9, 8, 7, 8, 6, 7],
+                            itemStyle: { color: '#00f2ea' }
+                        },
+                        {
+                            name: 'Effort',
+                            type: 'bar',
+                            data: [3, 5, 6, 4, 7, 8],
+                            itemStyle: { color: '#ff0050' }
+                        },
+                        {
+                            name: 'Priority Score',
+                            type: 'line',
+                            data: [9, 7, 6, 8, 5, 5],
+                            itemStyle: { color: '#ffce54' },
+                            lineStyle: { width: 3 },
+                            symbol: 'circle',
+                            symbolSize: 10
+                        }
+                    ]
+                };
+                roadmapChart.setOption(roadmapOption);
+            }
+            
+            // Automation Framework Chart
+            if (document.getElementById('automation-framework')) {
+                const automationChart = echarts.init(document.getElementById('automation-framework'));
+                const automationOption = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}'
+                    },
+                    series: [{
+                        type: 'graph',
+                        layout: 'force',
+                        roam: true,
+                        label: {
+                            show: true,
+                            position: 'inside',
+                            formatter: '{b}',
+                            fontSize: 12,
+                            color: '#fff'
                         },
                         emphasis: {
-                            upperLabel: {
-                                show: false
-                            },
-                            itemStyle: {
-                                shadowBlur: 20,
-                                shadowColor: 'rgba(0, 242, 234, 0.5)'
+                            focus: 'adjacency',
+                            label: {
+                                fontSize: 16
                             }
                         },
-                        data: classificationData.sort((a, b) => b.value - a.value)
-                    }
-                ]
-            };
-            classificationChart.setOption(classificationOption);
+                        force: {
+                            repulsion: 1000,
+                            edgeLength: 200
+                        },
+                        data: [
+                            { name: 'Performance Monitor', symbolSize: 80, itemStyle: { color: '#00f2ea' } },
+                            { name: 'ROAS Check', symbolSize: 60, itemStyle: { color: '#ff0050' } },
+                            { name: 'CTR Analysis', symbolSize: 60, itemStyle: { color: '#ffce54' } },
+                            { name: 'Budget Scaler', symbolSize: 70, itemStyle: { color: '#4ade80' } },
+                            { name: 'Creative Pauser', symbolSize: 70, itemStyle: { color: '#ef4444' } },
+                            { name: 'Bid Optimizer', symbolSize: 60, itemStyle: { color: '#00bcd4' } },
+                            { name: 'Alert System', symbolSize: 50, itemStyle: { color: '#fbbf24' } }
+                        ],
+                        links: [
+                            { source: 'Performance Monitor', target: 'ROAS Check' },
+                            { source: 'Performance Monitor', target: 'CTR Analysis' },
+                            { source: 'ROAS Check', target: 'Budget Scaler' },
+                            { source: 'ROAS Check', target: 'Creative Pauser' },
+                            { source: 'CTR Analysis', target: 'Bid Optimizer' },
+                            { source: 'Budget Scaler', target: 'Alert System' },
+                            { source: 'Creative Pauser', target: 'Alert System' },
+                            { source: 'Bid Optimizer', target: 'Alert System' }
+                        ],
+                        lineStyle: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0.3,
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }]
+                };
+                automationChart.setOption(automationOption);
+            }
             
-            // Resize charts on window resize
+            // Window resize handler
             window.addEventListener('resize', () => {
-                overviewScatter.resize();
-                audienceRadar.resize();
-                catPerformanceBar.resize();
-                steamerFunnel.resize();
-                steamerCost.resize();
-                classificationChart.resize();
+                executiveChart.resize();
+                if (document.getElementById('roas-distribution')) {
+                    echarts.getInstanceByDom(document.getElementById('roas-distribution')).resize();
+                }
+                if (document.getElementById('conversion-funnel')) {
+                    echarts.getInstanceByDom(document.getElementById('conversion-funnel')).resize();
+                }
+                if (document.getElementById('performance-matrix')) {
+                    echarts.getInstanceByDom(document.getElementById('performance-matrix')).resize();
+                }
+                if (document.getElementById('cat-litter-comparison')) {
+                    echarts.getInstanceByDom(document.getElementById('cat-litter-comparison')).resize();
+                }
+                if (document.getElementById('cat-litter-cost')) {
+                    echarts.getInstanceByDom(document.getElementById('cat-litter-cost')).resize();
+                }
+                if (document.getElementById('steamer-radar')) {
+                    echarts.getInstanceByDom(document.getElementById('steamer-radar')).resize();
+                }
+                if (document.getElementById('steamer-path')) {
+                    echarts.getInstanceByDom(document.getElementById('steamer-path')).resize();
+                }
+                if (document.getElementById('audience-analysis')) {
+                    echarts.getInstanceByDom(document.getElementById('audience-analysis')).resize();
+                }
+                if (document.getElementById('demographic-performance')) {
+                    echarts.getInstanceByDom(document.getElementById('demographic-performance')).resize();
+                }
+                if (document.getElementById('interest-mapping')) {
+                    echarts.getInstanceByDom(document.getElementById('interest-mapping')).resize();
+                }
+                if (document.getElementById('optimization-roadmap')) {
+                    echarts.getInstanceByDom(document.getElementById('optimization-roadmap')).resize();
+                }
+                if (document.getElementById('automation-framework')) {
+                    echarts.getInstanceByDom(document.getElementById('automation-framework')).resize();
+                }
             });
         }
         
-        // Populate Cat Litter Table
-        function populateCatLitterTable() {
-            const tableBody = document.getElementById('cat-litter-table');
+        // Populate Performance Table
+        function populatePerformanceTable() {
+            const tbody = document.getElementById('performance-tbody');
             
-            catLitterData.forEach(item => {
+            creativeData.forEach(item => {
                 const row = document.createElement('tr');
                 
-                const tagClass = item.tag.toLowerCase().replace(/\s+/g, '-');
                 const tagClassMap = {
-                    'explosive-creative': 'tag-explosive',
-                    'high-conversion': 'tag-high-conversion',
-                    'click-trap': 'tag-optimize',
-                    'traffic-driver': 'tag-traffic',
-                    'needs-optimization': 'tag-optimize',
-                    'pause': 'tag-stop'
+                    'explosive': 'perf-tag explosive',
+                    'high-conv': 'perf-tag high-conv',
+                    'traffic': 'perf-tag traffic',
+                    'optimize': 'perf-tag optimize',
+                    'pause': 'perf-tag pause'
                 };
                 
                 row.innerHTML = `
                     <td>${item.id}</td>
-                    <td>${item.roas}</td>
+                    <td>${item.product}</td>
+                    <td style="color: ${item.roas > 3 ? '#00f2ea' : item.roas > 1 ? '#ffce54' : '#ef4444'}">${item.roas}</td>
                     <td>${item.convRate}%</td>
                     <td>${item.ctr}%</td>
                     <td>$${item.cpc}</td>
                     <td>$${item.cpm}</td>
-                    <td><span class="tag ${tagClassMap[tagClass]}">${item.tag}</span></td>
+                    <td>$${item.spend.toLocaleString()}</td>
+                    <td>$${item.revenue.toLocaleString()}</td>
+                    <td><span class="${tagClassMap[item.tag]}">${item.tag.replace('-', ' ').toUpperCase()}</span></td>
                 `;
                 
-                tableBody.appendChild(row);
+                tbody.appendChild(row);
             });
         }
         
-        // Initialize everything
+        // Table Filters
+        const filterButtons = document.querySelectorAll('.filter-button');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                const rows = document.querySelectorAll('#performance-tbody tr');
+                
+                rows.forEach(row => {
+                    const tag = row.querySelector('.perf-tag').textContent.toLowerCase();
+                    
+                    if (filter === 'all') {
+                        row.style.display = '';
+                    } else if (filter === 'winners' && (tag.includes('explosive') || tag.includes('high'))) {
+                        row.style.display = '';
+                    } else if (filter === 'optimize' && (tag.includes('traffic') || tag.includes('optimize'))) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
             initCharts();
-            populateCatLitterTable();
+            populatePerformanceTable();
         });
     </script>
 </body>
