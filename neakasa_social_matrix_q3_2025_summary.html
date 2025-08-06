@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neakasa Social Media Matrix - Q3 2025 Performance Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f2ea, #ff0050, #00f2ea);
+            animation: gradient-move 3s linear infinite;
+        }
+        
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        
+        .period-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .period-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .period-badge.primary {
+            background: rgba(0, 242, 234, 0.15);
+            border-color: rgba(0, 242, 234, 0.3);
+            color: #00f2ea;
+        }
+        
+        .period-badge.success {
+            background: rgba(74, 222, 128, 0.15);
+            border-color: rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+        }
+        
+        /* Executive Summary */
+        .executive-summary {
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .summary-title {
+            font-size: 2em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f2ea, #ff0050, #00f2ea, #ff0050);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+        
+        .kpi-card:hover::before {
+            opacity: 0.6;
+            animation: rotate 3s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 242, 234, 0.2);
+        }
+        
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .kpi-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+        
+        .kpi-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: rgba(0, 242, 234, 0.1);
+        }
+        
+        .kpi-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        
+        .kpi-target {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .kpi-achievement {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .kpi-achievement.success {
+            color: #4ade80;
+        }
+        
+        .kpi-achievement.warning {
+            color: #fbbf24;
+        }
+        
+        .kpi-achievement.danger {
+            color: #ef4444;
+        }
+        
+        .achievement-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .achievement-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2ea, #4ade80);
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+        
+        /* Chart Sections */
+        .chart-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .chart-section:hover {
+            border-color: rgba(0, 242, 234, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 242, 234, 0.05);
+        }
+        
+        .chart-header {
+            margin-bottom: 25px;
+        }
+        
+        .chart-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .chart-subtitle {
+            color: #888;
+            font-size: 15px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 450px;
+            margin: 25px 0;
+        }
+        
+        .chart-container.large {
+            height: 550px;
+        }
+        
+        .chart-container.small {
+            height: 350px;
+        }
+        
+        /* Insights Panel */
+        .insights-panel {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.05), rgba(255, 0, 80, 0.05));
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+        
+        .insights-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .insights-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .insights-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .insight-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+        
+        .insight-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+            border-color: rgba(0, 242, 234, 0.3);
+        }
+        
+        .insight-number {
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 242, 234, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #00f2ea;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .insight-content {
+            flex: 1;
+        }
+        
+        .insight-title-text {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+        
+        .insight-description {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Product Performance Cards */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 40px 20px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .product-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .product-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .product-badge.flagship {
+            background: rgba(0, 242, 234, 0.2);
+            color: #00f2ea;
+            border: 1px solid rgba(0, 242, 234, 0.3);
+        }
+        
+        .product-badge.new {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+            border: 1px solid rgba(255, 0, 80, 0.3);
+        }
+        
+        /* Metrics Table */
+        .metrics-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .metric-row {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr 2fr;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            align-items: center;
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .metric-change {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .metric-change.positive {
+            color: #4ade80;
+        }
+        
+        .metric-change.negative {
+            color: #ef4444;
+        }
+        
+        .metric-note {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        /* Channel Performance */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .channel-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .channel-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 234, 0.3);
+        }
+        
+        .channel-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .channel-icon.tiktok {
+            background: linear-gradient(135deg, #ff0050, #00f2ea);
+        }
+        
+        .channel-icon.instagram {
+            background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+        }
+        
+        .channel-icon.youtube {
+            background: #ff0000;
+        }
+        
+        .channel-icon.amazon {
+            background: #ff9900;
+        }
+        
+        .channel-icon.google {
+            background: linear-gradient(135deg, #4285f4, #34a853, #fbbc04, #ea4335);
+        }
+        
+        .channel-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .channel-metrics {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .channel-metric {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        
+        .channel-metric-label {
+            color: #666;
+        }
+        
+        .channel-metric-value {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* Action Items */
+        .action-section {
+            background: linear-gradient(135deg, rgba(255, 0, 80, 0.05), rgba(0, 242, 234, 0.05));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 20px;
+            border: 1px solid rgba(0, 242, 234, 0.2);
+        }
+        
+        .action-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .action-title {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .action-subtitle {
+            color: #888;
+            font-size: 16px;
+        }
+        
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .action-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: #00f2ea;
+            box-shadow: 0 10px 30px rgba(0, 242, 234, 0.1);
+        }
+        
+        .action-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .action-icon.exposure {
+            background: rgba(0, 242, 234, 0.2);
+            color: #00f2ea;
+        }
+        
+        .action-icon.private {
+            background: rgba(255, 206, 84, 0.2);
+            color: #ffce54;
+        }
+        
+        .action-icon.roi {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+        }
+        
+        .action-icon.content {
+            background: rgba(255, 0, 80, 0.2);
+            color: #ff0050;
+        }
+        
+        .action-card-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .action-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 14px;
+            color: #e0e0e0;
+        }
+        
+        .action-bullet {
+            color: #00f2ea;
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .action-target {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(0, 242, 234, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            font-size: 14px;
+            color: #00f2ea;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .product-grid,
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 350px;
+            }
+            
+            .channel-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .metric-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .metric-row > * {
+                text-align: left !important;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Progress Ring */
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 242, 234, 0.1), rgba(255, 0, 80, 0.1));
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .highlight-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00f2ea;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-content {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Social Media Matrix Performance Dashboard</h1>
+        <p>Content Marketing Project Q3 2025 (May 8 - August 8) Summary Report</p>
+        <div class="period-badges">
+            <span class="period-badge primary">Q3 2025 Results</span>
+            <span class="period-badge success">All KPIs Achieved ✓</span>
+            <span class="period-badge">ROI: 1.46 (+12% vs Target)</span>
+        </div>
+    </div>
+    
+    <!-- Executive Summary -->
+    <div class="executive-summary">
+        <h2 class="summary-title">Executive Performance Overview</h2>
+        
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Published Content</span>
+                    <div class="kpi-icon">📱</div>
+                </div>
+                <div class="kpi-value">384</div>
+                <div class="kpi-target">Target: 360 | Q2: 312</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 107% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Total Impressions</span>
+                    <div class="kpi-icon">👁️</div>
+                </div>
+                <div class="kpi-value">40.2M</div>
+                <div class="kpi-target">Target: 38M | Q2: 33M</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 106% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Total Engagement</span>
+                    <div class="kpi-icon">💬</div>
+                </div>
+                <div class="kpi-value">470K</div>
+                <div class="kpi-target">Target: 450K | Q2: 390K</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 104% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Click-throughs</span>
+                    <div class="kpi-icon">🎯</div>
+                </div>
+                <div class="kpi-value">7.1M</div>
+                <div class="kpi-target">Target: 7.0M | Q2: 5.9M</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 101% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">New Followers</span>
+                    <div class="kpi-icon">👥</div>
+                </div>
+                <div class="kpi-value">+157K</div>
+                <div class="kpi-target">Target: 150K | Q2: 118K</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 105% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+            
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span class="kpi-label">Total Orders</span>
+                    <div class="kpi-icon">🛒</div>
+                </div>
+                <div class="kpi-value">2,640</div>
+                <div class="kpi-target">Target: 2,600 | Q2: 2,120</div>
+                <div class="kpi-achievement success">
+                    <span>↑ 102% Achievement</span>
+                </div>
+                <div class="achievement-bar">
+                    <div class="achievement-fill" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overall Performance Trend -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Q2 vs Q3 Performance Comparison</h2>
+            <p class="chart-subtitle">Quarter-over-quarter growth analysis across all key metrics</p>
+        </div>
+        <div id="performance-comparison" class="chart-container"></div>
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">💡</div>
+                <h3 class="insights-title">Key Performance Insights</h3>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Exceptional ROI Growth</div>
+                        <div class="insight-description">
+                            ROI increased from 1.34 to 1.46 (+9%), exceeding target by 12%. This was driven by automated content gating (R1-R4) which reduced low-performing content dwell time by 36 hours and capital occupation by 22%.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Content Velocity Success</div>
+                        <div class="insight-description">
+                            Published 384 pieces of content (107% of target), with short-form video maintaining 62% share. The 10-15s "auto-cleaning bin drop" highlight frame increased CTR by 1.6pp and has been integrated into static ad templates.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Follower Acquisition Acceleration</div>
+                        <div class="insight-description">
+                            New follower growth reached 157K (+33% QoQ), with EU markets contributing significantly after DE/FR subtitle implementation. The 1K follower threshold was achieved one week ahead of schedule.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Product Performance -->
+    <div class="product-grid">
+        <!-- Smart Litter Box -->
+        <div class="product-card">
+            <div class="product-header">
+                <h3 class="product-title">Smart Litter Box</h3>
+                <span class="product-badge flagship">Flagship Product</span>
+            </div>
+            <div class="metrics-table">
+                <div class="metric-row">
+                    <span class="metric-label">Impressions</span>
+                    <span class="metric-value">24.6M</span>
+                    <span class="metric-change positive">↑ 19% QoQ</span>
+                    <span class="metric-note">TikTok: 62%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Click-throughs</span>
+                    <span class="metric-value">4.7M</span>
+                    <span class="metric-change positive">↑ 12%</span>
+                    <span class="metric-note">Shop CTR: 3.4%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Orders</span>
+                    <span class="metric-value">2,180</span>
+                    <span class="metric-change positive">↑ 17%</span>
+                    <span class="metric-note">Amazon: 65%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue</span>
+                    <span class="metric-value">$2.95M</span>
+                    <span class="metric-change positive">↑ 14%</span>
+                    <span class="metric-note">DTC AOV: $756</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">ROI</span>
+                    <span class="metric-value">1.35</span>
+                    <span class="metric-change positive">↑ 0.17</span>
+                    <span class="metric-note">Gate strategy working</span>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <div class="highlight-title">🎯 Strategic Achievement</div>
+                <div class="highlight-content">
+                    "Smart litter box" search ranking: 4 out of top 6 positions secured (+1 position gained). UGC content strategy proved highly effective in organic search dominance.
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Garment Steamer -->
+        <div class="product-card">
+            <div class="product-header">
+                <h3 class="product-title">AI Lightweight Garment Steamer</h3>
+                <span class="product-badge new">New Launch</span>
+            </div>
+            <div class="metrics-table">
+                <div class="metric-row">
+                    <span class="metric-label">Impressions</span>
+                    <span class="metric-value">15.6M</span>
+                    <span class="metric-change">—</span>
+                    <span class="metric-note">Launch period</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Click-throughs</span>
+                    <span class="metric-value">2.4M</span>
+                    <span class="metric-change">—</span>
+                    <span class="metric-note">Strong interest</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Orders</span>
+                    <span class="metric-value">460</span>
+                    <span class="metric-change">—</span>
+                    <span class="metric-note">Early adopters</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Revenue</span>
+                    <span class="metric-value">$143K</span>
+                    <span class="metric-change">—</span>
+                    <span class="metric-note">Premium pricing</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">ROI</span>
+                    <span class="metric-value">2.76</span>
+                    <span class="metric-change success">Excellent</span>
+                    <span class="metric-note">Above target</span>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <div class="highlight-title">🚀 Viral Content Success</div>
+                <div class="highlight-content">
+                    "2300 Pa suction demo + cute cat moments" video achieved 1.4M likes, becoming the most successful launch content. This format template is being replicated across campaigns.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Content Performance Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Content Topic Performance Analysis</h2>
+            <p class="chart-subtitle">View distribution and engagement by content category</p>
+        </div>
+        <div id="content-performance" class="chart-container"></div>
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">📊</div>
+                <h3 class="insights-title">Content Strategy Insights</h3>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Problem-Solution Content Dominates</div>
+                        <div class="insight-description">
+                            37% of views came from pain point content. "Automatic cleaning + odor control" remains the primary traffic driver. Recommendation: Maintain 40% allocation to this proven category while testing new angles.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Tech Innovation Rising</div>
+                        <div class="insight-description">
+                            AI monitoring and safety sensors content grew to 29% share, indicating market education success. Focus on "peace of mind" messaging and real-time app notifications for Q4.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Lifestyle Storytelling Converts</div>
+                        <div class="insight-description">
+                            "Busy pet parent" narratives (21% share) show highest completion rates. These authentic scenarios should be expanded with more diverse personas and day-in-the-life formats.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Channel Performance -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Multi-Channel Performance Breakdown</h2>
+            <p class="chart-subtitle">Traffic, conversions, and ROI by platform</p>
+        </div>
+        <div class="channel-grid">
+            <div class="channel-card">
+                <div class="channel-icon tiktok">📱</div>
+                <h4 class="channel-name">TikTok</h4>
+                <div class="channel-metrics">
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Impressions</span>
+                        <span class="channel-metric-value">25.1M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Clicks</span>
+                        <span class="channel-metric-value">3.9M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Orders</span>
+                        <span class="channel-metric-value">1,540</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">ROI</span>
+                        <span class="channel-metric-value">1.22</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-icon instagram">📷</div>
+                <h4 class="channel-name">Instagram</h4>
+                <div class="channel-metrics">
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Impressions</span>
+                        <span class="channel-metric-value">6.4M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Clicks</span>
+                        <span class="channel-metric-value">0.8M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Orders</span>
+                        <span class="channel-metric-value">360</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">ROI</span>
+                        <span class="channel-metric-value">1.57</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-icon youtube">▶️</div>
+                <h4 class="channel-name">YouTube Shorts</h4>
+                <div class="channel-metrics">
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Impressions</span>
+                        <span class="channel-metric-value">4.3M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Clicks</span>
+                        <span class="channel-metric-value">0.4M</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Orders</span>
+                        <span class="channel-metric-value">210</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">ROI</span>
+                        <span class="channel-metric-value">1.44</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-icon amazon">📦</div>
+                <h4 class="channel-name">Amazon DSP</h4>
+                <div class="channel-metrics">
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Impressions</span>
+                        <span class="channel-metric-value">—</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Clicks</span>
+                        <span class="channel-metric-value">—</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Orders</span>
+                        <span class="channel-metric-value">420</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">ROI</span>
+                        <span class="channel-metric-value">1.60</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="channel-card">
+                <div class="channel-icon google">🔍</div>
+                <h4 class="channel-name">Google PMax</h4>
+                <div class="channel-metrics">
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Impressions</span>
+                        <span class="channel-metric-value">—</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Clicks</span>
+                        <span class="channel-metric-value">—</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">Orders</span>
+                        <span class="channel-metric-value">110</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="channel-metric-label">ROI</span>
+                        <span class="channel-metric-value">1.33</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="channel-performance-chart" class="chart-container" style="margin-top: 30px;"></div>
+    </div>
+    
+    <!-- Geographic Performance -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Geographic Market Expansion</h2>
+            <p class="chart-subtitle">Regional performance and growth opportunities</p>
+        </div>
+        <div id="geographic-performance" class="chart-container"></div>
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">🌍</div>
+                <h3 class="insights-title">Regional Strategy Insights</h3>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">EU Market Breakthrough</div>
+                        <div class="insight-description">
+                            EU click share increased to 28% (+9pp) after implementing SmartLink with DE/FR subtitles. CTR improved by 1.8pp. Expand to ES/IT languages in Q4 to capture additional 15% market potential.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Static Image Ad Validation</div>
+                        <div class="insight-description">
+                            First static image test consumed 12% of budget with 1.5 ROI, validating "low-cost fill" strategy. CPM decreased by 46% vs video. Scale to 20% budget allocation in Q4.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Private Domain Building -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Private Domain (Seed) Building Progress</h2>
+            <p class="chart-subtitle">Comment-to-customer funnel optimization</p>
+        </div>
+        <div id="private-domain-funnel" class="chart-container"></div>
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">🌱</div>
+                <h3 class="insights-title">Private Domain Insights</h3>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Automated Intent Capture Success</div>
+                        <div class="insight-description">
+                            n8n workflow captures 42 daily buy-intent comments with 10-minute latency. 18% click through to VIP landing pages. Expand automation to include question-based intents for 2x capture rate.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Email Funnel Profitability</div>
+                        <div class="insight-description">
+                            504 emails captured (36% rate) generated $33K revenue via welcome flow (8.4% conversion). Implement RFM segmentation in Klaviyo to improve lifetime value by estimated 25%.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Factors Analysis -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Key Success Factors & Learnings</h2>
+            <p class="chart-subtitle">What worked, what didn't, and optimization opportunities</p>
+        </div>
+        <div id="success-factors" class="chart-container small"></div>
+        <div class="insights-panel">
+            <div class="insights-header">
+                <div class="insights-icon">✅</div>
+                <h3 class="insights-title">Critical Success Factors</h3>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-number">1</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Automated Content Gating (R1-R4)</div>
+                        <div class="insight-description">
+                            Low-ROI content now paused 36 hours faster, reducing capital occupation by 22%. Add SKU-level CPA thresholds to prevent category-wide pausing of potentially profitable variants.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">2</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Localization Impact</div>
+                        <div class="insight-description">
+                            DE/FR subtitles + TTS drove EU CTR up 1.8pp and helped reach 1K follower milestone one week early. Expand to Spanish/Italian for projected 15% additional reach.
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-number">3</div>
+                    <div class="insight-content">
+                        <div class="insight-title-text">Visual Innovation</div>
+                        <div class="insight-description">
+                            Highlight frame extraction for static ads reduced CPM by 46% while maintaining 1.5 ROI. Accelerate creation of UGC-style static variations for cost-efficient scaling.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Q4 Action Plan -->
+    <div class="action-section">
+        <div class="action-header">
+            <h2 class="action-title">Q4 Phase 4 Strategic Action Plan</h2>
+            <p class="action-subtitle">Priority initiatives for continued growth and optimization</p>
+        </div>
+        
+        <div class="action-grid">
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-icon exposure">📈</div>
+                    <h3 class="action-card-title">Exposure & Traffic Growth</h3>
+                </div>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Scale static image ads to 20% of budget allocation</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Launch EU localization for Spanish & Italian markets</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Expand LATAM presence with Portuguese content</span>
+                    </div>
+                </div>
+                <div class="action-target">
+                    Target: +15% Impressions / +20% Clicks
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-icon private">🔐</div>
+                    <h3 class="action-card-title">Private Domain Upgrade</h3>
+                </div>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Capture 900+ emails via comments + popup optimization</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Deploy Klaviyo RFM automated segmentation</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Launch VIP customer exclusive content program</span>
+                    </div>
+                </div>
+                <div class="action-target">
+                    Target: Private Domain Orders ≥10% of Total
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-icon roi">💰</div>
+                    <h3 class="action-card-title">ROI Enhancement</h3>
+                </div>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Implement SKU-level CPA threshold automation</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Scale Amazon DSP "pet allergy" audience targeting</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Test dynamic pricing on high-traffic content</span>
+                    </div>
+                </div>
+                <div class="action-target">
+                    Target: Maintain ROI ≥1.45
+                </div>
+            </div>
+            
+            <div class="action-card">
+                <div class="action-card-header">
+                    <div class="action-icon content">🎬</div>
+                    <h3 class="action-card-title">Content Evolution</h3>
+                </div>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Launch monthly comparison review series (3 videos/month)</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Create AI/tech feature spotlight content series</span>
+                    </div>
+                    <div class="action-item">
+                        <span class="action-bullet">•</span>
+                        <span>Develop pet health monitoring educational content</span>
+                    </div>
+                </div>
+                <div class="action-target">
+                    Target: Completion Rate ≥35%
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Resource Requirements -->
+    <div class="chart-section">
+        <div class="chart-header">
+            <h2 class="chart-title">Resource Requirements & Next Steps</h2>
+            <p class="chart-subtitle">Technical infrastructure and template needs</p>
+        </div>
+        <div class="highlight-box">
+            <div class="highlight-title">🛠️ Priority Resource Requests</div>
+            <div class="highlight-content">
+                <strong>1. GemPages Templates:</strong> Deploy EU language versions for /vip-litter and /vip-steamer landing pages<br><br>
+                <strong>2. n8n Automation:</strong> Move comment capture JSON workflow to production environment<br><br>
+                <strong>3. Looker Studio v2:</strong> Add private domain metrics view and static image ad performance dashboard<br><br>
+                <em>All templates, JSON configs, and datasets available within 24 hours upon request.</em>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize all charts
+        function initCharts() {
+            // Q2 vs Q3 Performance Comparison
+            const performanceChart = echarts.init(document.getElementById('performance-comparison'));
+            const performanceOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    formatter: function(params) {
+                        let result = params[0].axisValue + '<br/>';
+                        params.forEach(function(item) {
+                            const value = item.seriesName === 'Achievement Rate' ? item.value + '%' : 
+                                         item.axisValue === 'ROI' ? item.value : 
+                                         item.value.toLocaleString();
+                            result += item.marker + ' ' + item.seriesName + ': ' + value + '<br/>';
+                        });
+                        return result;
+                    }
+                },
+                legend: {
+                    data: ['Q2 Actual', 'Q3 Target', 'Q3 Actual', 'Achievement Rate'],
+                    textStyle: { color: '#888' },
+                    top: 10
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '15%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Content Published', 'Impressions (M)', 'Engagement (K)', 'Clicks (M)', 'New Followers (K)', 'Orders', 'ROI'],
+                    axisLabel: {
+                        color: '#888',
+                        rotate: 20,
+                        interval: 0
+                    },
+                    axisLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                    }
+                },
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'Value',
+                        position: 'left',
+                        splitLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        axisLabel: { color: '#888' }
+                    },
+                    {
+                        type: 'value',
+                        name: 'Achievement %',
+                        position: 'right',
+                        min: 90,
+                        max: 110,
+                        splitLine: { show: false },
+                        axisLine: {
+                            lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        axisLabel: { 
+                            color: '#888',
+                            formatter: '{value}%'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: 'Q2 Actual',
+                        type: 'bar',
+                        data: [312, 33, 390, 5.9, 118, 2120, 1.34],
+                        itemStyle: {
+                            color: 'rgba(255, 255, 255, 0.2)',
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    {
+                        name: 'Q3 Target',
+                        type: 'bar',
+                        data: [360, 38, 450, 7.0, 150, 2600, 1.30],
+                        itemStyle: {
+                            color: 'rgba(255, 206, 84, 0.3)',
+                            borderColor: 'rgba(255, 206, 84, 0.5)',
+                            borderWidth: 1
+                        }
+                    },
+                    {
+                        name: 'Q3 Actual',
+                        type: 'bar',
+                        data: [384, 40.2, 470, 7.1, 157, 2640, 1.46],
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00f2ea' },
+                                { offset: 1, color: 'rgba(0, 242, 234, 0.2)' }
+                            ]),
+                            borderRadius: [4, 4, 0, 0]
+                        }
+                    },
+                    {
+                        name: 'Achievement Rate',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [107, 106, 104, 101, 105, 102, 112],
+                        itemStyle: { color: '#4ade80' },
+                        lineStyle: { width: 3 },
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: '{c}%',
+                            color: '#4ade80'
+                        }
+                    }
+                ]
+            };
+            performanceChart.setOption(performanceOption);
+            
+            // Content Performance Analysis
+            const contentChart = echarts.init(document.getElementById('content-performance'));
+            const contentOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        return `${params.name}<br/>
+                                Views: ${params.value}%<br/>
+                                Hashtags: ${params.data.hashtags}`;
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['35%', '70%'],
+                        center: ['35%', '50%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#0f0f23',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}\n{c}%',
+                            fontSize: 14
+                        },
+                        labelLine: {
+                            show: true,
+                            length: 15,
+                            length2: 10
+                        },
+                        data: [
+                            { 
+                                value: 37, 
+                                name: 'Function/Pain Points',
+                                hashtags: '#odorfree #automaticlitterbox',
+                                itemStyle: { color: '#00f2ea' }
+                            },
+                            { 
+                                value: 29, 
+                                name: 'Tech Innovation',
+                                hashtags: '#pettech2025 #ai4pets',
+                                itemStyle: { color: '#ff0050' }
+                            },
+                            { 
+                                value: 21, 
+                                name: 'Lifestyle Stories',
+                                hashtags: '#busylife #workingcatdad',
+                                itemStyle: { color: '#ffce54' }
+                            },
+                            { 
+                                value: 13, 
+                                name: 'Other Topics',
+                                hashtags: 'Various',
+                                itemStyle: { color: '#888' }
+                            }
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 20,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 242, 234, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        type: 'bar',
+                        name: 'Engagement Rate',
+                        radius: ['0%', '30%'],
+                        center: ['75%', '50%'],
+                        data: [
+                            { value: 3.2, name: 'Function/Pain Points' },
+                            { value: 4.1, name: 'Tech Innovation' },
+                            { value: 3.8, name: 'Lifestyle Stories' },
+                            { value: 2.1, name: 'Other Topics' }
+                        ],
+                        coordinateSystem: 'polar',
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(74, 222, 128, 0.8)' },
+                                { offset: 1, color: 'rgba(74, 222, 128, 0.2)' }
+                            ])
+                        }
+                    }
+                ],
+                polar: {
+                    center: ['75%', '50%'],
+                    radius: '35%'
+                },
+                radiusAxis: {
+                    max: 5,
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { show: false }
+                },
+                angleAxis: {
+                    type: 'category',
+                    data: ['Function', 'Tech', 'Lifestyle', 'Other'],
+                    startAngle: 90,
+                    splitLine: { show: false },
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: {
+                        color: '#888',
+                        fontSize: 12
+                    }
+                }
+            };
+            contentChart.setOption(contentOption);
+            
+            // Channel Performance Chart
+            const channelChart = echarts.init(document.getElementById('channel-performance-chart'));
+            const channelOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross'
+                    }
+                },
+                legend: {
+                    data: ['Impressions', 'Clicks', 'Orders', 'ROI'],
+                    textStyle: { color: '#888' }
+                },
+                radar: {
+                    indicator: [
+                        { name: 'TikTok', max: 30 },
+                        { name: 'Instagram', max: 30 },
+                        { name: 'YouTube', max: 30 },
+                        { name: 'Amazon DSP', max: 30 },
+                        { name: 'Google PMax', max: 30 }
+                    ],
+                    center: ['50%', '50%'],
+                    radius: '65%',
+                    axisName: {
+                        color: '#888'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    splitArea: {
+                        areaStyle: {
+                            color: 'rgba(255, 255, 255, 0.02)'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'radar',
+                        data: [
+                            {
+                                value: [25.1, 6.4, 4.3, 0, 0],
+                                name: 'Impressions',
+                                lineStyle: { color: '#00f2ea' },
+                                areaStyle: { color: 'rgba(0, 242, 234, 0.2)' }
+                            },
+                            {
+                                value: [15.4, 3.6, 2.1, 4.2, 1.1],
+                                name: 'Orders',
+                                lineStyle: { color: '#ff0050' },
+                                areaStyle: { color: 'rgba(255, 0, 80, 0.2)' }
+                            }
+                        ]
+                    }
+                ]
+            };
+            channelChart.setOption(channelOption);
+            
+            // Geographic Performance
+            const geoContainer = document.getElementById('geographic-performance');
+            if (!geoContainer) {
+                console.error('Geographic performance container not found');
+                return;
+            }
+            // Ensure container has height
+            if (!geoContainer.offsetHeight) {
+                geoContainer.style.height = '450px';
+            }
+            const geoChart = echarts.init(geoContainer);
+            const geoOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                visualMap: {
+                    show: false,
+                    min: 0,
+                    max: 100,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    }
+                },
+                series: [
+                    {
+                        name: 'Traffic Share',
+                        type: 'map',
+                        map: 'world',
+                        roam: true,
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        },
+                        data: [
+                            { name: 'United States', value: 62 },
+                            { name: 'Germany', value: 12 },
+                            { name: 'France', value: 10 },
+                            { name: 'United Kingdom', value: 6 },
+                            { name: 'Canada', value: 5 },
+                            { name: 'Other', value: 5 }
+                        ]
+                    }
+                ],
+                // Use a simple bar chart instead of map for simplicity
+                xAxis: {
+                    type: 'category',
+                    data: ['US', 'DE', 'FR', 'UK', 'CA', 'Others'],
+                    axisLabel: { color: '#888' },
+                    axisLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Traffic Share %',
+                    splitLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    axisLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                    },
+                    axisLabel: { color: '#888' }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '15%'
+                }
+            };
+            
+            // Use bar chart for geographic data
+            geoOption = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '10%',
+                    right: '10%',
+                    bottom: '15%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['United States', 'Germany', 'France', 'UK', 'Canada', 'Others'],
+                    axisLabel: { 
+                        color: '#888',
+                        rotate: 20,
+                        interval: 0
+                    },
+                    axisLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Click Share %',
+                    splitLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    axisLine: {
+                        lineStyle: { color: 'rgba(255, 255, 255, 0.3)' }
+                    },
+                    axisLabel: { 
+                        color: '#888',
+                        formatter: '{value}%'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Traffic Share',
+                        type: 'bar',
+                        data: [
+                            { 
+                                value: 62, 
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#00f2ea' },
+                                        { offset: 1, color: 'rgba(0, 242, 234, 0.2)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 12, 
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#ffce54' },
+                                        { offset: 1, color: 'rgba(255, 206, 84, 0.2)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 10, 
+                                itemStyle: { 
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#ff0050' },
+                                        { offset: 1, color: 'rgba(255, 0, 80, 0.2)' }
+                                    ])
+                                }
+                            },
+                            { value: 6, itemStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
+                            { value: 5, itemStyle: { color: 'rgba(255, 255, 255, 0.2)' } },
+                            { value: 5, itemStyle: { color: 'rgba(255, 255, 255, 0.1)' } }
+                        ],
+                        barWidth: '60%',
+                        label: {
+                            show: true,
+                            position: 'top',
+                            formatter: '{c}%',
+                            color: '#fff'
+                        }
+                    }
+                ]
+            };
+            geoChart.setOption(geoOption);
+            
+            // Private Domain Funnel
+            const funnelContainer = document.getElementById('private-domain-funnel');
+            if (!funnelContainer) {
+                console.error('Private domain funnel container not found');
+                return;
+            }
+            // Ensure container has height
+            if (!funnelContainer.offsetHeight) {
+                funnelContainer.style.height = '450px';
+            }
+            const funnelChart = echarts.init(funnelContainer);
+            const funnelOption = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function(params) {
+                        const metrics = {
+                            'Buy Intent Comments': '42 daily avg',
+                            'Landing Page Clicks': '18% CTR',
+                            'Email Captures': '504 emails (14 days)',
+                            'Welcome Flow Conversions': '8.4% conversion',
+                            'Revenue Generated': '$33K total'
+                        };
+                        return `${params.name}<br/>
+                                ${params.value} ${params.name === 'Buy Intent Comments' ? 'daily' : 'total'}<br/>
+                                ${metrics[params.name]}`;
+                    }
+                },
+                series: [
+                    {
+                        name: 'Private Domain Funnel',
+                        type: 'funnel',
+                        left: '10%',
+                        top: '10%',
+                        bottom: '10%',
+                        width: '80%',
+                        min: 0,
+                        max: 100,
+                        minSize: '20%',
+                        maxSize: '100%',
+                        sort: 'descending',
+                        gap: 2,
+                        label: {
+                            show: true,
+                            position: 'center',
+                            formatter: '{b}\n{c}',
+                            fontSize: 14,
+                            fontWeight: 'bold'
+                        },
+                        labelLine: {
+                            length: 10,
+                            lineStyle: {
+                                width: 1,
+                                type: 'solid'
+                            }
+                        },
+                        itemStyle: {
+                            borderColor: '#0f0f23',
+                            borderWidth: 2
+                        },
+                        emphasis: {
+                            label: {
+                                fontSize: 18
+                            }
+                        },
+                        data: [
+                            { 
+                                value: 100, 
+                                name: 'Buy Intent Comments',
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#00f2ea' },
+                                        { offset: 1, color: 'rgba(0, 242, 234, 0.4)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 18, 
+                                name: 'Landing Page Clicks',
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#00bcd4' },
+                                        { offset: 1, color: 'rgba(0, 188, 212, 0.4)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 36, 
+                                name: 'Email Captures',
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#ffce54' },
+                                        { offset: 1, color: 'rgba(255, 206, 84, 0.4)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 8.4, 
+                                name: 'Welcome Flow Conversions',
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#ff0050' },
+                                        { offset: 1, color: 'rgba(255, 0, 80, 0.4)' }
+                                    ])
+                                }
+                            },
+                            { 
+                                value: 8.4, 
+                                name: 'Revenue Generated',
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                        { offset: 0, color: '#4ade80' },
+                                        { offset: 1, color: 'rgba(74, 222, 128, 0.4)' }
+                                    ])
+                                }
+                            }
+                        ]
+                    }
+                ]
+            };
+            funnelChart.setOption(funnelOption);
+            
+            // Success Factors Analysis
+            const successContainer = document.getElementById('success-factors');
+            if (!successContainer) {
+                console.error('Success factors container not found');
+                return;
+            }
+            // Ensure container has height (this one uses small class, so 350px)
+            if (!successContainer.offsetHeight) {
+                successContainer.style.height = '350px';
+            }
+            const successChart = echarts.init(successContainer);
+            const successOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    textStyle: { color: '#888' }
+                },
+                series: [
+                    {
+                        name: 'Impact Analysis',
+                        type: 'pie',
+                        radius: '70%',
+                        center: ['60%', '50%'],
+                        data: [
+                            { 
+                                value: 30, 
+                                name: 'Automated Gating',
+                                itemStyle: { color: '#00f2ea' }
+                            },
+                            { 
+                                value: 25, 
+                                name: 'Localization',
+                                itemStyle: { color: '#ff0050' }
+                            },
+                            { 
+                                value: 20, 
+                                name: 'Static Ads',
+                                itemStyle: { color: '#ffce54' }
+                            },
+                            { 
+                                value: 15, 
+                                name: 'Private Domain',
+                                itemStyle: { color: '#4ade80' }
+                            },
+                            { 
+                                value: 10, 
+                                name: 'Content Diversity',
+                                itemStyle: { color: '#00bcd4' }
+                            }
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        label: {
+                            formatter: '{b}: {c}%'
+                        }
+                    }
+                ]
+            };
+            successChart.setOption(successOption);
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (performanceChart) performanceChart.resize();
+                if (contentChart) contentChart.resize();
+                if (channelChart) channelChart.resize();
+                if (geoChart) geoChart.resize();
+                if (funnelChart) funnelChart.resize();
+                if (successChart) successChart.resize();
+            });
+        }
+        
+        // Initialize charts on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add a small delay to ensure containers are rendered
+            setTimeout(() => {
+                initCharts();
+            }, 100);
+            
+            // Animate KPI values
+            const kpiValues = document.querySelectorAll('.kpi-value');
+            kpiValues.forEach(kpi => {
+                kpi.classList.add('fade-in');
+            });
+            
+            // Animate achievement bars
+            setTimeout(() => {
+                const achievementFills = document.querySelectorAll('.achievement-fill');
+                achievementFills.forEach(fill => {
+                    fill.style.width = fill.style.width || '100%';
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
